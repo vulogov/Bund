@@ -1,13 +1,15 @@
 extern crate log;
 use rustyline::error::ReadlineError;
-use rustyline::{Editor, Result};
+use rustyline::{Editor};
+use crate::stdlib::banner;
 use crate::cmd;
 
 pub fn run_shell(c: &cmd::Cli, _a: &Vec<String>)  {
     log::trace!("run_shell() reached");
+    println!("{}", banner::bund_banner());
     let mut line = Editor::<()>::new().unwrap();
     loop {
-        let readline = line.readline("[BUND> ");
+        let readline = line.readline("[BUND > ");
         match readline {
             Ok(line) => {
                 shell_line(&c, &line)
@@ -26,6 +28,7 @@ pub fn run_shell(c: &cmd::Cli, _a: &Vec<String>)  {
             }
         }
     }
+    println!("{}", banner::banner(&"Zay Gezunt".to_string()));
 }
 
 fn shell_line(_c: &cmd::Cli, _line: &String) {
