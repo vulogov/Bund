@@ -7,5 +7,5 @@ pub fn run_version(_c: &cmd::Cli) {
     let standard_font = FIGfont::standard().unwrap();
     let banner = format!("the BUND {}", env!("CARGO_PKG_VERSION"));
     let figure = standard_font.convert(&banner);
-    println!("{}", figure.unwrap())
+    println!("{}", figure.unwrap());
 }
