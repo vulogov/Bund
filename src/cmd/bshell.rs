@@ -3,6 +3,7 @@ use rustyline::error::ReadlineError;
 use rustyline::{Editor};
 use crate::stdlib::banner;
 use crate::cmd;
+use crate::lang;
 
 pub fn run_shell(c: &cmd::Cli, _a: &Vec<String>)  {
     log::trace!("run_shell() reached");
@@ -31,6 +32,6 @@ pub fn run_shell(c: &cmd::Cli, _a: &Vec<String>)  {
     println!("{}", banner::banner(&"Zay Gezunt".to_string()));
 }
 
-fn shell_line(_c: &cmd::Cli, _line: &String) {
-
+fn shell_line(_c: &cmd::Cli, line: &String) {
+    lang::parse(&line)
 }
