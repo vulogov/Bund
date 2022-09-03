@@ -2,27 +2,27 @@
 extern crate pest;
 use pest::{Parser};
 use pest_derive::*;
+use crate::vm::error;
 
 #[derive(Parser)]
 #[grammar = "bund.pest"]
 struct BUNDParser;
 
+pub mod parse;
+
 pub fn parse(s: &String) {
     let pairs = BUNDParser::parse(Rule::program, s);
-    for pair in pairs {
-        for p in pair {
-            print_pair(0, p);
+    match pairs {
+        Ok(_) => {
+            for pair in pairs {
+                for p in pair {
+                    parse::parse_pair(p);
+                }
+            }
+        }
+        Err(err) => {
+            error::parse_error_handler(err);
         }
     }
-}
 
-fn print_pair(n: i32, p: pest::iterators::Pair<Rule>) {
-    let r = &p.as_rule();
-    println!("{} {} {:#?}", n, &p, &r);
-    let mut childs = p.into_inner();
-    let n = childs.next().unwrap();
-    println!("{:#?}", n);
-    // for i in childs {
-    //     print_pair(n+1, i);
-    // }
 }
