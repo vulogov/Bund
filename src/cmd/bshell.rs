@@ -5,9 +5,12 @@ use crate::stdlib::banner;
 use crate::cmd;
 use crate::lang;
 
-pub fn run_shell(c: &cmd::Cli, _a: &Vec<String>)  {
+pub fn run_shell(c: &cmd::Cli, a: &Vec<String>)  {
     log::trace!("run_shell() reached");
     println!("{}", banner::bund_banner());
+    for code in a {
+        shell_line(&c, &code);
+    }
     let mut line = Editor::<()>::new().unwrap();
     loop {
         let readline = line.readline("[BUND > ");
