@@ -9,10 +9,8 @@ value   = _{
   string |
   multi_line_string |
   literal |
-  multi_line_literal |
   float |
-  integer |
-  boolean
+  integer
 }
 
 attr = _{
@@ -23,7 +21,6 @@ attr = _{
 multi_line_string  = @{ "\"\"\"" ~ inner ~ "\"\"\"" }
 string             = @{ "\"" ~ inner ~ "\"" }
 inner              = @{ (!("\"" | "\\" | "\u{0000}" | "\u{001F}") ~ ANY)* ~ (escape ~ inner)? }
-multi_line_literal = @{ "'''" ~ (!"'''" ~ ANY)* ~ "'''" }
 literal            = @{ "'" ~ (!"'" ~ ANY)* ~ "'" }
 
 escape  = @{ "\\" ~ ("b" | "t" | "n" | "f" | "r" | "\"" | "\\" | unicode | NEWLINE)? }
@@ -35,7 +32,6 @@ int     = @{ "0" | (ASCII_NONZERO_DIGIT ~ digits?) }
 digits  = @{ (ASCII_DIGIT | ("_" ~ ASCII_DIGIT))+ }
 exp     = @{ ("E" | "e") ~ ("+" | "-")? ~ int }
 
-boolean = @{ "true" | "false" }
 
 ident   = @{ (LETTER|op) ~ (LETTER | NUMBER | "." | op )* }
 tag     = @{ LETTER ~ (LETTER)* }
