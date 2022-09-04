@@ -35,9 +35,9 @@ exp     = @{ ("E" | "e") ~ ("+" | "-")? ~ int }
 
 ident   = @{ (LETTER|op) ~ (LETTER | NUMBER | "." | op )* }
 tag     = @{ LETTER ~ (LETTER)* }
-prefix  = @{ ("?" | "`" | "#" | "~" | "$") }
+prefix  = @{ ("?" | "`" | "#" | "~" | "$" | "@") }
 suffix  = @{ ("?" | "!") }
-op      = @{ ( "*" | "=" | ">" | "<" | "&" | "^" | "|") }
+op      = @{ ( "*" | "-" | "=" | ">" | "<" | "&" | "^" | "|" | ";" | "," | "%" | "_") }
 left_function_bracket  = @{ "[" }
 right_function_bracket = @{ "]" }
 left_tag_bracket  = @{ "(" }
