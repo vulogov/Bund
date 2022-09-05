@@ -3,7 +3,7 @@ COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 
 program = _{ SOI ~ terms ~ EOI }
 terms   = _{ term ~ term* }
-term    = _{ (prefix)? ~ value ~ (suffix)? ~(left_function_bracket ~ term* ~ right_function_bracket)? ~ (left_tag_bracket ~ attr* ~ right_tag_bracket)? }
+term    = { (prefix)? ~ value ~ (suffix)? ~(left_function_bracket ~ term* ~ right_function_bracket)? ~ (left_tag_bracket ~ attr* ~ right_tag_bracket)? }
 value   = _{
   ident |
   string |

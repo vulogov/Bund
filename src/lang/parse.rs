@@ -16,12 +16,21 @@ use crate::vm::prefix;
 use crate::vm::suffix;
 use crate::vm::integer;
 use crate::vm::float;
+use crate::vm::token;
+
 
 
 pub fn parse_pair(b: &vm::VM, p: pest::iterators::Pair<Rule>) {
     let rule  = &p.as_rule();
     let token = &p.as_span();
     match rule {
+        Rule::term => {
+            token::process_token(&b, &p, &token.as_str().to_string());
+            for inner in p.into_inner() {
+                parse_pair(b, inner);
+            }
+            token::post_process_token(&b, &rule, &token.as_str().to_string());
+        }
         Rule::integer => {
             integer::process_token(&b, &p, &token.as_str().to_string());
         }

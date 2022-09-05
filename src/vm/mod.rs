@@ -16,3 +16,4 @@ pub mod prefix;
 pub mod suffix;
 pub mod integer;
 pub mod float;
+pub mod token;
