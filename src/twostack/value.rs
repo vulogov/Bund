@@ -21,6 +21,7 @@ enum Val {
     String(String),
 }
 
+#[derive(Clone)]
 pub struct Value {
     dt:         u16,
     pub q:      f32,
