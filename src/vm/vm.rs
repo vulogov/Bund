@@ -1,17 +1,12 @@
 use std::collections;
 use crate::twostack;
+use crate::twostack::value;
+use crate::vm::bundfunction;
 
-type BundFunctionPtr = fn(&VM, &BundFunction);
-
-pub struct BundFunction {
-    name:       String,
-    min_attr:   i32,
-    fun_ptr:    BundFunctionPtr,
-}
 
 pub struct VM {
     ts:         twostack::TS,
-    functions:  collections::HashMap<String,BundFunction>,
+    functions:  collections::HashMap<String,bundfunction::BundFunction>,
 }
 
 impl VM {
@@ -20,5 +15,17 @@ impl VM {
             ts:             twostack::TS::new(),
             functions:      collections::HashMap::new(),
         }
+    }
+}
+
+impl VM {
+    pub fn local(&mut self) -> &mut collections::VecDeque<value::Value> {
+        self.ts.local()
+    }
+    pub fn get(&mut self) -> Option<&value::Value> {
+        self.ts.get()
+    }
+    pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
+        self.functions.remove(name)
     }
 }
