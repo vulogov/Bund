@@ -1,5 +1,5 @@
 use std::collections;
-use crate::vm::value;
+pub mod value;
 
 pub struct TS {
     stack:       collections::VecDeque<collections::VecDeque<value::Value>>,
