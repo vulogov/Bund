@@ -14,12 +14,12 @@ pub mod parse;
 
 pub fn parse(s: &String) {
     let pairs = BUNDParser::parse(Rule::program, s);
-    let b     = vm::VM::new();
+    let mut b = vm::VM::new();
     match pairs {
         Ok(_) => {
             for pair in pairs {
                 for p in pair {
-                    parse::parse_pair(&b, p);
+                    parse::parse_pair(&mut b, p);
                 }
             }
         }

@@ -50,6 +50,7 @@ impl VM {
         self.v.pop_back()
     }
     pub fn add_value(&mut self, v: value::Value) {
+        log::trace!("Adding value from lexer");
         self.v.push_back(v)
     }
 }

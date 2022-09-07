@@ -20,7 +20,7 @@ use crate::vm::token;
 
 
 
-pub fn parse_pair(b: &vm::VM, p: pest::iterators::Pair<Rule>) {
+pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
     let rule  = &p.as_rule();
     let token = &p.as_span();
     match rule {
@@ -35,7 +35,7 @@ pub fn parse_pair(b: &vm::VM, p: pest::iterators::Pair<Rule>) {
             integer::process_token(&b, &p, &token.as_str().to_string());
         }
         Rule::float => {
-            float::process_token(&b, &p, &token.as_str().to_string());
+            float::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::ident => {
             ident::process_token(&b, &p, &token.as_str().to_string());
