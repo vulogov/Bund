@@ -35,6 +35,7 @@ impl TS {
     }
     pub fn new_stack(&mut self) -> &mut collections::VecDeque<value::Value> {
         let id = genid::generate_id();
+        log::trace!("Create new stack: {:?}", &id);
         self.names.push_back(id);
         let _ = self.stack.push_back(collections::VecDeque::new());
         self.stack.back_mut().unwrap()
@@ -44,14 +45,18 @@ impl TS {
             self.position(n);
             return self.local();
         }
+        log::trace!("Create new stack: {:?}", &n);
         self.names.push_back(n.to_string());
         let _ = self.stack.push_back(collections::VecDeque::new());
         self.stack.back_mut().unwrap()
     }
-    pub fn drop_stack(&mut self) {
+    pub fn drop_stack(&mut self)  {
         let _ = &mut self.if_empty();
         let _ = &mut self.stack.pop_back();
+        let name = &self.current();
+        let _ = &mut self.names.pop_back();
         let _ = &mut self.if_empty();
+        log::trace!("Dropping stack: {:?}", name);
     }
     pub fn get(&mut self) -> Option<&value::Value> {
         let _ = &mut self.if_empty();

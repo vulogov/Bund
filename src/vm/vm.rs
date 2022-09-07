@@ -63,4 +63,7 @@ impl VM {
     pub fn new_named_stack(&mut self, n: &String) -> &mut collections::VecDeque<value::Value> {
         self.ts.new_named_stack(n)
     }
+    pub fn drop_stack(&mut self)  {
+        self.ts.drop_stack();
+    }
 }

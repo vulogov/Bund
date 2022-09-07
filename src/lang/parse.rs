@@ -29,7 +29,7 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             for inner in p.into_inner() {
                 parse_pair(b, inner);
             }
-            token::post_process_token(&b, &rule, &token.as_str().to_string());
+            token::post_process_token(b, &rule, &token.as_str().to_string());
         }
         Rule::integer => {
             integer::process_token(b, &p, &token.as_str().to_string());
@@ -62,7 +62,7 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             rfb::process_token(&b, &p, &token.as_str().to_string());
         }
         Rule::tag => {
-            tag::process_token(&b, &p, &token.as_str().to_string());
+            tag::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::left_tag_bracket => {
             ltb::process_token(b, &p, &token.as_str().to_string());
