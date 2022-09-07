@@ -2,7 +2,6 @@ extern crate log;
 extern crate pest;
 use crate::lang::Rule;
 use crate::vm::vm;
-use crate::twostack::value;
 use lexical_core;
 
 pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String) {
@@ -10,7 +9,8 @@ pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String
     let num: Result<f64, lexical_core::Error> = lexical_core::parse(t.as_bytes());
     match num {
         Ok(val) => {
-            let v = value::Value::from_float(&val);
+            let mut v = b.value().unwrap();
+            v.float(val);
             b.add_value(v);
         }
         Err(err) => {

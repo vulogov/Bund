@@ -25,14 +25,14 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
     let token = &p.as_span();
     match rule {
         Rule::term => {
-            token::process_token(&b, &p, &token.as_str().to_string());
+            token::process_token(b, &p, &token.as_str().to_string());
             for inner in p.into_inner() {
                 parse_pair(b, inner);
             }
             token::post_process_token(&b, &rule, &token.as_str().to_string());
         }
         Rule::integer => {
-            integer::process_token(&b, &p, &token.as_str().to_string());
+            integer::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::float => {
             float::process_token(b, &p, &token.as_str().to_string());

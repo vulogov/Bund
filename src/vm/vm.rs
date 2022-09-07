@@ -47,10 +47,11 @@ impl VM {
         if self.v.is_empty() {
             return None;
         }
+        log::trace!("Taking value from value cache");
         self.v.pop_back()
     }
     pub fn add_value(&mut self, v: value::Value) {
-        log::trace!("Adding value from lexer");
+        log::trace!("Adding value from lexer: {:?}", &v);
         self.v.push_back(v)
     }
 }

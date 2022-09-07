@@ -1,4 +1,4 @@
-
+use core::fmt::{self, Debug};
 use std::collections;
 
 const NONE: u16     = 0;
@@ -113,6 +113,39 @@ impl Value {
 }
 
 impl Value {
+    pub fn string(&mut self, s: &String) -> &mut Value {
+        self.dt   = STRING;
+        self.data = Val::String(s.to_string());
+        self
+    }
+    pub fn float(&mut self, v: f64) -> &mut Value {
+        self.dt   = FLOAT;
+        self.data = Val::F64(v);
+        self
+    }
+    pub fn int(&mut self, v: i64) -> &mut Value {
+        self.dt   = INTEGER;
+        self.data = Val::I64(v);
+        self
+    }
+    pub fn bool(&mut self, v: bool) -> &mut Value {
+        self.dt   = BOOL;
+        self.data = Val::Bool(v);
+        self
+    }
+    pub fn call(&mut self, s: &String) -> &mut Value {
+        self.dt   = CALL;
+        self.data = Val::String(s.to_string());
+        self
+    }
+    pub fn ptr(&mut self, s: &String) -> &mut Value {
+        self.dt   = PTR;
+        self.data = Val::String(s.to_string());
+        self
+    }
+}
+
+impl Value {
     pub fn to_ready(&mut self) -> &Value {
         self.is_ready = true;
         self
@@ -173,5 +206,17 @@ impl Value {
     }
     pub fn tags_of(&mut self) -> &mut collections::HashSet<String>  {
         &mut self.tags
+    }
+}
+
+impl Debug for Value {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        match &self.data {
+            Val::Null => formatter.write_str("Null"),
+            Val::Bool(boolean) => write!(formatter, "Bool({})", boolean),
+            Val::I64(number) => Debug::fmt(&number, formatter),
+            Val::F64(number) => Debug::fmt(&number, formatter),
+            Val::String(string) => write!(formatter, "String({:?})", string),
+        }
     }
 }
