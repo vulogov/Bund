@@ -6,8 +6,9 @@ const BOOL: u16     = 1;
 const INTEGER: u16  = 2;
 const FLOAT: u16    = 3;
 const STRING: u16   = 4;
-const CALL: u16     = 5;
-const PTR: u16      = 6;
+const LITERAL: u16  = 5;
+const CALL: u16     = 6;
+const PTR: u16      = 7;
 
 
 
@@ -115,6 +116,11 @@ impl Value {
 impl Value {
     pub fn string(&mut self, s: &String) -> &mut Value {
         self.dt   = STRING;
+        self.data = Val::String(s.to_string());
+        self
+    }
+    pub fn literal(&mut self, s: &String) -> &mut Value {
+        self.dt   = LITERAL;
         self.data = Val::String(s.to_string());
         self
     }

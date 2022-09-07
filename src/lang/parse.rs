@@ -47,13 +47,13 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             suffix::process_token(&b, &p, &token.as_str().to_string());
         }
         Rule::literal => {
-            literal::process_token(&b, &p, &token.as_str().to_string());
+            literal::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::string => {
-            string::process_token(&b, &p, &token.as_str().to_string());
+            string::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::multi_line_string => {
-            string::process_token(&b, &p, &token.as_str().to_string());
+            string::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::left_function_bracket => {
             lfb::process_token(&b, &p, &token.as_str().to_string());

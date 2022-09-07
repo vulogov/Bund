@@ -3,6 +3,9 @@ extern crate pest;
 use crate::lang::Rule;
 use crate::vm::vm;
 
-pub fn process_token(_b: &vm::VM, p: &pest::iterators::Pair<Rule>, _t: &String) {
-    log::debug!("Received LITERAL token: {:#?}", p.as_rule());
+pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String) {
+    log::debug!("Received STRING token: {:#?}", p.as_rule());
+    let mut v = b.value().unwrap();
+    v.string(t);
+    b.add_value(v);
 }
