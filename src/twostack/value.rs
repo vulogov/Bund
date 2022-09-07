@@ -25,11 +25,12 @@ enum Val {
 #[derive(Clone)]
 pub struct Value {
     dt:         u16,
-    pub q:      f32,
+    pub q:      f64,
     data:       Val,
-    pub prefix:     String,
-    pub suffix:     String,
+    pub prefix: String,
+    pub suffix: String,
     is_ready:   bool,
+    pub is_attr:    bool,
     tags:       collections::HashSet<String>,
 }
 
@@ -40,7 +41,8 @@ impl Value {
             q:    0.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::Null,
             tags: collections::HashSet::new(),
         }
@@ -51,7 +53,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -62,7 +65,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -73,7 +77,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -84,7 +89,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::Bool(*v),
             tags: collections::HashSet::new(),
         }
@@ -95,7 +101,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::I64(*v),
             tags: collections::HashSet::new(),
         }
@@ -106,7 +113,8 @@ impl Value {
             q:    100.0,
             prefix: "".to_string(),
             suffix: "".to_string(),
-            is_ready:   false,
+            is_ready:  false,
+            is_attr:   true,
             data: Val::F64(*v),
             tags: collections::HashSet::new(),
         }

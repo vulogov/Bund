@@ -65,10 +65,10 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             tag::process_token(&b, &p, &token.as_str().to_string());
         }
         Rule::left_tag_bracket => {
-            ltb::process_token(&b, &p, &token.as_str().to_string());
+            ltb::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::right_tag_bracket => {
-            rtb::process_token(&b, &p, &token.as_str().to_string());
+            rtb::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::EOI => {
             eoi::process_token(&b, &p, &token.as_str().to_string());

@@ -10,8 +10,14 @@ pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String
     match num {
         Ok(val) => {
             let mut v = b.value().unwrap();
-            v.float(val);
-            b.add_value(v);
+            if v.is_attr {
+                v.float(val);
+                b.add_value(v);
+            } else {
+                log::debug!("Set Q for the value: {:?}", &val);
+                v.q = val;
+                b.add_value(v);
+            }
         }
         Err(err) => {
             log::error!("Error parsing FLOAT token: {:?}", err);
