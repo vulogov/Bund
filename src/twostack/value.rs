@@ -26,6 +26,9 @@ pub struct Value {
     dt:         u16,
     pub q:      f32,
     data:       Val,
+    pub prefix:     String,
+    pub suffix:     String,
+    is_ready:   bool,
     tags:       collections::HashSet<String>,
 }
 
@@ -34,6 +37,9 @@ impl Value {
         Self {
             dt:   NONE,
             q:    0.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::Null,
             tags: collections::HashSet::new(),
         }
@@ -42,6 +48,9 @@ impl Value {
         Self {
             dt:   STRING,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -50,6 +59,9 @@ impl Value {
         Self {
             dt:   CALL,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -58,6 +70,9 @@ impl Value {
         Self {
             dt:   PTR,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -66,6 +81,9 @@ impl Value {
         Self {
             dt:   BOOL,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::Bool(*v),
             tags: collections::HashSet::new(),
         }
@@ -74,6 +92,9 @@ impl Value {
         Self {
             dt:   INTEGER,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::I64(*v),
             tags: collections::HashSet::new(),
         }
@@ -82,6 +103,9 @@ impl Value {
         Self {
             dt:   FLOAT,
             q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:   false,
             data: Val::F64(*v),
             tags: collections::HashSet::new(),
         }
@@ -89,6 +113,17 @@ impl Value {
 }
 
 impl Value {
+    pub fn to_ready(&mut self) -> &Value {
+        self.is_ready = true;
+        self
+    }
+    pub fn to_not_ready(&mut self) -> &Value {
+        self.is_ready = false;
+        self
+    }
+    pub fn is_ready(&self) -> bool {
+        self.is_ready
+    }
     pub fn type_of(&self) -> u16 {
         self.dt
     }
@@ -121,6 +156,12 @@ impl Value {
             Val::String(v) => Some(&v),
             _ => None,
         }
+    }
+    pub fn prefix(&mut self, p: &String) {
+        self.prefix = p.to_string()
+    }
+    pub fn suffix(&mut self, s: &String) {
+        self.suffix = s.to_string()
     }
     pub fn clear_tags(&mut self) -> &Value {
         let _ = &self.tags.clear();

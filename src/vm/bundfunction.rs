@@ -1,7 +1,8 @@
+use std::collections;
 use std::error::Error;
 use crate::vm::vm;
 
-type BundFunctionPtr = fn(&vm::VM);
+type BundFunctionPtr = fn(&vm::VM, &collections::VecDeque<value::Value>);
 
 pub struct BundFunction {
     name:       String,
