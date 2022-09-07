@@ -29,6 +29,9 @@ impl VM {
     pub fn get(&mut self) -> Option<&value::Value> {
         self.ts.get()
     }
+    pub fn set(&mut self, v: value::Value)  {
+        self.ts.set(v)
+    }
     pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
         self.functions.remove(name)
     }
@@ -48,5 +51,14 @@ impl VM {
     }
     pub fn add_value(&mut self, v: value::Value) {
         self.v.push_back(v)
+    }
+}
+
+impl VM {
+    pub fn new_stack(&mut self) -> &mut collections::VecDeque<value::Value> {
+        self.ts.new_stack()
+    }
+    pub fn new_named_stack(&mut self, n: &String) -> &mut collections::VecDeque<value::Value> {
+        self.ts.new_named_stack(n)
     }
 }

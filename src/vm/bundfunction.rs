@@ -1,6 +1,7 @@
 use std::collections;
 use std::error::Error;
 use crate::vm::vm;
+use crate::twostack::value;
 
 type BundFunctionPtr = fn(&vm::VM, &collections::VecDeque<value::Value>);
 

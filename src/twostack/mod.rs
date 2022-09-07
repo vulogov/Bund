@@ -1,3 +1,4 @@
+extern crate log;
 use std::collections;
 use crate::stdlib::genid;
 pub mod value;
@@ -39,6 +40,10 @@ impl TS {
         self.stack.back_mut().unwrap()
     }
     pub fn new_named_stack(&mut self, n: &String) -> &mut collections::VecDeque<value::Value> {
+        if self.names.contains(n) {
+            self.position(n);
+            return self.local();
+        }
         self.names.push_back(n.to_string());
         let _ = self.stack.push_back(collections::VecDeque::new());
         self.stack.back_mut().unwrap()
@@ -106,7 +111,7 @@ impl TS {
         let _ = local.rotate_left(1);
         self.get()
     }
-    pub fn position(&mut self, name: &mut String) -> bool {
+    pub fn position(&mut self, name: &String) -> bool {
         let _ = &mut self.if_empty();
         let last = &mut self.current();
         if last == name {
