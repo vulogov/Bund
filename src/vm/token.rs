@@ -12,6 +12,20 @@ pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String
 
 pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
     log::debug!("TOKEN postprocessing: {:?}({})", &r, &t);
-    let attr = b.local();
-    b.drop_stack();
+    let v   = b.value().unwrap();
+    match v.type_of() {
+        value::NONE ..=value::LITERAL => {
+            b.set(v);
+            post_process_data_token(b);
+        }
+        _ => todo!(),
+    }
+}
+
+fn post_process_data_token(b: &mut vm::VM) {
+    let mut attr = b.take_stack();
+    while ! attr.is_empty() {
+        let v = attr.pop_front().unwrap();
+        b.set(v);
+    }
 }

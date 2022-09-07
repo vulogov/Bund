@@ -1,14 +1,14 @@
 use core::fmt::{self, Debug};
 use std::collections;
 
-const NONE: u16     = 0;
-const BOOL: u16     = 1;
-const INTEGER: u16  = 2;
-const FLOAT: u16    = 3;
-const STRING: u16   = 4;
-const LITERAL: u16  = 5;
-const CALL: u16     = 6;
-const PTR: u16      = 7;
+pub const NONE: u16     = 0;
+pub const BOOL: u16     = 1;
+pub const INTEGER: u16  = 2;
+pub const FLOAT: u16    = 3;
+pub const STRING: u16   = 4;
+pub const LITERAL: u16  = 5;
+pub const CALL: u16     = 6;
+pub const PTR: u16      = 7;
 
 
 

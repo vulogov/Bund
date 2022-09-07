@@ -26,6 +26,9 @@ impl VM {
     pub fn local(&mut self) -> &mut collections::VecDeque<value::Value> {
         self.ts.local()
     }
+    pub fn take_stack(&mut self) -> collections::VecDeque<value::Value> {
+        self.ts.take_stack()
+    }
     pub fn get(&mut self) -> Option<&value::Value> {
         self.ts.get()
     }

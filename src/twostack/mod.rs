@@ -33,6 +33,12 @@ impl TS {
         let _ = &mut self.if_empty();
         self.stack.back_mut().unwrap()
     }
+    pub fn take_stack(&mut self) -> collections::VecDeque<value::Value> {
+        let _ = &mut self.if_empty();
+        let name = self.names.pop_back().unwrap();
+        log::trace!("Taking stack: {:?}", &name);
+        self.stack.pop_back().unwrap()
+    }
     pub fn new_stack(&mut self) -> &mut collections::VecDeque<value::Value> {
         let id = genid::generate_id();
         log::trace!("Create new stack: {:?}", &id);
@@ -64,7 +70,9 @@ impl TS {
     }
     pub fn set(&mut self, v: value::Value) {
         let _ = &mut self.if_empty();
+        let name  = &self.current();
         let local = &mut self.local();
+        log::trace!("Push {:?} to {:?}", &v, &name);
         local.push_back(v)
     }
     pub fn drop(&mut self) {
