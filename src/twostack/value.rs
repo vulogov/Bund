@@ -9,13 +9,14 @@ pub const STRING: u16   = 4;
 pub const LITERAL: u16  = 5;
 pub const CALL: u16     = 6;
 pub const PTR: u16      = 7;
-
+pub const TOKEN: u16    = 99;
 
 
 
 #[derive(Clone)]
 enum Val {
     Null,
+    Token,
     Bool(bool),
     I64(i64),
     F64(f64),
@@ -46,6 +47,19 @@ impl Value {
             is_attr:   true,
             has_attr:  false,
             data: Val::Null,
+            tags: collections::HashSet::new(),
+        }
+    }
+    pub fn token() -> Self {
+        Self {
+            dt:   TOKEN,
+            q:    0.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:  false,
+            is_attr:   true,
+            has_attr:  false,
+            data: Val::Token,
             tags: collections::HashSet::new(),
         }
     }
@@ -235,6 +249,7 @@ impl Debug for Value {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         match &self.data {
             Val::Null => formatter.write_str("Null"),
+            Val::Token => formatter.write_str("Token"),
             Val::Bool(boolean) => write!(formatter, "Bool({})", boolean),
             Val::I64(number) => Debug::fmt(&number, formatter),
             Val::F64(number) => Debug::fmt(&number, formatter),

@@ -6,7 +6,7 @@ use crate::vm::vm;
 
 pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String) {
     log::debug!("Received TOKEN token: {:#?}({})", p.as_rule(), t);
-    b.add_value(value::Value::new());
+    b.add_value(value::Value::token());
 }
 
 pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
@@ -16,6 +16,9 @@ pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
         value::NONE ..=value::LITERAL => {
             b.set_by_ref(&v);
             post_process_data_token(b, &v);
+        }
+        value::CALL => {
+            log::trace!("CALL request: {}", &v.as_string().unwrap());
         }
         _ => todo!(),
     }

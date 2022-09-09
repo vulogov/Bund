@@ -38,13 +38,13 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             float::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::ident => {
-            ident::process_token(&b, &p, &token.as_str().to_string());
+            ident::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::prefix => {
-            prefix::process_token(&b, &p, &token.as_str().to_string());
+            prefix::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::suffix => {
-            suffix::process_token(&b, &p, &token.as_str().to_string());
+            suffix::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::literal => {
             literal::process_token(b, &p, &token.as_str().to_string());
