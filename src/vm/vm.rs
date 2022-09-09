@@ -3,6 +3,7 @@ use std::collections;
 use crate::twostack;
 use crate::twostack::value;
 use crate::vm::bundfunction;
+use crate::stdlib::bund::{init_stdlib};
 
 
 pub struct VM {
@@ -21,6 +22,13 @@ impl VM {
             a:              collections::VecDeque::new(),
             functions:      collections::HashMap::new(),
         }
+    }
+    pub fn init() -> Self {
+        let mut b = VM::new();
+        log::trace!("Initializing BUND standard library");
+        init_stdlib(&mut b);
+        log::trace!("BUND VM is ready");
+        b
     }
 }
 

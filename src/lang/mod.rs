@@ -14,7 +14,7 @@ pub mod parse;
 
 pub fn parse(s: &String) {
     let pairs = BUNDParser::parse(Rule::program, s);
-    let mut b = vm::VM::new();
+    let mut b = vm::VM::init();
     match pairs {
         Ok(_) => {
             for pair in pairs {
