@@ -7,7 +7,6 @@ use crate::vm::vm;
 pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String) {
     log::debug!("Received TOKEN token: {:#?}({})", p.as_rule(), t);
     b.add_value(value::Value::new());
-    b.new_stack();
 }
 
 pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
@@ -15,15 +14,18 @@ pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
     let v   = b.value().unwrap();
     match v.type_of() {
         value::NONE ..=value::LITERAL => {
-            b.set(v);
-            post_process_data_token(b);
+            b.set_by_ref(&v);
+            post_process_data_token(b, &v);
         }
         _ => todo!(),
     }
 }
 
-fn post_process_data_token(b: &mut vm::VM) {
-    let mut attr = b.take_stack();
+fn post_process_data_token(b: &mut vm::VM, v: &value::Value) {
+    if ! v.has_attr {
+        return
+    }
+    let mut attr = b.attr().unwrap();
     while ! attr.is_empty() {
         let v = attr.pop_front().unwrap();
         b.set(v);

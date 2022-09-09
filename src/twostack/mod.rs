@@ -21,6 +21,7 @@ impl TS {
     fn if_empty(&mut self) {
         if self.stack.is_empty() {
             let id = genid::generate_id();
+            log::trace!("Create new stack: {:?}", &id);
             self.names.push_back(id);
             self.stack.push_back(collections::VecDeque::new())
         }
@@ -74,6 +75,9 @@ impl TS {
         let local = &mut self.local();
         log::trace!("Push {:?} to {:?}", &v, &name);
         local.push_back(v)
+    }
+    pub fn set_by_ref(&mut self, v: &value::Value) {
+        self.set(v.clone())
     }
     pub fn drop(&mut self) {
         let _ = &mut self.if_empty();

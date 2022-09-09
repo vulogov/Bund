@@ -31,6 +31,7 @@ pub struct Value {
     pub suffix: String,
     is_ready:   bool,
     pub is_attr:    bool,
+    pub has_attr:   bool,
     tags:       collections::HashSet<String>,
 }
 
@@ -43,6 +44,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::Null,
             tags: collections::HashSet::new(),
         }
@@ -55,6 +57,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -67,6 +70,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -79,6 +83,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::String(s.to_string()),
             tags: collections::HashSet::new(),
         }
@@ -91,6 +96,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::Bool(*v),
             tags: collections::HashSet::new(),
         }
@@ -103,6 +109,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::I64(*v),
             tags: collections::HashSet::new(),
         }
@@ -115,6 +122,7 @@ impl Value {
             suffix: "".to_string(),
             is_ready:  false,
             is_attr:   true,
+            has_attr:  false,
             data: Val::F64(*v),
             tags: collections::HashSet::new(),
         }

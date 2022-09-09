@@ -7,6 +7,7 @@ use crate::vm::bundfunction;
 
 pub struct VM {
     v:          collections::VecDeque<value::Value>,
+    a:          collections::VecDeque<collections::VecDeque<value::Value>>,
     ts:         twostack::TS,
     functions:  collections::HashMap<String,bundfunction::BundFunction>,
 }
@@ -17,6 +18,7 @@ impl VM {
         Self {
             ts:             twostack::TS::new(),
             v:              collections::VecDeque::new(),
+            a:              collections::VecDeque::new(),
             functions:      collections::HashMap::new(),
         }
     }
@@ -29,11 +31,24 @@ impl VM {
     pub fn take_stack(&mut self) -> collections::VecDeque<value::Value> {
         self.ts.take_stack()
     }
+    pub fn to_attr(&mut self, s: collections::VecDeque<value::Value>) {
+        self.a.push_back(s)
+    }
+    pub fn attr(&mut self) -> Option<collections::VecDeque<value::Value>> {
+        if self.a.is_empty() {
+            return None;
+        }
+        log::trace!("Taking attr from attribute cache");
+        self.a.pop_back()
+    }
     pub fn get(&mut self) -> Option<&value::Value> {
         self.ts.get()
     }
     pub fn set(&mut self, v: value::Value)  {
         self.ts.set(v)
+    }
+    pub fn set_by_ref(&mut self, v: &value::Value)  {
+        self.ts.set_by_ref(v)
     }
     pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
         self.functions.remove(name)
