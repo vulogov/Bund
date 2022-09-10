@@ -52,9 +52,6 @@ impl VM {
         log::trace!("Taking attr from attribute cache");
         self.a.pop_back()
     }
-    pub fn to_traceback(&mut self, s: String) {
-        self.tb.push_back(traceback::Traceback::new(s))
-    }
     pub fn get(&mut self) -> Option<value::Value> {
         self.ts.get()
     }
@@ -66,20 +63,6 @@ impl VM {
     }
     pub fn set_by_ref(&mut self, v: &value::Value)  {
         self.ts.set_by_ref(v)
-    }
-    pub fn set_error(&mut self, c: String, m: String) {
-        self.ts.set(value::Value::from_error(&c, &m))
-    }
-    pub fn is_error(&mut self) -> bool {
-        let v = self.look().unwrap();
-        match v.type_of() {
-            value::ERROR => {
-                true
-            }
-            _ => {
-                false
-            }
-        }
     }
     pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
         self.functions.remove(name)
@@ -114,5 +97,33 @@ impl VM {
     }
     pub fn drop_stack(&mut self)  {
         self.ts.drop_stack();
+    }
+}
+
+impl VM {
+    pub fn set_error(&mut self, c: String, m: String) {
+        self.ts.set(value::Value::from_error(&c, &m))
+    }
+    pub fn is_error(&mut self) -> bool {
+        let v = self.look().unwrap();
+        match v.type_of() {
+            value::ERROR => {
+                true
+            }
+            _ => {
+                false
+            }
+        }
+    }
+    pub fn to_traceback(&mut self, s: String) {
+        self.tb.push_back(traceback::Traceback::new(s))
+    }
+    pub fn dump_traceback(&self) {
+        let mut c = 0;
+        while c < self.tb.len() {
+            c += 1;
+            let t = self.tb.get(c).unwrap();
+            println!("[{:?}] {}", t.elapsed(), t.rule());
+        }
     }
 }

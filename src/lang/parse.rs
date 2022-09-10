@@ -23,6 +23,7 @@ use crate::vm::token;
 pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
     let rule  = &p.as_rule();
     let token = &p.as_span();
+    b.to_traceback(format!("{:?}", &rule));
     match rule {
         Rule::term => {
             token::process_token(b, &p, &token.as_str().to_string());

@@ -18,6 +18,9 @@ impl Traceback {
     pub fn millisecond(&self) -> i64 {
         self.ts.duration_since(UNIX_EPOCH).unwrap().as_millis() as i64
     }
+    pub fn elapsed(&self) -> i64 {
+        self.ts.elapsed().unwrap().as_secs() as i64
+    }
     pub fn rule(&self) -> &String {
         &self.r
     }
