@@ -1,7 +1,9 @@
 extern crate log;
 use std::collections;
 use crate::stdlib::genid;
+
 pub mod value;
+pub mod error;
 
 pub struct TS {
     names:       collections::VecDeque<String>,
@@ -65,7 +67,11 @@ impl TS {
         let _ = &mut self.if_empty();
         log::trace!("Dropping stack: {:?}", name);
     }
-    pub fn get(&mut self) -> Option<&value::Value> {
+    pub fn get(&mut self) -> Option<value::Value> {
+        let _ = &mut self.if_empty();
+        self.local().pop_back()
+    }
+    pub fn look(&mut self) -> Option<&value::Value> {
         let _ = &mut self.if_empty();
         self.local().back()
     }
@@ -120,13 +126,13 @@ impl TS {
         let _ = &mut self.if_empty();
         let local = &mut self.local();
         let _ = local.rotate_right(1);
-        self.get()
+        self.look()
     }
     pub fn local_left(&mut self) -> Option<&value::Value> {
         let _ = &mut self.if_empty();
         let local = &mut self.local();
         let _ = local.rotate_left(1);
-        self.get()
+        self.look()
     }
     pub fn position(&mut self, name: &String) -> bool {
         let _ = &mut self.if_empty();

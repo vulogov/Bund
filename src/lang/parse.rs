@@ -71,10 +71,10 @@ pub fn parse_pair(b: &mut vm::VM, p: pest::iterators::Pair<Rule>) {
             rtb::process_token(b, &p, &token.as_str().to_string());
         }
         Rule::EOI => {
-            eoi::process_token(&b, &p, &token.as_str().to_string());
+            eoi::process_token(b, &p, &token.as_str().to_string());
         }
         _ => {
-            unknown::process_token(&b, &p, &token.as_str().to_string());
+            unknown::process_token(b, &p, &token.as_str().to_string());
         }
     }
 }

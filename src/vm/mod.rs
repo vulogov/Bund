@@ -1,6 +1,7 @@
 pub mod error;
 pub mod vm;
 pub mod bundfunction;
+pub mod traceback;
 
 pub mod unknown;
 pub mod eoi;

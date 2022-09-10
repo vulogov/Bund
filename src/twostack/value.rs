@@ -1,5 +1,6 @@
 use core::fmt::{self, Debug};
 use std::collections;
+use crate::twostack::error::{BundError};
 
 pub const NONE: u16     = 0;
 pub const BOOL: u16     = 1;
@@ -9,6 +10,7 @@ pub const STRING: u16   = 4;
 pub const LITERAL: u16  = 5;
 pub const CALL: u16     = 6;
 pub const PTR: u16      = 7;
+pub const ERROR: u16    = 98;
 pub const TOKEN: u16    = 99;
 
 
@@ -17,6 +19,7 @@ pub const TOKEN: u16    = 99;
 enum Val {
     Null,
     Token,
+    Error(BundError),
     Bool(bool),
     I64(i64),
     F64(f64),
@@ -141,6 +144,19 @@ impl Value {
             tags: collections::HashSet::new(),
         }
     }
+    pub fn from_error(c: &String, m: &String) -> Self {
+        Self {
+            dt:   ERROR,
+            q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:  false,
+            is_attr:   true,
+            has_attr:  false,
+            data: Val::Error(BundError::new(c.to_string(), m.to_string())),
+            tags: collections::HashSet::new(),
+        }
+    }
 }
 
 impl Value {
@@ -250,6 +266,7 @@ impl Debug for Value {
         match &self.data {
             Val::Null => formatter.write_str("Null"),
             Val::Token => formatter.write_str("Token"),
+            Val::Error(err) => write!(formatter, "Error({}:{})", err.class(), err.message()),
             Val::Bool(boolean) => write!(formatter, "Bool({})", boolean),
             Val::I64(number) => Debug::fmt(&number, formatter),
             Val::F64(number) => Debug::fmt(&number, formatter),

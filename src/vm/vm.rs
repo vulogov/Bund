@@ -3,10 +3,12 @@ use std::collections;
 use crate::twostack;
 use crate::twostack::value;
 use crate::vm::bundfunction;
+use crate::vm::traceback;
 use crate::stdlib::bund::{init_stdlib};
 
 
 pub struct VM {
+    tb:         collections::VecDeque<traceback::Traceback>,
     v:          collections::VecDeque<value::Value>,
     a:          collections::VecDeque<collections::VecDeque<value::Value>>,
     ts:         twostack::TS,
@@ -21,6 +23,7 @@ impl VM {
             v:              collections::VecDeque::new(),
             a:              collections::VecDeque::new(),
             functions:      collections::HashMap::new(),
+            tb:             collections::VecDeque::new(),
         }
     }
     pub fn init() -> Self {
@@ -49,14 +52,34 @@ impl VM {
         log::trace!("Taking attr from attribute cache");
         self.a.pop_back()
     }
-    pub fn get(&mut self) -> Option<&value::Value> {
+    pub fn to_traceback(&mut self, s: String) {
+        self.tb.push_back(traceback::Traceback::new(s))
+    }
+    pub fn get(&mut self) -> Option<value::Value> {
         self.ts.get()
+    }
+    pub fn look(&mut self) -> Option<&value::Value> {
+        self.ts.look()
     }
     pub fn set(&mut self, v: value::Value)  {
         self.ts.set(v)
     }
     pub fn set_by_ref(&mut self, v: &value::Value)  {
         self.ts.set_by_ref(v)
+    }
+    pub fn set_error(&mut self, c: String, m: String) {
+        self.ts.set(value::Value::from_error(&c, &m))
+    }
+    pub fn is_error(&mut self) -> bool {
+        let v = self.look().unwrap();
+        match v.type_of() {
+            value::ERROR => {
+                true
+            }
+            _ => {
+                false
+            }
+        }
     }
     pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
         self.functions.remove(name)
