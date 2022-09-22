@@ -2,6 +2,8 @@ pub mod error;
 pub mod vm;
 pub mod bundfunction;
 pub mod traceback;
+pub mod codeblockctx;
+pub mod bundcontext;
 
 pub mod unknown;
 pub mod eoi;

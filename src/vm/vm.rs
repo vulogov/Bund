@@ -1,9 +1,12 @@
 extern crate log;
 use std::collections;
+use std::error::Error;
 use crate::twostack;
 use crate::twostack::value;
 use crate::vm::bundfunction;
 use crate::vm::traceback;
+use crate::vm::codeblockctx;
+use crate::vm::bundcontext;
 use crate::stdlib::bund::{init_stdlib};
 
 
@@ -13,6 +16,8 @@ pub struct VM {
     a:          collections::VecDeque<collections::VecDeque<value::Value>>,
     ts:         twostack::TS,
     functions:  collections::HashMap<String,bundfunction::BundFunction>,
+    cbctx:      codeblockctx::CodeBlockCtx,
+    pub ctx:    bundcontext::BundContext,
 }
 
 impl VM {
@@ -24,6 +29,8 @@ impl VM {
             a:              collections::VecDeque::new(),
             functions:      collections::HashMap::new(),
             tb:             collections::VecDeque::new(),
+            cbctx:          codeblockctx::CodeBlockCtx::new(),
+            ctx:            bundcontext::BundContext::new(),
         }
     }
     pub fn init() -> Self {
@@ -125,5 +132,20 @@ impl VM {
             let t = self.tb.get(c).unwrap();
             println!("[{:?}] {}", t.elapsed(), t.rule());
         }
+    }
+}
+
+impl VM {
+    pub fn in_codeblock(&mut self)  {
+        self.cbctx.in_codeblock()
+    }
+    pub fn outof_codeblock(&mut self)  {
+        self.cbctx.outof_codeblock()
+    }
+    pub fn code(&mut self) -> Result<&String, Box<dyn Error>> {
+        self.cbctx.code()
+    }
+    pub fn add_code(&mut self, c: &String)  {
+        self.cbctx.set_code(c)
     }
 }
