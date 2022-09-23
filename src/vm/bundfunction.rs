@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::vm::vm;
 use crate::twostack::value;
 
-type BundFunctionPtr = fn(&vm::VM, &collections::VecDeque<value::Value>);
+type BundFunctionPtr = fn(&mut vm::VM, &mut collections::VecDeque<value::Value>);
 
 pub struct BundFunction {
     name:       String,
@@ -12,10 +12,10 @@ pub struct BundFunction {
 }
 
 impl BundFunction {
-    pub fn new(name: &String, n: &i32, ptr: BundFunctionPtr) -> Self {
+    pub fn new(name: &str, n: i32, ptr: BundFunctionPtr) -> Self {
         Self {
             name:           name.to_string(),
-            min_attr:       *n,
+            min_attr:       n as i32,
             fun_ptr:        ptr,
         }
     }

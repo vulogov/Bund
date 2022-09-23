@@ -1,6 +1,5 @@
 extern crate log;
 use std::collections;
-use std::error::Error;
 use crate::twostack;
 use crate::twostack::value;
 use crate::vm::bundfunction;
@@ -17,7 +16,7 @@ pub struct VM {
     ts:         twostack::TS,
     functions:  collections::HashMap<String,bundfunction::BundFunction>,
     cbctx:      codeblockctx::CodeBlockCtx,
-    pub ctx:    bundcontext::BundContext,
+    ctx:    bundcontext::BundContext,
 }
 
 impl VM {
@@ -74,9 +73,9 @@ impl VM {
     pub fn drop_function(&mut self, name: &String) -> Option<bundfunction::BundFunction> {
         self.functions.remove(name)
     }
-    pub fn add_function(&mut self, n: &String, f: bundfunction::BundFunction) {
+    pub fn add_function(&mut self, n: &str, f: bundfunction::BundFunction) {
         log::debug!("Registering BUND function: {:?}", &n);
-        self.drop_function(&n);
+        self.drop_function(&n.to_string());
         self.functions.insert(n.to_string(), f);
     }
     pub fn function(&self, name: &String) -> Option<&bundfunction::BundFunction> {
@@ -142,10 +141,17 @@ impl VM {
     pub fn outof_codeblock(&mut self)  {
         self.cbctx.outof_codeblock()
     }
-    pub fn code(&mut self) -> Result<&String, Box<dyn Error>> {
-        self.cbctx.code()
+    pub fn code(&mut self, n: String) -> Option<&String> {
+        self.ctx.get(n)
     }
     pub fn add_code(&mut self, c: &String)  {
         self.cbctx.set_code(c)
+    }
+    pub fn set_code_in_ctx(&mut self, n: String) {
+        if self.cbctx.is_in_codeblock() {
+            let code = &mut self.cbctx.code().unwrap();
+            let _ = &mut self.ctx.set(n, code.to_string());
+            let _ = &mut self.cbctx.outof_codeblock();
+        }
     }
 }
