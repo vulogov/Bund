@@ -16,7 +16,7 @@ pub struct VM {
     ts:         twostack::TS,
     functions:  collections::HashMap<String,bundfunction::BundFunction>,
     cbctx:      codeblockctx::CodeBlockCtx,
-    ctx:    bundcontext::BundContext,
+    ctx:        bundcontext::BundContext,
 }
 
 impl VM {

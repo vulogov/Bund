@@ -10,6 +10,7 @@ pub const STRING: u16   = 4;
 pub const LITERAL: u16  = 5;
 pub const CALL: u16     = 6;
 pub const PTR: u16      = 7;
+pub const BIN: u16      = 8;
 pub const ERROR: u16    = 98;
 pub const TOKEN: u16    = 99;
 
@@ -24,6 +25,7 @@ enum Val {
     I64(i64),
     F64(f64),
     String(String),
+    Binary(Vec<u8>),
 }
 
 #[derive(Clone)]
@@ -157,6 +159,19 @@ impl Value {
             tags: collections::HashSet::new(),
         }
     }
+    pub fn from_binary(d: &Vec<u8>) -> Self {
+        Self {
+            dt:   ERROR,
+            q:    100.0,
+            prefix: "".to_string(),
+            suffix: "".to_string(),
+            is_ready:  false,
+            is_attr:   true,
+            has_attr:  false,
+            data: Val::Binary(d.to_vec()),
+            tags: collections::HashSet::new(),
+        }
+    }
 }
 
 impl Value {
@@ -193,6 +208,11 @@ impl Value {
     pub fn ptr(&mut self, s: &String) -> &mut Value {
         self.dt   = PTR;
         self.data = Val::String(s.to_string());
+        self
+    }
+    pub fn binary(&mut self, s: &Vec<u8>) -> &mut Value {
+        self.dt   = BIN;
+        self.data = Val::Binary(s.to_vec());
         self
     }
 }
@@ -242,6 +262,12 @@ impl Value {
             _ => None,
         }
     }
+    pub fn as_binary(&self) -> Option<&Vec<u8>> {
+        match &self.data {
+            Val::Binary(v) => Some(&v),
+            _ => None,
+        }
+    }
     pub fn prefix(&mut self, p: &String) {
         self.prefix = p.to_string()
     }
@@ -271,6 +297,7 @@ impl Debug for Value {
             Val::I64(number) => Debug::fmt(&number, formatter),
             Val::F64(number) => Debug::fmt(&number, formatter),
             Val::String(string) => write!(formatter, "String({:?})", string),
+            Val::Binary(bin) => write!(formatter, "Binary({:?})", bin),
         }
     }
 }
