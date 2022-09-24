@@ -6,6 +6,7 @@ use crate::vm::bundfunction;
 use crate::vm::traceback;
 use crate::vm::codeblockctx;
 use crate::vm::bundcontext;
+use crate::vm::bundstate;
 use crate::stdlib::bund::{init_stdlib};
 
 
@@ -17,6 +18,7 @@ pub struct VM {
     functions:  collections::HashMap<String,bundfunction::BundFunction>,
     cbctx:      codeblockctx::CodeBlockCtx,
     ctx:        bundcontext::BundContext,
+pub state:      bundstate::BundState,
 }
 
 impl VM {
@@ -30,6 +32,7 @@ impl VM {
             tb:             collections::VecDeque::new(),
             cbctx:          codeblockctx::CodeBlockCtx::new(),
             ctx:            bundcontext::BundContext::new(),
+            state:          bundstate::BundState::new(),
         }
     }
     pub fn init() -> Self {

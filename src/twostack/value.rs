@@ -1,4 +1,3 @@
-use core::fmt::{self, Debug};
 use std::collections;
 use crate::twostack::error::{BundError};
 
@@ -17,7 +16,7 @@ pub const TOKEN: u16    = 99;
 
 
 #[derive(Clone)]
-enum Val {
+pub enum Val {
     Null,
     Token,
     Error(BundError),
@@ -32,7 +31,7 @@ enum Val {
 pub struct Value {
     dt:         u16,
     pub q:      f64,
-    data:       Val,
+    pub data:   Val,
     pub prefix: String,
     pub suffix: String,
     is_ready:   bool,
@@ -284,20 +283,5 @@ impl Value {
     }
     pub fn tags_of(&mut self) -> &mut collections::HashSet<String>  {
         &mut self.tags
-    }
-}
-
-impl Debug for Value {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        match &self.data {
-            Val::Null => formatter.write_str("Null"),
-            Val::Token => formatter.write_str("Token"),
-            Val::Error(err) => write!(formatter, "Error({}:{})", err.class(), err.message()),
-            Val::Bool(boolean) => write!(formatter, "Bool({})", boolean),
-            Val::I64(number) => Debug::fmt(&number, formatter),
-            Val::F64(number) => Debug::fmt(&number, formatter),
-            Val::String(string) => write!(formatter, "String({:?})", string),
-            Val::Binary(bin) => write!(formatter, "Binary({:?})", bin),
-        }
     }
 }
