@@ -19,7 +19,7 @@ pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
         }
         value::CALL => {
             log::trace!("CALL request: {}", &v.as_string().unwrap());
-
+            b.end_codeblock(&v.as_string().unwrap());
         }
         _ => todo!(),
     }
