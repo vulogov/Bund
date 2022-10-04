@@ -141,18 +141,25 @@ impl VM {
     pub fn in_codeblock(&mut self)  {
         self.cbctx.in_codeblock()
     }
+    pub fn is_in_codeblock(&mut self) -> bool {
+        self.cbctx.is_in_codeblock()
+    }
     pub fn outof_codeblock(&mut self)  {
         self.cbctx.outof_codeblock()
     }
     pub fn code(&mut self, n: String) -> Option<&String> {
         self.ctx.get(n)
     }
-    pub fn add_code(&mut self, c: &String)  {
+    pub fn add_code_as_ref(&mut self, c: &String)  {
         self.cbctx.set_code(c)
+    }
+    pub fn add_code(&mut self, c: String)  {
+        self.cbctx.set_code(&c)
     }
     pub fn set_code_in_ctx(&mut self, n: String) {
         if self.cbctx.is_in_codeblock() {
             let code = &mut self.cbctx.code().unwrap();
+            log::trace!("Setting code: {} : {}", &n, &code.to_string());
             let _ = &mut self.ctx.set(n, code.to_string());
             let _ = &mut self.cbctx.outof_codeblock();
         }

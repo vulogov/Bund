@@ -1,3 +1,4 @@
+extern crate log;
 use std::error::Error;
 
 pub struct CodeBlockCtx {
@@ -30,7 +31,8 @@ impl CodeBlockCtx {
     }
     pub fn set_code(&mut self, c: &String) {
         if self.is_in_codeblock() {
-            self.code = self.code.to_owned() + c
+            self.code = self.code.to_owned() + c;
+            log::trace!("Code: {}", &self.code);
         }
     }
 }

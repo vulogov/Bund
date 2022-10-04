@@ -5,8 +5,8 @@ use crate::vm::vm;
 
 pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String) {
     log::debug!("Received IDENT token: {:#?}({})", p.as_rule(), t);
-    b.begin_codeblock(t);
     let mut v = b.value().unwrap();
+    b.begin_codeblock(&t);
     v.call(t);
     b.add_value(v);
 }
