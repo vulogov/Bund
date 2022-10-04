@@ -12,9 +12,6 @@ pub fn process_token(b: &mut vm::VM, p: &pest::iterators::Pair<Rule>, t: &String
 pub fn post_process_token(b: &mut vm::VM, r: &Rule, t: &String) {
     let v   = b.value().unwrap();
     log::debug!("TOKEN postprocessing: {:?}({})", &r, &t);
-    if b.end_codeblock(&v.as_string().unwrap()) {
-        return;
-    }
     match v.type_of() {
         value::NONE ..=value::LITERAL => {
             b.set_by_ref(&v);
