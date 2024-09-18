@@ -1,0 +1,15 @@
+[package]
+name = "bund"
+version = "0.1.0"
+edition = "2021"
+description = "BUND programming language"
+license-file = "LICENSE"
+repository = "https://github.com/vulogov/Bund"
+categories = ["compilers"]
+keywords = ["language", "stack", "concatenative", "lambda", "dynamic"]
+
+[dependencies]
+bund_language_parser = ">=0.*.*"
+bundcore = ">=0.*.*"
+rust_dynamic = ">=0.*.*"
+rust_multistackvm = ">=0.*.*"
