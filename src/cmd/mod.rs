@@ -66,8 +66,19 @@ pub struct Script {
 #[derive(Args, Clone, Debug)]
 #[clap(about="Evaluate the BUND code snippet")]
 pub struct Eval {
-    #[clap(last = true)]
-    args: Vec<String>,
+    #[clap(flatten)]
+    source: EvalSrcArgGroup,
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = false, multiple = false)]
+pub struct EvalSrcArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Take BUND snippet from STDIN")]
+    pub stdin: bool,
+
+    #[clap(help="Take BUND snippet from CLI argument", long)]
+    pub eval: Option<String>,
+
 }
 
 #[derive(Args, Clone, Debug)]

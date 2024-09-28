@@ -12,6 +12,8 @@ keywords = ["language", "stack", "concatenative", "lambda", "dynamic"]
 bund_language_parser = ">=0.*.*"
 bundcore = ">=0.*.*"
 clap = { version = "4.5.18", features = ["derive"] }
+curl = "0.4.46"
+easy-error = "1.0.0"
 env_logger = "0.11.5"
 log = "0.4.22"
 neofiglet = "0.1.1"
