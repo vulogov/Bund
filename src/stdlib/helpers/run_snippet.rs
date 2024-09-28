@@ -3,7 +3,7 @@ use crate::stdlib::helpers;
 
 
 pub fn run_snippet_for_cmd(bc: &mut Bund, snippet: String) {
-    let code = format!("{} ", &snippet);
+    let code = format!("{}", &snippet);
     match bc.run(code) {
         Ok(val) => {
             match val {
@@ -15,6 +15,16 @@ pub fn run_snippet_for_cmd(bc: &mut Bund, snippet: String) {
                 }
             }
         }
+        Err(err) => {
+            helpers::print_error::print_error(err);
+        }
+    }
+}
+
+pub fn run_snippet_for_script(bc: &mut Bund, snippet: String) {
+    let code = format!("{}", &snippet);
+    match bc.eval(code) {
+        Ok(_) => {}
         Err(err) => {
             helpers::print_error::print_error(err);
         }

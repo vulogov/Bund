@@ -59,8 +59,22 @@ enum Commands {
 #[derive(Args, Clone, Debug)]
 #[clap(about="Execute BUND script")]
 pub struct Script {
+    #[clap(flatten)]
+    source: ScriptSrcArgGroup,
+
     #[clap(last = true)]
     args: Vec<String>,
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = false, multiple = false)]
+pub struct ScriptSrcArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Take BUND snippet from STDIN")]
+    pub stdin: bool,
+
+    #[clap(help="Take BUND snippet from CLI argument", long)]
+    pub eval: Option<String>,
+
 }
 
 #[derive(Args, Clone, Debug)]
