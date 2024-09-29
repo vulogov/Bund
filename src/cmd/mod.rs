@@ -44,6 +44,9 @@ pub struct Cli {
     #[arg(short, long, action = clap::ArgAction::Count)]
     debug: u8,
 
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in output")]
+    pub nocolor: bool,
+
     #[clap(subcommand)]
     command: Commands,
 }
@@ -69,10 +72,16 @@ pub struct Script {
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = false, multiple = false)]
 pub struct ScriptSrcArgGroup {
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Take BUND snippet from STDIN")]
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Take BUND script from STDIN")]
     pub stdin: bool,
 
-    #[clap(help="Take BUND snippet from CLI argument", long)]
+    #[clap(help="Take BUND script from file (full path required)", long)]
+    pub file: Option<String>,
+
+    #[clap(help="Take BUND script from url", long)]
+    pub url: Option<String>,
+
+    #[clap(help="Take BUND script from CLI argument", long)]
     pub eval: Option<String>,
 
 }

@@ -3,6 +3,6 @@ use bundcore::bundcore::Bund;
 
 pub mod helpers;
 
-pub fn init_stdlib(bc: &mut Bund) {
+pub fn init_stdlib(_bc: &mut Bund) {
     log::debug!("Running STDLIB init");
 }
