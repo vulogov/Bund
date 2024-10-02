@@ -1,10 +1,17 @@
-use bundcore::bundcore::Bund;
 use crate::cmd;
 use crate::stdlib::helpers;
+use crate::stdlib::BUND;
 
 
-pub fn run_snippet_for_cmd(bc: &mut Bund, snippet: String, cli: &cmd::Cli) {
+pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
     let code = format!("{}", &snippet);
+    let mut bc = match BUND.lock() {
+        Ok(bc) => bc,
+        Err(err) => {
+            helpers::print_error::print_error_from_str(format!("{}", err), cli);
+            return;
+        }
+    };
     match bc.run(code) {
         Ok(val) => {
             match val {
@@ -20,14 +27,23 @@ pub fn run_snippet_for_cmd(bc: &mut Bund, snippet: String, cli: &cmd::Cli) {
             helpers::print_error::print_error(err, cli);
         }
     }
+    drop(bc);
 }
 
-pub fn run_snippet_for_script(bc: &mut Bund, snippet: String, cli: &cmd::Cli) {
+pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
     let code = format!("{}", &snippet);
+    let mut bc = match BUND.lock() {
+        Ok(bc) => bc,
+        Err(err) => {
+            helpers::print_error::print_error_from_str(format!("{}", err), cli);
+            return;
+        }
+    };
     match bc.eval(code) {
         Ok(_) => {}
         Err(err) => {
             helpers::print_error::print_error(err, cli);
         }
     }
+    drop(bc);
 }

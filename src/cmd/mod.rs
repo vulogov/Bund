@@ -1,6 +1,5 @@
 extern crate log;
-use bundcore::bundcore::Bund;
-use crate::stdlib::init_stdlib;
+use crate::stdlib::{init_stdlib};
 use clap::{Parser, Subcommand, Args};
 
 pub mod setloglevel;
@@ -12,23 +11,23 @@ pub mod bund_script;
 
 pub mod bund_display_banner;
 
-pub fn main(bc: &mut Bund) {
+pub fn main() {
     let cli = Cli::parse();
     setloglevel::setloglevel(&cli);
-    init_stdlib(bc);
+    init_stdlib();
     log::debug!("BUND interpterer initialized ...");
     match &cli.command {
         Commands::Script(script) => {
-            bund_script::run(bc, &cli, &script);
+            bund_script::run(&cli, &script);
         }
         Commands::Eval(eval) => {
-            bund_eval::run(bc, &cli, &eval);
+            bund_eval::run(&cli, &eval);
         }
         Commands::Shell(shell) => {
-            bund_shell::run(bc, &cli, &shell);
+            bund_shell::run(&cli, &shell);
         }
         Commands::Version(_) => {
-            bund_version::run(bc, &cli);
+            bund_version::run(&cli);
         }
     }
 }

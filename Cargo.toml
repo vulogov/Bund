@@ -14,6 +14,7 @@ bundcore = ">=0.*.*"
 clap = { version = "4.5.18", features = ["derive"] }
 curl = "0.4.46"
 easy-error = "1.0.0"
+easy_reader = "0.5.2"
 env_logger = "0.11.5"
 lazy_static = "1.5.0"
 log = "0.4.22"

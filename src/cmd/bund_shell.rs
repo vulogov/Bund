@@ -2,12 +2,11 @@ extern crate log;
 use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor};
 use yansi::Paint;
-use bundcore::bundcore::Bund;
 use crate::cmd;
 use crate::cmd::bund_display_banner;
 use crate::stdlib::helpers;
 
-pub fn run(bc: &mut Bund, cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
+pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
     log::debug!("SHELL::run() reached");
 
     let mut rl = match DefaultEditor::new() {
@@ -31,7 +30,7 @@ pub fn run(bc: &mut Bund, cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
         match line {
             Ok(snippet) => {
                 let _ = rl.add_history_entry(snippet.as_str());
-                helpers::run_snippet::run_snippet_for_cmd(bc, snippet.to_string(), cli);
+                helpers::run_snippet::run_snippet_for_cmd(snippet.to_string(), cli);
             },
             Err(ReadlineError::Interrupted) => {
                 log::info!("CTRL-C");
