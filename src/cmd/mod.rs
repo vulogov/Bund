@@ -14,7 +14,7 @@ pub mod bund_display_banner;
 pub fn main() {
     let cli = Cli::parse();
     setloglevel::setloglevel(&cli);
-    init_stdlib();
+    init_stdlib(&cli);
     log::debug!("BUND interpterer initialized ...");
     match &cli.command {
         Commands::Script(script) => {
@@ -45,6 +45,12 @@ pub struct Cli {
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in output")]
     pub nocolor: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable bund.eval group of functions")]
+    pub noeval: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable I/O group of functions")]
+    pub noio: bool,
 
     #[clap(subcommand)]
     command: Commands,

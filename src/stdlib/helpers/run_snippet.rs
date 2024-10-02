@@ -1,3 +1,5 @@
+extern crate log;
+
 use crate::cmd;
 use crate::stdlib::helpers;
 use crate::stdlib::BUND;
@@ -43,6 +45,25 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         Ok(_) => {}
         Err(err) => {
             helpers::print_error::print_error(err, cli);
+        }
+    }
+    drop(bc);
+}
+
+pub fn run_snippet(snippet: String) {
+    log::debug!("Running snippet: {}", &snippet);
+    let code = format!("{}", &snippet);
+    let mut bc = match BUND.lock() {
+        Ok(bc) => bc,
+        Err(err) => {
+            helpers::print_error::print_error_from_str_plain(format!("{}", err));
+            return;
+        }
+    };
+    match bc.eval(code) {
+        Ok(_) => {}
+        Err(err) => {
+            helpers::print_error::print_error_plain(err);
         }
     }
     drop(bc);

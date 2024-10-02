@@ -17,7 +17,7 @@ pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
         }
     };
     #[cfg(feature = "with-file-history")]
-    if rl.load_history(".bund_history.txt").is_err() {
+    if rl.load_history("bund_history.txt").is_err() {
         log::warn!("No previous shell history.");
     }
     println!("{}", bund_display_banner::bund_banner());
