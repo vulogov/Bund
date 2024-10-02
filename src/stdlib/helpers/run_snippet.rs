@@ -60,6 +60,7 @@ pub fn run_snippet(snippet: String) {
             return;
         }
     };
+    log::debug!("Reached bc::eval()");
     match bc.eval(code) {
         Ok(_) => {}
         Err(err) => {
