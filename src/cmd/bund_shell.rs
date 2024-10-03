@@ -48,5 +48,5 @@ pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
     }
     log::debug!("Saving shell history...");
     #[cfg(feature = "with-file-history")]
-    rl.save_history(".bund_history.txt");
+    rl.save_history("bund_history.txt");
 }

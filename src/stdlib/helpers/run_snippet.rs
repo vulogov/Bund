@@ -22,7 +22,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
                     println!("{}", &returned_value);
                 }
                 None => {
-                    log::warn!("Snippet returned no value");
+                    log::debug!("Snippet returned no value");
                 }
             }
         }
@@ -53,7 +53,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
 
 pub fn run_snippet(snippet: String) {
     log::debug!("Running snippet: {}", &snippet);
-    let code = format!("{}", &snippet);
+    let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
         Err(err) => {
