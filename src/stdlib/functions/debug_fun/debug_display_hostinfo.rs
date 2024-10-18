@@ -73,6 +73,11 @@ pub fn stdlib_debug_display_hostinfo_color(vm: &mut VM) -> Result<&mut VM, Error
     Ok(vm)
 }
 
+pub fn stdlib_debug_display_hostinfo_nocolor(vm: &mut VM) -> Result<&mut VM, Error> {
+    debug_display_hostinfo_nocolor();
+    Ok(vm)
+}
+
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
@@ -82,7 +87,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         }
     };
     if cli.nocolor {
-        let _ = bc.vm.register_inline("debug.display_hostinfo".to_string(), stdlib_debug_display_hostinfo_color);
+        let _ = bc.vm.register_inline("debug.display_hostinfo".to_string(), stdlib_debug_display_hostinfo_nocolor);
     } else {
         let _ = bc.vm.register_inline("debug.display_hostinfo".to_string(), stdlib_debug_display_hostinfo_color);
     }
