@@ -3,6 +3,8 @@ extern crate log;
 
 use crate::cmd;
 use crate::stdlib::helpers;
+use crate::stdlib::functions::debug_fun;
+use std::ops::DerefMut;
 use crate::stdlib::BUND;
 
 
@@ -28,6 +30,9 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
         }
         Err(err) => {
             helpers::print_error::print_error(err, cli);
+            if cli.debug_shell {
+                let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+            }
         }
     }
     drop(bc);
@@ -46,6 +51,9 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         Ok(_) => {}
         Err(err) => {
             helpers::print_error::print_error(err, cli);
+            if cli.debug_shell {
+                let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+            }
         }
     }
     drop(bc);
