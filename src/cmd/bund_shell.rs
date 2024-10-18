@@ -5,6 +5,7 @@ use yansi::Paint;
 use crate::cmd;
 use crate::cmd::bund_display_banner;
 use crate::stdlib::helpers;
+use crate::stdlib::functions::debug_fun;
 
 pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
     log::debug!("SHELL::run() reached");
@@ -21,6 +22,11 @@ pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
         log::warn!("No previous shell history.");
     }
     println!("{}", bund_display_banner::bund_banner());
+    if cli.nocolor {
+        debug_fun::debug_display_hostinfo::debug_display_hostinfo_nocolor()
+    } else {
+        debug_fun::debug_display_hostinfo::debug_display_hostinfo_color()
+    }
     let prompt = match cli.nocolor {
         true => format!("[BUND> "),
         false => format!("{}{}{}{}{} {} ", Paint::yellow("["), Paint::red("B"), Paint::blue("U").bold(), Paint::white("N"), Paint::cyan("D"), Paint::green(">").bold()),
