@@ -8,6 +8,7 @@ use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 use memory_stats::memory_stats;
+use humansize::{format_size, DECIMAL};
 
 pub fn debug_display_memstat_color() {
     if let Some(usage) = memory_stats() {
@@ -17,10 +18,10 @@ pub fn debug_display_memstat_color() {
             .apply_modifier(UTF8_ROUND_CORNERS)
             .set_content_arrangement(ContentArrangement::Dynamic)
             .add_row(vec![
-                Cell::new("Current physical memory usage").fg(Color::Blue), Cell::new(format!("{}", usage.physical_mem)).fg(Color::White),
+                Cell::new("Current physical memory usage").fg(Color::Blue), Cell::new(format_size(usage.physical_mem, DECIMAL)).fg(Color::White),
             ])
             .add_row(vec![
-                Cell::new("Current virtual memory usage").fg(Color::Blue), Cell::new(format!("{}", usage.virtual_mem)).fg(Color::White),
+                Cell::new("Current virtual memory usage").fg(Color::Blue), Cell::new(format_size(usage.virtual_mem, DECIMAL)).fg(Color::White),
             ]);
         println!("{table}");
     } else {
@@ -36,10 +37,10 @@ pub fn debug_display_memstat_nocolor() {
             .apply_modifier(UTF8_ROUND_CORNERS)
             .set_content_arrangement(ContentArrangement::Dynamic)
             .add_row(vec![
-                Cell::new("Current physical memory usage"), Cell::new(format!("{}", usage.physical_mem)),
+                Cell::new("Current physical memory usage"), Cell::new(format_size(usage.physical_mem, DECIMAL)),
             ])
             .add_row(vec![
-                Cell::new("Current virtual memory usage"), Cell::new(format!("{}", usage.virtual_mem)),
+                Cell::new("Current virtual memory usage"), Cell::new(format_size(usage.virtual_mem, DECIMAL)),
             ]);
         println!("{table}");
     } else {
