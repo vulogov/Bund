@@ -30,6 +30,7 @@ Commands:
 
 Options:
   -d, --debug...     Turn debugging information on
+      --debugger     Run BUND code inside debugger
       --debug-shell  Drop to DEBUG shell if error occurs
       --nocolor      Disable colors in output
       --noeval       Disable bund.eval group of functions
@@ -77,6 +78,55 @@ You must execute _bund_ command with _shell_ subcommand
 [BUND >
 ```
 
+### How to drop to the BUND debugger
+
+You have two options on how you can run the code snippet inside BUND debugger
+
+#### Running entire script inside debugger
+
+For that, you have to pass ```--debugger``` CLI parameter
+
+#### Running code snippet inside BUND debugger interactively
+
+You can interactively pass code snippet to a debug function
+
+```shell
+[BUND > "2 2 +" debug
+╭────────────┬────────────────────────────────────────────────────────────╮
+│ Value type ┆ Integer                                                    │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Value      ┆ 2                                                          │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Debug      ┆ Value { id: "vux_tEZu2Cxkk64itdxiz", stamp:                │
+│            ┆ 1729884622410.0, dt: 2, q: 100.0, data: I64(2), attr: [],  │
+│            ┆ curr: -1, tags: {} }                                       │
+╰────────────┴────────────────────────────────────────────────────────────╯
+[DEBUG >
+╭────────────┬────────────────────────────────────────────────────────────╮
+│ Value type ┆ Integer                                                    │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Value      ┆ 2                                                          │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Debug      ┆ Value { id: "QVqF2tbsIhMto4FiUx7e6", stamp:                │
+│            ┆ 1729884622410.0, dt: 2, q: 100.0, data: I64(2), attr: [],  │
+│            ┆ curr: -1, tags: {} }                                       │
+╰────────────┴────────────────────────────────────────────────────────────╯
+[DEBUG >
+╭────────────┬────────────────────────────────────────────────────────────╮
+│ Value type ┆ Call                                                       │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Value      ┆ Value(0)=Value { id: "QhjmkgKGPc6l9T9mbM5g0", stamp:       │
+│            ┆ 1729884625035.0, dt: 0, q: 0.0, data: Null, attr: [],      │
+│            ┆ curr: -1, tags: {} }                                       │
+├╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┤
+│ Debug      ┆ Value { id: "0hmYwhHhad8VMklPckEt3", stamp:                │
+│            ┆ 1729884622410.0, dt: 6, q: 100.0, data: String("+"), attr: │
+│            ┆ [], curr: -1, tags: {} }                                   │
+╰────────────┴────────────────────────────────────────────────────────────╯
+[DEBUG >
+4
+```
+
 ### How to drop to debug shell if error occurs ?
 
 You must pass _--debug-shell_ CLI parameter to _bund_ command
@@ -90,6 +140,6 @@ You must pass _--debug-shell_ CLI parameter to _bund_ command
  |____/   \___/  |_| \_| |____/     \___/  (_) |_| (_)  \___/
 
 [BUND > 2 2 **
-Attempt to evaluate value Value { id: "9fZEoerSihRUi_g1_Ic7K", stamp: 1729371784779.0, dt: 6, q: 100.0, data: String("**"), attr: [], curr: -1, tags: {} } returned error: i(**) for stack returned: Inline ** not registered 
+Attempt to evaluate value Value { id: "9fZEoerSihRUi_g1_Ic7K", stamp: 1729371784779.0, dt: 6, q: 100.0, data: String("**"), attr: [], curr: -1, tags: {} } returned error: i(**) for stack returned: Inline ** not registered
 [DEBUG >
 ```
