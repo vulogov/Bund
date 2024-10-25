@@ -17,21 +17,35 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
             return;
         }
     };
-    match bc.run(code) {
-        Ok(val) => {
-            match val {
-                Some(returned_value) => {
-                    println!("{}", &returned_value);
-                }
-                None => {
-                    log::debug!("Snippet returned no value");
+    if cli.debugger {
+        match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
+            Ok(_) => {
+
+            }
+            Err(err) => {
+                helpers::print_error::print_error(err, cli);
+                if cli.debug_shell {
+                    let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
                 }
             }
         }
-        Err(err) => {
-            helpers::print_error::print_error(err, cli);
-            if cli.debug_shell {
-                let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+    } else {
+        match bc.run(code) {
+            Ok(val) => {
+                match val {
+                    Some(returned_value) => {
+                        println!("{}", &returned_value);
+                    }
+                    None => {
+                        log::debug!("Snippet returned no value");
+                    }
+                }
+            }
+            Err(err) => {
+                helpers::print_error::print_error(err, cli);
+                if cli.debug_shell {
+                    let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+                }
             }
         }
     }
@@ -47,12 +61,26 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
             return;
         }
     };
-    match bc.eval(code) {
-        Ok(_) => {}
-        Err(err) => {
-            helpers::print_error::print_error(err, cli);
-            if cli.debug_shell {
-                let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+    if cli.debugger {
+        match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
+            Ok(_) => {
+
+            }
+            Err(err) => {
+                helpers::print_error::print_error(err, cli);
+                if cli.debug_shell {
+                    let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+                }
+            }
+        }
+    } else {
+        match bc.eval(code) {
+            Ok(_) => {}
+            Err(err) => {
+                helpers::print_error::print_error(err, cli);
+                if cli.debug_shell {
+                    let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
+                }
             }
         }
     }

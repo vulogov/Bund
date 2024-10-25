@@ -43,6 +43,9 @@ pub struct Cli {
     #[arg(short, long, action = clap::ArgAction::Count)]
     debug: u8,
 
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Run BUND code inside debugger")]
+    pub debugger: bool,
+
     #[clap(long, action = clap::ArgAction::SetTrue, help="Drop to DEBUG shell if error occurs")]
     pub debug_shell: bool,
 
