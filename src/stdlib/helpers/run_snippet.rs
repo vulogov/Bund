@@ -9,7 +9,7 @@ use crate::stdlib::BUND;
 
 
 pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
-    let code = format!("{}", &snippet);
+    let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
         Err(err) => {
@@ -18,6 +18,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
         }
     };
     if cli.debugger {
+        log::warn!("Sropping into DEBUGGER");
         match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
             Ok(_) => {
 
@@ -30,6 +31,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
             }
         }
     } else {
+        log::debug!("Execute code");
         match bc.run(code) {
             Ok(val) => {
                 match val {
@@ -53,7 +55,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
 }
 
 pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
-    let code = format!("{}", &snippet);
+    let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
         Err(err) => {
@@ -62,6 +64,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         }
     };
     if cli.debugger {
+        log::warn!("Sropping into DEBUGGER");
         match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
             Ok(_) => {
 
@@ -74,6 +77,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
             }
         }
     } else {
+        log::debug!("Execute code");
         match bc.eval(code) {
             Ok(_) => {}
             Err(err) => {

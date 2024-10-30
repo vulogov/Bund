@@ -11,7 +11,7 @@ pub fn get_file_from_stdin() -> String {
 
         // stop reading
         if last_input.len() == 0 {
-            break;
+            user_input.push_str("\n");
         }
 
         // add a new line once user_input starts storing user input

@@ -1,0 +1,18 @@
+//
+// This basic example demonstrates creation
+// and query of JSON data types using BUND
+// concatenative language
+//
+
+text
+  "The answer is" , // Let's prepare the output prompt
+"$.answer"          // Let's put query to the stack
+
+// Then we will push string representation of JSON to stack
+// and create JSON object out of it's string representation
+// consuming string and leave JSON object on the stack
+'{"answer": 42}' json    
+
+json.path           // Performing the query consuming JSON object and query string
+, println           // Merging result to the textbuffer (note "," function)
+                    // Printing query result
