@@ -9,6 +9,48 @@ pub fn load_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut 
     Ok(vm)
 }
 
+fn save_stack_data<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+    match conn.execute("DROP TABLE IF EXISTS STACK_DATA", ()) {
+        Ok(_) => {},
+        Err(err) => {
+            bail!("Dropping stack_data table returns: {}", err);
+        }
+    }
+    match conn.execute(
+        "CREATE TABLE IF NOT EXISTS STACK_DATA (
+            id      INTEGER PRIMARY KEY,
+            name    TEXT NOT NULL,
+            pos     INTEGER,
+            value   BLOB
+        )",
+        ()) {
+        Ok(_) => {
+            match conn.execute(
+                "DROP INDEX IF EXISTS STACK_DATA.STACK_AND_POS",
+            ()) {
+                Ok(_) => {
+                    match conn.execute(
+                        "CREATE UNIQUE INDEX IF NOT EXISTS STACK_AND_POS ON STACK_DATA(name,pos)",
+                    ()) {
+                        Ok(_) => {},
+                        Err(err) => {
+                            bail!("Creating stack_data index table returns: {}", err);
+                        }
+                    }
+
+                }
+                Err(err) => {
+                    bail!("Dropping stack_data index table returns: {}", err);
+                }
+            }
+        },
+        Err(err) => {
+            bail!("Creating stack_data table returns: {}", err);
+        }
+    }
+    Ok(vm)
+}
+
 pub fn save_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
     match conn.execute("DROP TABLE IF EXISTS STACKS", ()) {
         Ok(_) => {},
@@ -35,5 +77,5 @@ pub fn save_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut 
             }
         }
     }
-    Ok(vm)
+    save_stack_data(vm, conn)
 }
