@@ -6,6 +6,7 @@ pub mod input;
 pub mod filesystem;
 pub mod debug_fun;
 pub mod sysinfo;
+pub mod create_aliases;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     bund::init_stdlib(cli);
@@ -13,4 +14,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     filesystem::init_stdlib(cli);
     debug_fun::init_stdlib(cli);
     sysinfo::init_stdlib(cli);
+    // And create aliases from BUND shell
+    create_aliases::init_stdlib(cli);
 }

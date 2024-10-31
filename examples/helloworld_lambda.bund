@@ -1,0 +1,6 @@
+//
+// This is lambda function that is "Hello World!" program
+//
+:PrintHelloWorld {
+  "Hello World!" println
+ } register
