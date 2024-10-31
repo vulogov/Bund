@@ -6,11 +6,27 @@ use crate::stdlib::helpers;
 use rust_multistackvm::multistackvm::{VM};
 use easy_error::{Error, bail};
 
-fn bund_save(vm: &mut VM, _fie_name: String) -> Result<&mut VM, Error> {
+fn bund_save(vm: &mut VM, file_name: String) -> Result<&mut VM, Error> {
+    let mut conn = match helpers::world::open(file_name) {
+        Ok(conn) => conn,
+        Err(err) => {
+            bail!("{}", err);
+        }
+    };
+    match helpers::world::aliases::save_aliases(vm, &mut conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Aliases SAVE returns: {}", err)
+        }
+    }
     Ok(vm)
 }
 
-pub fn stdlib_bund_save(vm: &mut VM) -> Result<&mut VM, Error> {
+fn bund_save_aliases(vm: &mut VM, _fie_name: String) -> Result<&mut VM, Error> {
+    Ok(vm)
+}
+
+pub fn stdlib_bund_save_base(vm: &mut VM, op: helpers::world::WorldFunctions) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 1 {
         bail!("Stack is too shallow for SAVE");
     }
@@ -26,7 +42,18 @@ pub fn stdlib_bund_save(vm: &mut VM) -> Result<&mut VM, Error> {
             bail!("SAVE casting string returns: {}", err);
         }
     };
-    bund_save(vm, file_name)
+    match op {
+        helpers::world::WorldFunctions::All => bund_save(vm, file_name),
+        helpers::world::WorldFunctions::Aliases => bund_save_aliases(vm, file_name),
+    }
+}
+
+pub fn stdlib_bund_save(vm: &mut VM) -> Result<&mut VM, Error> {
+    stdlib_bund_save_base(vm, helpers::world::WorldFunctions::All)
+}
+
+pub fn stdlib_bund_save_aliases(vm: &mut VM) -> Result<&mut VM, Error> {
+    stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Aliases)
 }
 
 pub fn stdlib_bund_save_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
@@ -43,8 +70,10 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     };
     if cli.noio {
         let _ = bc.vm.register_inline("save".to_string(), stdlib_bund_save_disabled);
+        let _ = bc.vm.register_inline("save.aliases".to_string(), stdlib_bund_save_disabled);
     } else {
         let _ = bc.vm.register_inline("save".to_string(), stdlib_bund_save);
+        let _ = bc.vm.register_inline("save.aliases".to_string(), stdlib_bund_save_aliases);
     }
     drop(bc);
 }
