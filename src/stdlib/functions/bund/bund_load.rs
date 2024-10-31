@@ -22,6 +22,13 @@ fn bund_load<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
             bail!("Lambdas LOAD returns: {}", err)
         }
     }
+    log::debug!("Loading stacks");
+    match helpers::world::stacks::load_stacks(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Aliases SAVE returns: {}", err)
+        }
+    }
     Ok(vm)
 }
 
@@ -40,6 +47,16 @@ fn bund_load_lambdas<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mu
         Ok(_) => {}
         Err(err) => {
             bail!("Lambdas LOAD returns: {}", err)
+        }
+    }
+    Ok(vm)
+}
+
+fn bund_load_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+    match helpers::world::stacks::load_stacks(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Stacks LOAD returns: {}", err)
         }
     }
     Ok(vm)
@@ -71,6 +88,7 @@ pub fn stdlib_bund_load_base(vm: &mut VM, op: helpers::world::WorldFunctions) ->
         helpers::world::WorldFunctions::All => bund_load(vm, &mut conn),
         helpers::world::WorldFunctions::Aliases => bund_load_aliases(vm, &mut conn),
         helpers::world::WorldFunctions::Lambdas => bund_load_lambdas(vm, &mut conn),
+        helpers::world::WorldFunctions::Stacks => bund_load_stacks(vm, &mut conn),
     };
     match conn.close() {
         Ok(_) => {},
@@ -93,6 +111,10 @@ pub fn stdlib_bund_load_lambdas(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::Lambdas)
 }
 
+pub fn stdlib_bund_load_stacks(vm: &mut VM) -> Result<&mut VM, Error> {
+    stdlib_bund_load_base(vm, helpers::world::WorldFunctions::Stacks)
+}
+
 pub fn stdlib_bund_load_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund LOAD functions disabled with --noio");
 }
@@ -109,10 +131,12 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         let _ = bc.vm.register_inline("load".to_string(), stdlib_bund_load_disabled);
         let _ = bc.vm.register_inline("load.aliases".to_string(), stdlib_bund_load_disabled);
         let _ = bc.vm.register_inline("load.lambdas".to_string(), stdlib_bund_load_disabled);
+        let _ = bc.vm.register_inline("load.stacks".to_string(), stdlib_bund_load_disabled);
     } else {
         let _ = bc.vm.register_inline("load".to_string(), stdlib_bund_load);
         let _ = bc.vm.register_inline("load.aliases".to_string(), stdlib_bund_load_aliases);
         let _ = bc.vm.register_inline("load.lambdas".to_string(), stdlib_bund_load_lambdas);
+        let _ = bc.vm.register_inline("load.stacks".to_string(), stdlib_bund_load_stacks);
     }
     drop(bc);
 }

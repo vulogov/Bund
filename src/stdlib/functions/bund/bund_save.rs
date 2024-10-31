@@ -22,6 +22,13 @@ fn bund_save<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
             bail!("Aliases SAVE returns: {}", err)
         }
     }
+    log::debug!("Saving stacks");
+    match helpers::world::stacks::save_stacks(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Aliases SAVE returns: {}", err)
+        }
+    }
     Ok(vm)
 }
 
@@ -40,6 +47,16 @@ fn bund_save_lambdas<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mu
         Ok(_) => {}
         Err(err) => {
             bail!("Lambdas SAVE returns: {}", err)
+        }
+    }
+    Ok(vm)
+}
+
+fn bund_save_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+    match helpers::world::stacks::save_stacks(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Stacks SAVE returns: {}", err)
         }
     }
     Ok(vm)
@@ -71,6 +88,7 @@ pub fn stdlib_bund_save_base(vm: &mut VM, op: helpers::world::WorldFunctions) ->
         helpers::world::WorldFunctions::All => bund_save(vm, &mut conn),
         helpers::world::WorldFunctions::Aliases => bund_save_aliases(vm, &mut conn),
         helpers::world::WorldFunctions::Lambdas => bund_save_lambdas(vm, &mut conn),
+        helpers::world::WorldFunctions::Stacks => bund_save_stacks(vm, &mut conn),
     };
     match conn.close() {
         Ok(_) => {},
@@ -93,6 +111,10 @@ pub fn stdlib_bund_save_lambdas(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Lambdas)
 }
 
+pub fn stdlib_bund_save_stacks(vm: &mut VM) -> Result<&mut VM, Error> {
+    stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Stacks)
+}
+
 pub fn stdlib_bund_save_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund SAVE functions disabled with --noio");
 }
@@ -108,9 +130,13 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     if cli.noio {
         let _ = bc.vm.register_inline("save".to_string(), stdlib_bund_save_disabled);
         let _ = bc.vm.register_inline("save.aliases".to_string(), stdlib_bund_save_disabled);
+        let _ = bc.vm.register_inline("save.lambdas".to_string(), stdlib_bund_save_disabled);
+        let _ = bc.vm.register_inline("save.stacks".to_string(), stdlib_bund_save_disabled);
     } else {
         let _ = bc.vm.register_inline("save".to_string(), stdlib_bund_save);
         let _ = bc.vm.register_inline("save.aliases".to_string(), stdlib_bund_save_aliases);
+        let _ = bc.vm.register_inline("save.lambdas".to_string(), stdlib_bund_save_lambdas);
+        let _ = bc.vm.register_inline("save.stacks".to_string(), stdlib_bund_save_stacks);
     }
     drop(bc);
 }

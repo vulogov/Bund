@@ -4,12 +4,14 @@ use easy_error::{Error, bail};
 
 pub mod aliases;
 pub mod lambdas;
+pub mod stacks;
 
 #[derive(Debug, Clone)]
 pub enum WorldFunctions {
     All,
     Aliases,
     Lambdas,
+    Stacks,
 }
 
 pub fn open(file_name: String) -> Result<Connection, Error> {
