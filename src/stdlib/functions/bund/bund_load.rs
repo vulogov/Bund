@@ -26,7 +26,7 @@ fn bund_load<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
     match helpers::world::stacks::load_stacks(vm, conn) {
         Ok(_) => {}
         Err(err) => {
-            bail!("Aliases SAVE returns: {}", err)
+            bail!("Stacks LOAD returns: {}", err)
         }
     }
     Ok(vm)

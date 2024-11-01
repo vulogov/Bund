@@ -1,11 +1,58 @@
 extern crate log;
-// use rust_dynamic::value::Value;
+use rust_dynamic::value::Value;
 use rusqlite::{Connection};
 use rust_multistackvm::multistackvm::{VM};
 use easy_error::{Error, bail};
 
-pub fn load_stacks<'a>(vm: &'a mut VM, _conn: &mut Connection) -> Result<&'a mut VM, Error> {
-
+pub fn load_stacks<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+    let stacks = get_stacks(vm, conn);
+    let mut stmt = match conn.prepare("SELECT value FROM STACK_DATA WHERE name=?1 ORDER BY pos") {
+        Ok(stmt) => stmt,
+        Err(err) => {
+            bail!("Error compiling SELECT for stack data: {}", err);
+        }
+    };
+    match stacks {
+        Ok(stacks) => {
+            for s in stacks {
+                let _ = match stmt.query([s.clone()]) {
+                    Ok(mut rows) => {
+                        loop {
+                            match rows.next() {
+                                Ok(Some(row)) => {
+                                    let raw_value: Vec<u8> = match row.get(0) {
+                                        Ok(raw_value) => raw_value,
+                                        Err(err) => {
+                                            bail!("Error getting value of stack: {}", err);
+                                        }
+                                    };
+                                    match Value::from_binary(raw_value) {
+                                        Ok(value) => {
+                                            vm.stack.push_to_stack(s.clone(), value);
+                                        }
+                                        Err(err) => {
+                                            bail!("Extraction of value returns: {}", err);
+                                        }
+                                    }
+                                }
+                                Ok(None) => break,
+                                Err(err) => {
+                                    log::debug!("Error getting ALIAS row: {}", err);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    Err(err) => {
+                        bail!("Error executing SELECT for stacks: {}", err);
+                    }
+                };
+            }
+        }
+        Err(err) => {
+            bail!("Error getting list of stacks: {}", err);
+        }
+    }
     Ok(vm)
 }
 
@@ -32,7 +79,7 @@ pub fn get_stacks<'a>(_vm: &'a mut VM, conn: &mut Connection) -> Result<Vec<Stri
                     }
                     Ok(None) => break,
                     Err(err) => {
-                        log::debug!("Error getting ALIAS row: {}", err);
+                        log::debug!("Error getting STACKS row: {}", err);
                         break;
                     }
                 }
