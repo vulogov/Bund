@@ -29,6 +29,13 @@ fn bund_save<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
             bail!("Aliases SAVE returns: {}", err)
         }
     }
+    log::debug!("Priming WORLD for bootstrap scripts");
+    match helpers::world::bootstrap::init(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("Priming bootstrap returns: {}", err)
+        }
+    }
     Ok(vm)
 }
 

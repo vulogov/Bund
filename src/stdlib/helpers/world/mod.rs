@@ -5,6 +5,7 @@ use easy_error::{Error, bail};
 pub mod aliases;
 pub mod lambdas;
 pub mod stacks;
+pub mod bootstrap;
 
 #[derive(Debug, Clone)]
 pub enum WorldFunctions {
