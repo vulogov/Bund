@@ -1,4 +1,5 @@
 extern crate log;
+use crate::stdlib::BUND;
 use crate::stdlib::{init_stdlib};
 use clap::{Parser, Subcommand, Args};
 
@@ -10,12 +11,33 @@ pub mod bund_eval;
 pub mod bund_script;
 
 pub mod bund_display_banner;
+pub mod bund_bootstrap;
+
 
 pub fn main() {
     let cli = Cli::parse();
     setloglevel::setloglevel(&cli);
     init_stdlib(&cli);
     log::debug!("BUND interpterer initialized ...");
+    match &cli.stack {
+        Some(initial_stack) => {
+            log::debug!("Setting initial stack to {}", &initial_stack);
+            let mut bc = BUND.lock().unwrap();
+            bc.vm.stack.ensure_stack(initial_stack.to_string());
+            drop(bc);
+        }
+        None => {
+            log::debug!("No initial stacks selected");
+        }
+    }
+    match &cli.bootstrap {
+        Some(_) => {
+            bund_bootstrap::run(&cli);
+        }
+        None => {
+            log::debug!("No BUND bootstrap specified");
+        }
+    }
     match &cli.command {
         Commands::Script(script) => {
             bund_script::run(&cli, &script);
@@ -60,6 +82,9 @@ pub struct Cli {
 
     #[clap(help="Set the initial stack name", long)]
     pub stack: Option<String>,
+
+    #[clap(short, long, value_delimiter = ' ', num_args = 0..)]
+    pub bootstrap: Option<Vec<String>>,
 
     #[clap(subcommand)]
     command: Commands,
