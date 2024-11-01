@@ -58,6 +58,9 @@ pub struct Cli {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Disable I/O group of functions")]
     pub noio: bool,
 
+    #[clap(help="Set the initial stack name", long)]
+    pub stack: Option<String>,
+
     #[clap(subcommand)]
     command: Commands,
 }

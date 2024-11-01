@@ -1,9 +1,24 @@
 extern crate log;
 use crate::cmd;
 use crate::stdlib::helpers;
+use rust_dynamic::value::Value;
+use crate::stdlib::functions::{bund};
 
 pub fn run(cli: &cmd::Cli, script_arg: &cmd::Script) {
     log::debug!("SCRIPT::run() reached");
+
+    match bund::bund_args::ARGS.lock() {
+        Ok(mut args) => {
+            for a in &script_arg.args {
+                let _ = args.push_inplace(Value::from_string(a.clone()));
+            }
+            drop(args);
+        }
+        Err(err) => {
+            helpers::print_error::print_error_from_str(format!("{}", err), cli);
+            return;
+        }
+    }
 
     if script_arg.source.stdin {
         log::debug!("Taking snippet from STDIN");

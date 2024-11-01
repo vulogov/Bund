@@ -3,13 +3,26 @@ use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor};
 use yansi::Paint;
 use crate::cmd;
+use rust_dynamic::value::Value;
 use crate::cmd::bund_display_banner;
 use crate::stdlib::helpers;
-use crate::stdlib::functions::debug_fun;
+use crate::stdlib::functions::{debug_fun, bund};
 
 pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
     log::debug!("SHELL::run() reached");
 
+    match bund::bund_args::ARGS.lock() {
+        Ok(mut args) => {
+            for a in &shell_arg.args {
+                let _ = args.push_inplace(Value::from_string(a.clone()));
+            }
+            drop(args);
+        }
+        Err(err) => {
+            helpers::print_error::print_error_from_str(format!("{}", err), cli);
+            return;
+        }
+    }
     let mut rl = match DefaultEditor::new() {
         Ok(line) => line,
         Err(err) => {
