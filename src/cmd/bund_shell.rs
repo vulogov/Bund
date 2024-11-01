@@ -7,7 +7,7 @@ use crate::cmd::bund_display_banner;
 use crate::stdlib::helpers;
 use crate::stdlib::functions::debug_fun;
 
-pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
+pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
     log::debug!("SHELL::run() reached");
 
     let mut rl = match DefaultEditor::new() {
@@ -36,7 +36,11 @@ pub fn run(cli: &cmd::Cli, _shell_arg: &cmd::Shell) {
         match line {
             Ok(snippet) => {
                 let _ = rl.add_history_entry(snippet.as_str());
-                helpers::run_snippet::run_snippet_for_cmd(snippet.to_string(), cli);
+                if shell_arg.as_script {
+                    helpers::run_snippet::run_snippet_for_script(snippet.to_string(), cli);
+                } else {
+                    helpers::run_snippet::run_snippet_for_cmd(snippet.to_string(), cli);
+                }
             },
             Err(ReadlineError::Interrupted) => {
                 log::info!("CTRL-C");

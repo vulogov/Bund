@@ -118,6 +118,9 @@ pub struct EvalSrcArgGroup {
 #[derive(Args, Clone, Debug)]
 #[clap(about="Run the BUND REPL shell")]
 pub struct Shell {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Run BUND code in the shell as script")]
+    pub as_script: bool,
+
     #[clap(last = true)]
     args: Vec<String>,
 }
