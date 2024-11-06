@@ -2,3 +2,4 @@ Here is what's new:
 * ```{URL} use``` load BUND script from URL resource provided in stack and execute it.
 * ```use.``` load BUND script from URL resource provided in the workbench and execute it.
 * Function ```string.wildcard``` and ```string.wildcard.``` returned TRUE or FALSE if string on stack or workbench matches or not matches  pattern on stack.
+* Function ```string.regex``` and ```string.regex.``` returned TRUE or FALSE if string on stack or workbench matches or not matches  regex pattern on stack.
