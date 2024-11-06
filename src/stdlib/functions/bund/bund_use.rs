@@ -1,4 +1,3 @@
-
 extern crate log;
 use crate::cmd;
 use crate::stdlib::BUND;
@@ -28,6 +27,7 @@ pub fn bund_use_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&m
         Some(snippet_val) => {
             match snippet_val.cast_string() {
                 Ok(snippet_addr) => {
+                    log::debug!("Loading BUND script from {}", &snippet_addr);
                     match helpers::file_helper::get_file_from_uri(snippet_addr.clone()) {
                         Some(snippet) => {
                             return helpers::eval::bund_compile_and_eval(vm, snippet);
