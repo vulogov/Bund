@@ -32,6 +32,31 @@ fn bund_load<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
     Ok(vm)
 }
 
+fn bund_load_with_scripts<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+    match bund_load(vm, conn) {
+        Ok(_) => {}
+        Err(err) => {
+            bail!("LOAD returns: {}", err)
+        }
+    }
+    let scripts = match helpers::world::bootstrap::read_all_bootstrap(vm, conn) {
+        Ok(scripts) => scripts,
+        Err(err) => {
+            bail!("BOOTSTRAP discovery scripts returns: {}", err);
+        }
+    };
+    log::debug!("Running bootstrap scripts");
+    for snippet in scripts {
+        match helpers::eval::bund_compile_and_eval(vm, snippet) {
+            Ok(_) => {},
+            Err(err) => {
+                bail!("BOOTSTRAP execution of script is failed: {}", err);
+            }
+        }
+    }
+    Ok(vm)
+}
+
 fn bund_load_aliases<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
     match helpers::world::aliases::load_aliases(vm, conn) {
         Ok(_) => {}
@@ -99,6 +124,38 @@ pub fn stdlib_bund_load_base(vm: &mut VM, op: helpers::world::WorldFunctions) ->
     return res;
 }
 
+pub fn stdlib_bund_bootstrap(vm: &mut VM) -> Result<&mut VM, Error> {
+    if vm.stack.current_stack_len() < 1 {
+        bail!("Stack is too shallow for BOOTSTRAP");
+    }
+    let file_name_value = match vm.stack.pull() {
+        Some(file_name_value) => file_name_value,
+        None => {
+            bail!("LOAD returns NO DATA #1");
+        }
+    };
+    let file_name = match file_name_value.cast_string() {
+        Ok(file_name) => file_name,
+        Err(err) => {
+            bail!("LOAD casting string returns: {}", err);
+        }
+    };
+    let mut conn = match helpers::world::open(file_name) {
+        Ok(conn) => conn,
+        Err(err) => {
+            bail!("{}", err);
+        }
+    };
+    let res = bund_load_with_scripts(vm, &mut conn);
+    match conn.close() {
+        Ok(_) => {},
+        Err(err) => {
+            log::debug!("Closing connection to the world returns error: {:?}", err);
+        }
+    }
+    return res;
+}
+
 pub fn stdlib_bund_load(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::All)
 }
@@ -132,11 +189,13 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         let _ = bc.vm.register_inline("load.aliases".to_string(), stdlib_bund_load_disabled);
         let _ = bc.vm.register_inline("load.lambdas".to_string(), stdlib_bund_load_disabled);
         let _ = bc.vm.register_inline("load.stacks".to_string(), stdlib_bund_load_disabled);
+        let _ = bc.vm.register_inline("bootstrap".to_string(), stdlib_bund_load_disabled);
     } else {
         let _ = bc.vm.register_inline("load".to_string(), stdlib_bund_load);
         let _ = bc.vm.register_inline("load.aliases".to_string(), stdlib_bund_load_aliases);
         let _ = bc.vm.register_inline("load.lambdas".to_string(), stdlib_bund_load_lambdas);
         let _ = bc.vm.register_inline("load.stacks".to_string(), stdlib_bund_load_stacks);
+        let _ = bc.vm.register_inline("bootstrap".to_string(), stdlib_bund_bootstrap);
     }
     drop(bc);
 }

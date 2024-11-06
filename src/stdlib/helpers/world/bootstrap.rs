@@ -4,6 +4,49 @@ use rusqlite::{Connection};
 use rust_multistackvm::multistackvm::{VM};
 use easy_error::{Error, bail};
 
+pub fn read_all_bootstrap(_vm: &mut VM, conn: &mut Connection) -> Result<Vec<String>, Error> {
+    let mut res: Vec<String> = Vec::new();
+    let mut stmt = match conn.prepare("SELECT name, script FROM BOOTSTRAP ORDER BY name") {
+        Ok(stmt) => stmt,
+        Err(err) => {
+            bail!("Error compiling BOOTSTRAP select: {:?}", err);
+        }
+    };
+    match stmt.query([]) {
+        Ok(mut rows) => {
+            loop {
+                match rows.next() {
+                    Ok(Some(row)) => {
+                        let name: String = match row.get(0) {
+                            Ok(name) => name,
+                            Err(err) => {
+                                bail!("Error getting name: {}", err);
+                            }
+                        };
+                        let script: String = match row.get(1) {
+                            Ok(script) => script,
+                            Err(err) => {
+                                bail!("Error getting script: {}", err);
+                            }
+                        };
+                        log::debug!("BOOTSTRAP discovering script {}", &name);
+                        res.push(script.clone());
+                    }
+                    Ok(None) => break,
+                    Err(err) => {
+                        log::debug!("Error getting SCRIPT row: {}", err);
+                        break;
+                    }
+                }
+            }
+        }
+        Err(err) => {
+            bail!("Error performing SCRIPT select: {:?}", err);
+        }
+    }
+    Ok(res)
+}
+
 pub fn load_bootstrap<'a>(vm: &'a mut VM, conn: &mut Connection, name: String) -> Result<&'a mut VM, Error> {
     let mut stmt = match conn.prepare("SELECT script FROM BOOTSTRAP WHERE name=?1") {
         Ok(stmt) => stmt,
