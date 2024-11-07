@@ -9,6 +9,7 @@ pub mod bund_version;
 pub mod bund_shell;
 pub mod bund_eval;
 pub mod bund_script;
+pub mod bund_load;
 
 pub mod bund_display_banner;
 pub mod bund_bootstrap;
@@ -47,6 +48,9 @@ pub fn main() {
         }
         Commands::Shell(shell) => {
             bund_shell::run(&cli, &shell);
+        }
+        Commands::Load(load) => {
+            bund_load::run(&cli, &load);
         }
         Commands::Version(_) => {
             bund_version::run(&cli);
@@ -95,6 +99,7 @@ enum Commands {
     Script(Script),
     Eval(Eval),
     Shell(Shell),
+    Load(Load),
     Version(Version),
 }
 
@@ -148,6 +153,16 @@ pub struct EvalSrcArgGroup {
 pub struct Shell {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Run BUND code in the shell as script")]
     pub as_script: bool,
+
+    #[clap(last = true)]
+    args: Vec<String>,
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Load WORLD file and execute bootstrap scripts in this file")]
+pub struct Load {
+    #[clap(help="Path to the WORLD file", long, required = true)]
+    pub world: String,
 
     #[clap(last = true)]
     args: Vec<String>,

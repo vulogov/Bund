@@ -32,7 +32,7 @@ fn bund_load<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Er
     Ok(vm)
 }
 
-fn bund_load_with_scripts<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
+pub fn bund_load_with_scripts<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut VM, Error> {
     match bund_load(vm, conn) {
         Ok(_) => {}
         Err(err) => {
