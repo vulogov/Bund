@@ -8,3 +8,4 @@ Here is what's new:
 * Function ```fs.cp``` copying files specified as string or list to target
 * Function ```fs.mv``` moving files specified as string or list to target
 * Function ```fs.rm``` removing files specified as string or list
+* Function ```file.write``` writing content of the string to the file
