@@ -22,7 +22,11 @@ pub fn open(file_name: String) -> Result<Connection, Error> {
     replacement: ""
     };
     let sanitized_filename = sanitize_filename::sanitize_with_options(file_name, options);
-    let world_file_name = format!("{}.world", sanitized_filename);
+    let world_file_name = if const_str::ends_with!(&sanitized_filename, ".world") {
+        sanitized_filename
+    } else {
+        format!("{}.world", sanitized_filename)
+    };
     match Connection::open(world_file_name) {
         Ok(connection) => {
             return Ok(connection);
