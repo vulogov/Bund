@@ -5,10 +5,14 @@ use rust_dynamic::value::Value;
 use crate::cmd;
 use crate::stdlib::helpers;
 use easy_error::{Error, bail};
-use fancy_regex::{Regex};
 
+#[derive(Debug, Clone)]
+pub enum PSOps {
+    Prefix,
+    Suffix,
+}
 
-pub fn string_regex_split_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
+fn string_is_ps_base(vm: &mut VM, op: StackOps, psop: PSOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {
             if vm.stack.current_stack_len() < 2 {
@@ -40,19 +44,11 @@ pub fn string_regex_split_base(vm: &mut VM, op: StackOps, err_prefix: String) ->
                         Some(pattern_val) => {
                             match pattern_val.cast_string() {
                                 Ok(pattern) => {
-                                    match Regex::new(&pattern) {
-                                        Ok(regx) => {
-                                            let mut res = Value::list();
-                                            let fields: Vec<&str> = regx.split(&string_data).map(|x| x.unwrap()).collect();
-                                            for f in fields {
-                                                res = res.push(Value::from_string(&f));
-                                            }
-                                            vm.stack.push(res);
-                                        }
-                                        Err(err) => {
-                                            bail!("{} compile returns: {}", &err_prefix, err);
-                                        }
-                                    }
+                                    let res = match psop {
+                                        PSOps::Prefix => string_data.starts_with(&pattern),
+                                        PSOps::Suffix => string_data.ends_with(&pattern),
+                                    };
+                                    vm.stack.push(Value::from_bool(res));
                                 }
                                 Err(err) => {
                                     bail!("{} returns: {}", &err_prefix, err);
@@ -77,14 +73,21 @@ pub fn string_regex_split_base(vm: &mut VM, op: StackOps, err_prefix: String) ->
 }
 
 
-pub fn stdlib_string_stack_regex_split_inline(vm: &mut VM) -> Result<&mut VM, Error> {
-    string_regex_split_base(vm, StackOps::FromStack, "STRING.REGEX.SPLIT".to_string())
+pub fn stdlib_string_stack_is_ps_prefix_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_is_ps_base(vm, StackOps::FromStack, PSOps::Prefix, "STRING.PREFIX".to_string())
 }
 
-pub fn stdlib_string_workbench_regex_split_inline(vm: &mut VM) -> Result<&mut VM, Error> {
-    string_regex_split_base(vm, StackOps::FromWorkBench, "STRING.REGEX.SPLIT.".to_string())
+pub fn stdlib_string_workbench_is_ps_prefix_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_is_ps_base(vm, StackOps::FromWorkBench, PSOps::Prefix, "STRING.PREFIX.".to_string())
 }
 
+pub fn stdlib_string_stack_is_ps_suffix_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_is_ps_base(vm, StackOps::FromStack, PSOps::Suffix, "STRING.SUFFIX".to_string())
+}
+
+pub fn stdlib_string_workbench_is_ps_suffix_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_is_ps_base(vm, StackOps::FromWorkBench, PSOps::Suffix, "STRING.SUFFIX.".to_string())
+}
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut bc = match BUND.lock() {
@@ -94,8 +97,10 @@ pub fn init_stdlib(cli: &cmd::Cli) {
             return;
         }
     };
-    let _ = bc.vm.register_inline("string.regex.split".to_string(), stdlib_string_stack_regex_split_inline);
-    let _ = bc.vm.register_inline("string.regex.split.".to_string(), stdlib_string_workbench_regex_split_inline);
+    let _ = bc.vm.register_inline("string.prefix".to_string(), stdlib_string_stack_is_ps_prefix_inline);
+    let _ = bc.vm.register_inline("string.prefix.".to_string(), stdlib_string_workbench_is_ps_prefix_inline);
+    let _ = bc.vm.register_inline("string.suffix".to_string(), stdlib_string_stack_is_ps_suffix_inline);
+    let _ = bc.vm.register_inline("string.suffix.".to_string(), stdlib_string_workbench_is_ps_suffix_inline);
 
     drop(bc);
 }

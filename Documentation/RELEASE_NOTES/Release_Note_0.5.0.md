@@ -10,3 +10,5 @@ Here is what's new:
 * Function ```fs.rm``` removing files specified as string or list
 * Function ```file.write``` writing content of the string to the file
 * New CLI command ```load``` When you pass a mandatory CLI option ```--world``` it will load this WORLD file and execute all bootstrap scripts in alphabetical order.
+* Function ```string.prefix[.]``` detecting prefix of the string
+* Function ```string.suffix[.]``` detecting suffix of the string
