@@ -14,5 +14,8 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("cp".to_string(), "fs.cp".to_string());
     let _ = bc.vm.register_alias("mv".to_string(), "fs.mv".to_string());
     let _ = bc.vm.register_alias("rm".to_string(), "fs.rm".to_string());
+    let _ = bc.vm.register_alias("ls".to_string(), "fs.ls".to_string());
+    let _ = bc.vm.register_alias("ls.".to_string(), "fs.ls.".to_string());
+    let _ = bc.vm.register_alias("cwd".to_string(), "fs.cwd".to_string());
     drop(bc);
 }
