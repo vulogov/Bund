@@ -39,7 +39,7 @@ pub fn bund_load_with_scripts<'a>(vm: &'a mut VM, conn: &mut Connection) -> Resu
             bail!("LOAD returns: {}", err)
         }
     }
-    let scripts = match helpers::world::bootstrap::read_all_bootstrap(vm, conn) {
+    let scripts = match helpers::world::bootstrap::read_all_bootstrap(conn) {
         Ok(scripts) => scripts,
         Err(err) => {
             bail!("BOOTSTRAP discovery scripts returns: {}", err);

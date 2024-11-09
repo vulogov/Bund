@@ -4,3 +4,4 @@ Here is what's new:
 * Function ```fs.ls.files["."]``` takes directory name from stack and returns the list of files
 * Function ```fs.ls.dir["."]``` takes directory name from stack and returns the list of directories
 * Function ```fs.cwd``` returns current directory
+* CLI option ```wscript``` providing an easy method for managing scripts in the "WORLD" file. Commands for the ```wscript``` option including ```[--add|--remove|--list|--export]```

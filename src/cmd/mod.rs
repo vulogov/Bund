@@ -9,6 +9,7 @@ pub mod bund_version;
 pub mod bund_shell;
 pub mod bund_eval;
 pub mod bund_script;
+pub mod bund_wscript;
 pub mod bund_load;
 
 pub mod bund_display_banner;
@@ -51,6 +52,9 @@ pub fn main() {
         }
         Commands::Load(load) => {
             bund_load::run(&cli, &load);
+        }
+        Commands::Wscript(wscript) => {
+            bund_wscript::run(&cli, &wscript);
         }
         Commands::Version(_) => {
             bund_version::run(&cli);
@@ -100,6 +104,7 @@ enum Commands {
     Eval(Eval),
     Shell(Shell),
     Load(Load),
+    Wscript(Wscript),
     Version(Version),
 }
 
@@ -127,6 +132,23 @@ pub struct ScriptSrcArgGroup {
 
     #[clap(help="Take BUND script from CLI argument", long)]
     pub eval: Option<String>,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct WscriptSrcArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Add scripts to the WORLD file")]
+    pub add: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Remove scripts from the WORLD file")]
+    pub remove: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="List scripts in the WORLD file")]
+    pub list: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Export script from the WORLD file")]
+    pub export: bool,
 
 }
 
@@ -166,6 +188,23 @@ pub struct Load {
 
     #[clap(last = true)]
     args: Vec<String>,
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Manage scripts in the WORLD file")]
+pub struct Wscript {
+    #[clap(help="Path to the WORLD file", long, required = true)]
+    pub world: String,
+
+    #[clap(short, long, value_delimiter = ' ', help="Filename with script")]
+    pub script: Option<String>,
+
+    #[clap(short, long, value_delimiter = ' ', help="Name of the scripts")]
+    pub name: Option<String>,
+
+    #[clap(flatten, help="Command performed")]
+    command: WscriptSrcArgGroup,
+
 }
 
 #[derive(Args, Clone, Debug)]
