@@ -1,0 +1,9 @@
+//
+// This is demonstration of conditional move feature
+//
+"Value for conditional move is " print
+42 dup    // First, we put value to stack and duplicate it
+  { 0 < } // This lambda returned TRUE if value on top of
+          // the stack is greater than 0
+  ?.      // Conditional move to workbench
+  take println
