@@ -2,7 +2,7 @@ SOURCES=$(wildcard src/*.rs)
 
 
 all: $(SOURCES) Makefile
-	cargo build
+	cargo build 
 
 rebuild:
 	make clean

@@ -118,9 +118,9 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         }
     };
 
-    let _ = bc.vm.register_inline("encode.base".to_string(), stdlib_encode_base64_stack);
-    let _ = bc.vm.register_inline("encode.base.".to_string(), stdlib_encode_base64_workbench);
-    let _ = bc.vm.register_inline("decode.base".to_string(), stdlib_decode_base64_stack);
-    let _ = bc.vm.register_inline("decode.base.".to_string(), stdlib_decode_base64_workbench);
+    let _ = bc.vm.register_inline("encode.base64".to_string(), stdlib_encode_base64_stack);
+    let _ = bc.vm.register_inline("encode.base64.".to_string(), stdlib_encode_base64_workbench);
+    let _ = bc.vm.register_inline("decode.base64".to_string(), stdlib_decode_base64_stack);
+    let _ = bc.vm.register_inline("decode.base64.".to_string(), stdlib_decode_base64_workbench);
     drop(bc);
 }
