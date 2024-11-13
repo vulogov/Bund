@@ -3,6 +3,7 @@ use crate::cmd;
 use crate::stdlib::BUND;
 use rust_multistackvm::multistackvm::{VM};
 use crate::stdlib::helpers;
+use crate::stdlib::functions;
 use easy_error::{Error};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
@@ -33,6 +34,9 @@ pub fn debug_display_hostinfo_color() {
             Cell::new("OS version").fg(Color::Blue), Cell::new(&os_version.clone()).fg(Color::White),
         ])
         .add_row(vec![
+            Cell::new("Virtualization").fg(Color::Blue), Cell::new(&functions::sysinfo::virt::bund_sysinfo_virtualization().clone()).fg(Color::White),
+        ])
+        .add_row(vec![
             Cell::new("Kernel version").fg(Color::Blue), Cell::new(&kernel_version.clone()).fg(Color::White),
         ]);
     println!("{table}");
@@ -61,6 +65,9 @@ pub fn debug_display_hostinfo_nocolor() {
         ])
         .add_row(vec![
             Cell::new("OS version"), Cell::new(&os_version.clone()),
+        ])
+        .add_row(vec![
+            Cell::new("Virtualization"), Cell::new(&functions::sysinfo::virt::bund_sysinfo_virtualization().clone()),
         ])
         .add_row(vec![
             Cell::new("Kernel version"), Cell::new(&kernel_version.clone()),
