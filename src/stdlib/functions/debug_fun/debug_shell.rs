@@ -16,7 +16,7 @@ pub fn debug_shell(vm: &mut VM)  -> Result<&mut VM, Error> {
             return Ok(vm);
         }
     };
-    #[cfg(feature = "with-file-history")]
+    // #[cfg(feature = "with-file-history")]
     if rl.load_history("bund_debug_shell_history.txt").is_err() {
         log::warn!("No previous shell history.");
     }
@@ -47,8 +47,8 @@ pub fn debug_shell(vm: &mut VM)  -> Result<&mut VM, Error> {
         }
     }
     log::debug!("Saving shell history...");
-    #[cfg(feature = "with-file-history")]
-    rl.save_history("bund_debug_shell_history.txt");
+    // #[cfg(feature = "with-file-history")]
+    let _ = rl.save_history("bund_debug_shell_history.txt");
     Ok(vm)
 }
 

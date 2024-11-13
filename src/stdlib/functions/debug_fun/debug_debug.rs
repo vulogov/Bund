@@ -44,7 +44,7 @@ pub fn bund_debugger<N: AsRef<str> + ToString>(vm: &mut VM, value: N) -> Result<
             return Ok(vm);
         }
     };
-    #[cfg(feature = "with-file-history")]
+    // #[cfg(feature = "with-file-history")]
     if rl.load_history("bund_debug_debugger_history.txt").is_err() {
         log::warn!("No previous shell history.");
     }
@@ -115,8 +115,8 @@ pub fn bund_debugger<N: AsRef<str> + ToString>(vm: &mut VM, value: N) -> Result<
         }
     }
     log::debug!("Saving shell history...");
-    #[cfg(feature = "with-file-history")]
-    rl.save_history("bund_debug_shell_history.txt");
+    // #[cfg(feature = "with-file-history")]
+    let _ = rl.save_history("bund_debug_shell_history.txt");
     Ok(vm)
 }
 

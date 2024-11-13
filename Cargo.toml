@@ -21,7 +21,7 @@ log = "0.4.22"
 path-absolutize = "3.1.1"
 rust_dynamic = ">=0.*.*"
 rust_multistackvm = ">=0.*.*"
-rustyline = { version = "14.0.*", features = ["with-file-history"] }
+rustyline = { version = "14.*.*", features = ["with-file-history"] }
 yansi = "1.0.1"
 os_info = "3"
 comfy-table = "7.1.1"
