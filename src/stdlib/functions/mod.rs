@@ -9,6 +9,8 @@ pub mod debug_fun;
 pub mod sysinfo;
 pub mod string;
 pub mod encoding;
+pub mod statistics;
+
 pub mod create_aliases;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
@@ -16,6 +18,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     io::init_stdlib(cli);
     bus::init_stdlib(cli);
     encoding::init_stdlib(cli);
+    statistics::init_stdlib(cli);
     filesystem::init_stdlib(cli);
     debug_fun::init_stdlib(cli);
     sysinfo::init_stdlib(cli);

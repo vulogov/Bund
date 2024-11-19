@@ -4,7 +4,7 @@ use rustyline::{DefaultEditor};
 use yansi::Paint;
 use crate::cmd;
 use rust_dynamic::value::Value;
-use crate::cmd::bund_display_banner;
+use crate::cmd::*;
 use crate::stdlib::helpers;
 use crate::stdlib::functions::{debug_fun, bund};
 
@@ -72,4 +72,5 @@ pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
     log::debug!("Saving shell history...");
     // #[cfg(feature = "with-file-history")]
     let _ = rl.save_history("bund_history.txt");
+    println!("{}", bund_display_banner::banner_small(&"Ir vet hobn a gut tog".to_string()));
 }

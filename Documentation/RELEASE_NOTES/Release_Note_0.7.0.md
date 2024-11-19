@@ -4,3 +4,4 @@ Here is what's new:
 * Functions ```sysinfo.mem.[total|free|used|shared|cached|buffers][|.]``` that is returning information about allocated memory for specific purpose in bytes.
 * Functions ```encode.base[|.]``` that is encoding object on stack or workbench to BASE64
 * Functions ```decode.base[|.]``` that is decoding object on stack or workbench from BASE64 into Value
+* Fountion ```stat.count[|.][|,]``` returning the number of values in the data sample allocated in list, stack or metrics. Be careful, for stack it is a destructive operation

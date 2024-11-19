@@ -39,6 +39,7 @@ scan_dir = "0.3.3"
 crossbeam = "0.8.4"
 crossbeam-channel = "0.5.13"
 base64ct = { version="1.6.*", features = ["alloc"] }
+rust_multistack = "0.31.0"
 
 [dependencies.rusqlite]
 version = "0.32.*"
