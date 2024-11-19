@@ -11,8 +11,10 @@ pub mod get_data;
 
 pub mod count;
 pub mod statistics;
+pub mod minmax;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     count::init_stdlib(cli);
     statistics::init_stdlib(cli);
+    minmax::init_stdlib(cli);
 }

@@ -13,3 +13,4 @@ Here is what's new:
 * Function ```system.setproctitle``` Setting process title for supported OS.
 * Function ```forecast.markov[|.][|,]``` returning the forecast for the next value in the data sample allocated in list, stack or metrics. Be careful, for stack it is a destructive operation
 * Functions ```stat.mean.[arithmetic|arithmeticweighted|geometric|geometricweighted|harmonic|harmonicweighted|harmonicspread][|.][|,]``` sample mean computation using various algorithm
+* Functions ```math.[min|max][|.][|,]``` returning minimum or maximum from sample
