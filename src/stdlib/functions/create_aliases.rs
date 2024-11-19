@@ -17,5 +17,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("ls".to_string(), "fs.ls".to_string());
     let _ = bc.vm.register_alias("ls.".to_string(), "fs.ls.".to_string());
     let _ = bc.vm.register_alias("cwd".to_string(), "fs.cwd".to_string());
+    let _ = bc.vm.register_alias("string.distance".to_string(), "string.distance.levenshtein".to_string());
+    let _ = bc.vm.register_alias("string.distance.".to_string(), "string.distance.levenshtein.".to_string());
     drop(bc);
 }

@@ -40,6 +40,8 @@ crossbeam = "0.8.4"
 crossbeam-channel = "0.5.13"
 base64ct = { version="1.6.*", features = ["alloc"] }
 rust_multistack = "0.31.0"
+distance = "0.4.0"
+fuzzy-matcher = "0.3.7"
 
 [dependencies.rusqlite]
 version = "0.32.*"
