@@ -11,3 +11,4 @@ Here is what's new:
 * Function ```string.distance.sift3[|.]``` returning the distance between two strings using Damerau-Sift3 algorithm
 * Function ```string.fuzzymatch[|.]``` returning the fuzzy matching between two strings.
 * Function ```system.setproctitle``` Setting process title for supported OS.
+* Function ```forecast.markov[|.][|,]``` returning the forecast for the next value in the data sample allocated in list, stack or metrics. Be careful, for stack it is a destructive operation
