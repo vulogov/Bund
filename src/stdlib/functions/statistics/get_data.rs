@@ -125,6 +125,7 @@ fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, 
             }
         }
     }
+    log::debug!("Taking data from stack.");
     let value = match op {
         StackOps::FromStack => vm.stack.pull(),
         StackOps::FromWorkBench => vm.stack.pull_from_workbench(),
@@ -165,6 +166,7 @@ fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, 
     }
     match smode {
         statistics::SourceMode::Keep => {
+            log::debug!("Keeping value in the stack by reinserting.");
             let _ = match op {
                 StackOps::FromStack => vm.stack.push(list_value),
                 StackOps::FromWorkBench => vm.stack.push_to_workbench(list_value),
@@ -189,31 +191,22 @@ pub fn get_data(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_pr
         }
     }
     let value = match op {
-        StackOps::FromStack => vm.stack.pull(),
-        StackOps::FromWorkBench => vm.stack.pull_from_workbench(),
+        StackOps::FromStack => vm.stack.peek(),
+        StackOps::FromWorkBench => vm.stack.workbench.peek().cloned(),
     };
     match value {
         Some(data_value) => {
             match data_value.type_of() {
                 LIST => {
-                    let _ = match op {
-                        StackOps::FromStack => vm.stack.push(data_value),
-                        StackOps::FromWorkBench => vm.stack.push_to_workbench(data_value),
-                    };
+                    log::debug!("Processing data from list.");
                     return get_data_from_list(vm, op, smode, err_prefix);
                 }
                 METRICS => {
-                    let _ = match op {
-                        StackOps::FromStack => vm.stack.push(data_value),
-                        StackOps::FromWorkBench => vm.stack.push_to_workbench(data_value),
-                    };
+                    log::debug!("Processing data from metrics.");
                     return get_data_from_metrics(vm, op, smode, err_prefix);
                 }
                 _ => {
-                    let _ = match op {
-                        StackOps::FromStack => vm.stack.push(data_value),
-                        StackOps::FromWorkBench => vm.stack.push_to_workbench(data_value),
-                    };
+                    log::debug!("Processing data from stack.");
                     return get_data_for_stat_from_stack_or_workbench(vm, op, err_prefix);
                 }
             }

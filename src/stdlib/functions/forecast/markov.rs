@@ -8,6 +8,7 @@ use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use decorum::{R64};
 use markov_chain::Chain;
+use rstats::*;
 
 fn forecast_markov_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<&mut VM, Error> {
     match statistics::get_data::get_data(vm, op.clone(), smode, err_prefix.clone()) {
@@ -18,16 +19,20 @@ fn forecast_markov_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode
             }
             let mut palanteer = Chain::<R64>::new(16);
             palanteer.train(dst);
-            let res = palanteer.generate_limit(1);
+            let res = palanteer.generate_limit(16);
             if res.len() == 0 {
                 bail!("{} forecasting does not returned a prognisis", &err_prefix);
             }
-            for i in res {
-                let _ = match op {
-                    StackOps::FromStack => vm.stack.push(Value::from_float(f64::from(i))),
-                    StackOps::FromWorkBench => vm.stack.push_to_workbench(Value::from_float(f64::from(i))),
-                };
-            }
+            let res_amean = match res.amean() {
+                Ok(res_amean) => res_amean,
+                Err(err) => {
+                    bail!("{} forecasting can not compute mean: {}", &err_prefix, err);
+                }
+            };
+            let _ = match op {
+                StackOps::FromStack => vm.stack.push(Value::from_float(res_amean)),
+                StackOps::FromWorkBench => vm.stack.push_to_workbench(Value::from_float(res_amean)),
+            };
         }
         Err(err) => {
             bail!("{} returned: {}", &err_prefix, err);
