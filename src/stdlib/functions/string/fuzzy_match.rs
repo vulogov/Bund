@@ -12,7 +12,7 @@ use fuzzy_matcher::skim::SkimMatcherV2;
 pub fn string_fuzzy_match_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {
-            if vm.stack.current_stack_len() < 1 {
+            if vm.stack.current_stack_len() < 2 {
                 bail!("Stack is too shallow for inline {}", &err_prefix);
             }
         }

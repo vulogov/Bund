@@ -10,3 +10,4 @@ Here is what's new:
 * Function ```string.distance.hamming[|.]``` returning the distance between two strings using Hamming algorithm
 * Function ```string.distance.sift3[|.]``` returning the distance between two strings using Damerau-Sift3 algorithm
 * Function ```string.fuzzymatch[|.]``` returning the fuzzy matching between two strings.
+* Function ```system.setproctitle``` Setting process title for supported OS.
