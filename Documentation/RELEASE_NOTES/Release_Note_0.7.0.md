@@ -14,3 +14,5 @@ Here is what's new:
 * Function ```forecast.markov[|.][|,]``` returning the forecast for the next value in the data sample allocated in list, stack or metrics. Be careful, for stack it is a destructive operation
 * Functions ```stat.mean.[arithmetic|arithmeticweighted|geometric|geometricweighted|harmonic|harmonicweighted|harmonicspread][|.][|,]``` sample mean computation using various algorithm
 * Functions ```math.[min|max][|.][|,]``` returning minimum or maximum from sample
+* Isolated execution context throough ```(``` and ```)``` last value in the context exported to WorkBench
+* Functions ```math.normalize[|.][|,]``` returning vector of normalized sample
