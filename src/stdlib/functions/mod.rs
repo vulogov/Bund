@@ -11,6 +11,7 @@ pub mod string;
 pub mod encoding;
 pub mod statistics;
 pub mod forecast;
+pub mod math;
 pub mod system;
 
 pub mod create_aliases;
@@ -27,6 +28,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     string::init_stdlib(cli);
     system::init_stdlib(cli);
     forecast::init_stdlib(cli);
+    math::init_stdlib(cli);
     // And create aliases from BUND shell
     create_aliases::init_stdlib(cli);
 }
