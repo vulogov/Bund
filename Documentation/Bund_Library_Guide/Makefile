@@ -1,7 +1,7 @@
 SOURCES=$(wildcard *.typ)
 NAME=BUND_standard_lisbrary_reference
 
-all: $(NAME).pdf
+all: $(NAME).pdf $(SOURCES) index.csv Makefile
 
 rebuild:
 	make clean
@@ -13,7 +13,7 @@ export:
 
 
 $(NAME).pdf: $(SOURCES)  Makefile
-	typst compile $(NAME).typ
+	typst compile $(NAME).typ 
 
 clean:
 	rm -f $(NAME)*.pdf

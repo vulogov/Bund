@@ -3,8 +3,8 @@
 #if dedication != none {
   v(15%)
   text(
-    size: 18pt,
-    font: "UniversalSerif.ttf"
+    size: 16pt,
+    font: "universalserif.ttf"
   )[
     #align(right+horizon, dedication)
   ]

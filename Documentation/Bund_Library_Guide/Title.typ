@@ -8,7 +8,7 @@
 ]
 #align(center+horizon)[
   #text(
-    font: "UniversalSerif.ttf",
+    font: "universalserif.ttf",
     size: 16pt
   )[
     Composed by Vladimir Ulogov
@@ -16,7 +16,7 @@
   \
   \
   #text(
-    font: "UniversalSerif.ttf",
+    font: "universalserif.ttf",
     size: 26pt
   )[
     BUND standard library reference
@@ -24,7 +24,7 @@
   \
   \
   #text(
-    font: "UniversalSerif.ttf",
+    font: "universalserif.ttf",
     size: 11pt
   )[
     #include "Title_abstract.typ"

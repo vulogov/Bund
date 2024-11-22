@@ -1,4 +1,3 @@
-#import "@preview/chic-hdr:0.4.0": *
 #include "settings.typ"
 #import "globals.typ": *
 
@@ -9,25 +8,13 @@
 )
 #set text(
   size: 13pt,
-  font: "UniversalSerif.ttf",
+  font: "universalserif.ttf",
   fill: black,
   weight: "regular",
   lang: "en",
   hyphenate: auto
 )
 #set par(justify: true)
-
-#show: chic.with(
-  chic-header(
-
-  ),
-  chic-footer(
-    left-side: chic-page-number(),
-  ),
-  chic-separator(1pt),
-  chic-offset(7pt),
-  chic-height(1.5cm)
-)
 
 #show heading.where(level: 1): it => {
   pagebreak(to: "odd")
@@ -45,9 +32,11 @@
 
 #include "Title.typ"
 #include "Introduction.typ"
+#include "Library.typ"
+
 #set text(
   size: 13pt,
-  font: "UniversalSerif.ttf",
+  font: "universalserif.ttf",
   fill: black,
   weight: "regular",
   lang: "en",
