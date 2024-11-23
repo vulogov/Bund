@@ -14,4 +14,4 @@
   - [ ] #"bund runtime"
 ]
 
-This function takes a single value from the top of current stack and discards it.
+This function clears out all data from the named stack, taking the name of the stack from current stack

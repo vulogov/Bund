@@ -1,7 +1,7 @@
 #import "@preview/gentle-clues:1.0.0": *
 \
 #danger[
-This is destructive operation with data.
+This is destructive operation with stack.
 ]
 \
 #rect(

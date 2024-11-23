@@ -3,6 +3,17 @@
 
 #show: checklist
 
+#colorbox(
+  title: "Defined in",
+  color: "default",
+  radius: 2pt,
+  width: auto
+)[
+  - [ ] #"rust_multistack"
+  - [ ] #"rust_multistackvm"
+  - [ ] #"bund runtime"
+]
+
 Description of function
 
 #colorbox(

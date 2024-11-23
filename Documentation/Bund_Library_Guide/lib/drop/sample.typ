@@ -6,7 +6,8 @@
   gutter: 2em,
 )[```rust
   //
-  //
+  // Calling this function will remove
+  // and discard a value
   //
   42 drop```
 ]

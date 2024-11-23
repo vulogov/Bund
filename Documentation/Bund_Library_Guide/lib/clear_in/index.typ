@@ -1,7 +1,7 @@
 #import "@preview/gentle-clues:1.0.0": *
 \
 #danger[
-This is destructive operation with data.
+This is destructive operation with stack.
 ]
 \
 #rect(
@@ -14,7 +14,7 @@ This is destructive operation with data.
 #align(center)[
   #grid(
     columns: (100% - 20pt),
-    rows: (auto,),
+    rows: (auto, 60pt),
     gutter: 5pt,
     fill: silver,
     grid.cell(

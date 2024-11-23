@@ -6,7 +6,8 @@
   gutter: 2em,
 )[```rust
   //
+  // Clearing current stack
   //
-  //
+  clear
   ```
 ]

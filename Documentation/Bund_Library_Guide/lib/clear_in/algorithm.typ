@@ -3,15 +3,16 @@
 
 #algorithm({
   import algorithmic: *
-  Function("drop", args: (), {
+  Function("clear_in", args: (), {
     Cmt[
-      Dropping value that is on top of the stack
+      Clearing named stack
     ]
     Assign(
-      [Value], [_current stack_]
+      [Name], [_current stack_]
     )
-    If(cond: "Value = None", {
+    If(cond: "Name = None", {
       Return[Error("Stack is too shallow")]
     })
+    Call("Clear_Stack", [Name])
   })
 })

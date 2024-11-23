@@ -6,7 +6,8 @@
   gutter: 2em,
 )[```rust
   //
+  // Remove all data from named stack
   //
-  //
+  :StackName clear_in
   ```
 ]
