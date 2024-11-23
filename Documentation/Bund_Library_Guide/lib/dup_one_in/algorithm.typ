@@ -3,15 +3,18 @@
 
 #algorithm({
   import algorithmic: *
-  Function("Dup", args: (), {
+  Function("Dup_One_in", args: (), {
     Cmt[
       Duplicate value
     ]
     Assign(
+      [Name], [_current stack_]
+    )
+    Assign(
       [Value], [_current stack_]
     )
     Assign(
-      [_current stack_], [Call("Dup", [Value])]
+      [_stack Name_], [Call("Dup", [1, Name, Value])]
     )
   })
 })

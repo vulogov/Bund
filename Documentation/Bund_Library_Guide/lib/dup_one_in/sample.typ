@@ -1,14 +1,15 @@
 #import "@preview/codelst:2.0.2": sourcecode
 
-
 #sourcecode(
   numbers-side: right,
   gutter: 2em,
 )[```rust
   //
-  // Duplicate data in stack
+  // Duplicating single value from stack "A"
   //
-  42 dup
-  // Now we have 42, 42 in stack
+  @A 42
+  @main
+    :A dup_one_in
+  // Now in stack A we have 42, 42 
   ```
 ]

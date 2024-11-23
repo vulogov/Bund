@@ -3,7 +3,7 @@
 
 #algorithm({
   import algorithmic: *
-  Function("function-name", args: (), {
+  Function("Drop_Stack", args: (), {
     Cmt[
       Drop the stack
     ]
