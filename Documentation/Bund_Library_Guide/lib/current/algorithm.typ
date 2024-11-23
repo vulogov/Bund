@@ -3,7 +3,7 @@
 
 #algorithm({
   import algorithmic: *
-  Function("to_current", args: (), {
+  Function("current", args: (), {
     Cmt[
       Returns the name of current stack to stack
     ]

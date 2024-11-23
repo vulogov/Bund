@@ -3,16 +3,16 @@
 
 #algorithm({
   import algorithmic: *
-  Function("clear", args: (), {
+  Function("Drop_in", args: (), {
     Cmt[
-      Clearing all values in current stack
+      Drop the value in the named stack
     ]
     Assign(
       [Name], [VM::current_stack_name()]
     )
     If(cond: "Name = None", {
-      Return[Error("Error getting current stack name")]
+      Return[Error("Stack is too shallow")]
     })
-    Call("Clear_Stack", [Name])
+    Call("Drop", [Name])
   })
 })

@@ -3,16 +3,16 @@
 
 #algorithm({
   import algorithmic: *
-  Function("drop", args: (), {
+  Function("function-name", args: (), {
     Cmt[
-      Dropping value that is on top of the stack
+      Drop the stack
     ]
     Assign(
-      [Name], [VM::current_stack_name()]
+      [Name], [_current stack_]
     )
     If(cond: "Value = None", {
       Return[Error("Stack is too shallow")]
     })
-    Call("Drop", [Name])
+    Call("DropStack", [Name])
   })
 })
