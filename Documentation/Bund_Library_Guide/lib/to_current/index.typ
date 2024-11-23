@@ -1,8 +1,3 @@
-#import "@preview/gentle-clues:1.0.0": *
-\
-#danger[
-Remove if there is no danger
-]
 \
 #rect(
   width: 100%,
