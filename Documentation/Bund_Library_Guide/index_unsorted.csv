@@ -15,4 +15,5 @@ ensure_stack_with_capacity,"Make named stack with set capacity current, create i
 stack_exists,"Check if stack exists"
 fold,"Folding all values in the current stack"
 fold_stack,"Folding all values in the named stack"
-rotate_current_left,"Retate current stack to the left"
+rotate_current_left,"Rotate current stack to the left"
+rotate_current_right,"Rotate current stack to the right"
