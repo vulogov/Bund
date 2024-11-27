@@ -3,12 +3,12 @@
 
 #algorithm({
   import algorithmic: *
-  Function("Rotate_Current_Right", args: (), {
+  Function("Rotate_Current_Left", args: (), {
     Cmt[
-      Rotate current stack
+      Rotate named stack
     ]
     Assign(
-      [Name], [VM::current_stack_name()]
+      [Name], [_current stack_]
     )
     Call("rotate_stack_right", [1, Name])
   })
