@@ -32,6 +32,7 @@
 
 #include "Title.typ"
 #include "Introduction.typ"
+#include "How_to_use.typ"
 #include "Library.typ"
 
 #set text(

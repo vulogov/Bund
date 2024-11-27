@@ -5,15 +5,12 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  //
-  // Remove all data from named stack
-  //
   @main
   @StackName
     1 2 3
   @main
-    :StackName clear_in
-  // After calling clear_in, stack with name "StackName"
-  // will have no data
+    :StackName 3 dup_many_in
+  // Duplicate all three values in
+  // stack "StackName"
   ```
 ]

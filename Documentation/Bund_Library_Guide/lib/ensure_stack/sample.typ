@@ -6,9 +6,8 @@
   gutter: 2em,
 )[```rust
   //
-  // Clearing current stack
+  // Set stack "StackName" current
   //
-  1 2 3 clear
-  // After calling clear stack is going to be empty
+  "StackName" ensure_stack
   ```
 ]

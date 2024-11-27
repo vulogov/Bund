@@ -14,3 +14,6 @@ So, what will might surprise you in concatenative stack-based language?
 - There are no variables. All data are stored on the stack.
 - There are no global constants, variables, or values. Everything is on the stack.
 - Due to the LIFO nature of the stack, you will deal with RPN, although BUND offers you an ability to creae a stack with FIFO policy.
+\
+#include "Introduction_the_art_of_stack_operations.typ"
+#include "Introduction_translation.typ"
