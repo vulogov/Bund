@@ -5,10 +5,11 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  42 . convert.to_string take
-  "42" == {
-    "Conversion is succesful"
-    println
-  } if
+  // Creating message in TEXTBUFFER
+  "Hello" .
+    convert.to_textbuffer.
+    "World" +.
+  take println
+  // And printing Hello World!
   ```
 ]

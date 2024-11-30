@@ -6,12 +6,12 @@
   gutter: 2em,
 )[```rust
   //
-  // Converting data in stack to string
+  // Converting data in stack to matrix
   //
-  42 convert.to_string
-  "42" == {
-    "Conversion is succesful"
-    println
-  } if
+  [
+    [ 1 2 3 ]
+    [ 4 5 6 ]
+  ] convert.to_matrix dup
+  "Size of matrix " print len println
   ```
 ]

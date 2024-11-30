@@ -3,9 +3,9 @@
 
 #algorithm({
   import algorithmic: *
-  Function("Convert_To_String", args: (), {
+  Function("Convert_To_Textbuffer", args: (), {
     Cmt[
-      Converting Value to String
+      Converting Value to Textbuffer
     ]
     Assign(
       [Value], [_current stack_]
@@ -14,7 +14,7 @@
       Return[Error("Stack is too shallow")]
     })
     Assign(
-      [_current stack_], [Value::conv(STRING)]
+      [_current stack_], [Value::conv(TEXTBUFFER)]
     )
   })
 })

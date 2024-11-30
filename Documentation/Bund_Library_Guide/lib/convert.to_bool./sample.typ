@@ -5,7 +5,7 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  1 . convert.to_bool take
+  1 . convert.to_bool. take
   TRUE == {
     "Conversion is succesful"
     println

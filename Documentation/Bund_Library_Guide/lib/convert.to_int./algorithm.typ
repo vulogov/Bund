@@ -3,9 +3,9 @@
 
 #algorithm({
   import algorithmic: *
-  Function("Convert_To_String_In_Workbench", args: (), {
+  Function("Convert_To_Integer_In_Workbench", args: (), {
     Cmt[
-      Converting Value to String
+      Converting Value to Integer
     ]
     Assign(
       [Value], [_workbench_]
@@ -14,7 +14,7 @@
       Return[Error("Workbench is too shallow")]
     })
     Assign(
-      [_workbench_], [Value::conv(STRING)]
+      [_workbench_], [Value::conv(INT)]
     )
   })
 })

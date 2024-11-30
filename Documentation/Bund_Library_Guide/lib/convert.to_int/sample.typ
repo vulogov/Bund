@@ -6,10 +6,10 @@
   gutter: 2em,
 )[```rust
   //
-  // Converting data in stack to string
+  // Converting data in stack to int
   //
-  42 convert.to_string
-  "42" == {
+  TRUE convert.to_int
+  1 == {
     "Conversion is succesful"
     println
   } if

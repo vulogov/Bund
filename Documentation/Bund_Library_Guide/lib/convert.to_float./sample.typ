@@ -5,7 +5,7 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  42 . convert.to_string take
+  42 . convert.to_string. take
   42.0 == {
     "Conversion is succesful"
     println

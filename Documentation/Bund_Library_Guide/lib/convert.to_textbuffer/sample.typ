@@ -6,12 +6,13 @@
   gutter: 2em,
 )[```rust
   //
-  // Converting data in stack to string
+  // Converting data in stack to textbuffer
   //
-  42 convert.to_string
-  "42" == {
-    "Conversion is succesful"
-    println
-  } if
+  "Hello"
+    convert.to_textbuffer
+    "WSorld" ,
+    "!" ,
+  println
+  // And printing Hello World!
   ```
 ]

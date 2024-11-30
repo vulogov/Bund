@@ -3,9 +3,9 @@
 
 #algorithm({
   import algorithmic: *
-  Function("Convert_To_String_In_Workbench", args: (), {
+  Function("Convert_To_List_In_Workbench", args: (), {
     Cmt[
-      Converting Value to String
+      Converting Value to List
     ]
     Assign(
       [Value], [_workbench_]

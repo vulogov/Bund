@@ -14,4 +14,4 @@
   - [ ] #"bund runtime"
 ]
 
-Taking value from the workbench, converting to the STRING and pushing result to the workbench
+Taking value from the workbench, converting to the LIST and pushing result to the workbench

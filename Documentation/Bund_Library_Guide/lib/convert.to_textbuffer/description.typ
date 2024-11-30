@@ -14,4 +14,4 @@
   - [ ] #"bund runtime"
 ]
 
-Taking value from the stack, converting to the STRING and pushing result to the stack
+Taking value from the stack, converting to the TEXTBUFFER and pushing result to the stack

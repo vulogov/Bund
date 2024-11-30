@@ -4,7 +4,22 @@
 #set page(
   paper: "iso-b5",
   margin: (bottom: 1.75cm, top: 2.25cm),
-  fill: white
+  fill: white,
+  numbering: "1 of 1",
+  header: context {
+    if counter(page).get().first() > 2 [
+      _BUND standard Library reference_
+    ]
+  },
+  footer: context {
+  if counter(page).get().first() > 2 [
+      #set align(center)
+      #counter(page).display(
+      "1 of 1",
+      both: true,
+    )
+  ]
+  },
 )
 #set text(
   size: 13pt,
