@@ -1,8 +1,12 @@
+![Bund shell](screen.png)
+
 # BUND concatenative language interpreter and shell.
 
-Now, I am thrilled to introduce a novel concatenative programming language called BUND. What sets a concatenative language apart, and how does it diverge from the programming languages you are accustomed to? You are likely well-versed in applicative programming languages like Python, C, or Java. Alternatively, you may have dabbled in functional programming languages such as Lisp, Haskell, or ML, other instances of applicative programming languages. This category is characterized by the way functions are perceived and managed. In applicative languages, a function is treated as a mathematical primitive that computes based on passed arguments and returns a value.
+I am thrilled to introduce a novel concatenative programming language called BUND. What sets a concatenative language apart, and how does it differ from the programming languages you are accustomed to?
 
-On the other hand, concatenative programming languages facilitate the transfer of a data context from one function to another, external to the function itself. While the stack is the most common method for this transfer, there are concatenative languages that don't rely on a stack. This data context transfer enables the concatenation of data processing, making concatenative languages a practical choice for certain applications. While less prevalent in the software development communities, you might have come across languages such as Forth, PostScript, and Factor.
+You are likely well-versed in applicative programming languages like Python, C, or Java. Alternatively, you may have dabbled in functional programming languages such as Lisp, Haskell, or ML, which are also instances of applicative programming languages. This category is characterized by the way functions are perceived and managed. In applicative languages, a function is treated as a mathematical primitive that computes based on passed arguments and returns a value.
+
+In contrast, concatenative programming languages facilitate the transfer of a data context from one function to another, external to the function itself. While the stack is the most common method for this transfer, some concatenative languages do not rely on a stack. This data context transfer enables the concatenation of data processing, making concatenative languages a practical choice for certain applications. Although less prevalent in software development communities, you might have come across languages such as Forth, PostScript, and Factor.
 
 ## Show me the code!
 
