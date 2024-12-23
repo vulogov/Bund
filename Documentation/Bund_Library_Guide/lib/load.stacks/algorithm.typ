@@ -3,7 +3,7 @@
 
 #algorithm({
   import algorithmic: *
-  Function("bund-load", args: (), {
+  Function("bund-load-stacks", args: (), {
     Cmt[
       Restore VM state from WORLD file
     ]
@@ -13,6 +13,6 @@
     If(cond: "Value = None", {
       Return[Error("Stack is too shallow")]
     })
-    Call("Bund_Load", [Filename])
+    Call("Bund_Load_Stacks", [Filename])
   })
 })

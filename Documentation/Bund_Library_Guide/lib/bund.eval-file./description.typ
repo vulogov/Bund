@@ -14,4 +14,4 @@
   - [x] #"bund runtime"
 ]
 
-Evaluating code snippet from the string that is loaded from file. Name of the file is taken from the string stored in the workbench. All errors are handled in a usual way. This function will not create a new virtual machine.
+This function is responsible for the evaluation of a code snippet that is extracted from a string loaded from a specified file. The name of this file is derived from a string that is stored within the workbench environment. All errors encountered during the execution of this function are managed using standard error-handling procedures. It is important to note that this function does not instantiate a new virtual machine.

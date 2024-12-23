@@ -3,9 +3,9 @@
 
 #algorithm({
   import algorithmic: *
-  Function("bund-load", args: (), {
+  Function("bund-load-aliases", args: (), {
     Cmt[
-      Restore VM state from WORLD file
+      Restore VM function aliases from WORLD file
     ]
     Assign(
       [Filename], [_current stack_]
@@ -13,6 +13,6 @@
     If(cond: "Value = None", {
       Return[Error("Stack is too shallow")]
     })
-    Call("Bund_Load", [Filename])
+    Call("Bund_Load_Aliases", [Filename])
   })
 })

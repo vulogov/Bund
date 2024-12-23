@@ -5,9 +5,7 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  //
-  // Load VM state from file _state.world_
-  //
-  "state" load
+  // Load stacks data context from file _state.world_
+  "state" load.stacks
   ```
 ]

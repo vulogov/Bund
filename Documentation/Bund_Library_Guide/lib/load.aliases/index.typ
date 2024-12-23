@@ -1,7 +1,7 @@
 #import "@preview/gentle-clues:1.0.0": *
 \
 #danger[
-Content from the external file will alter current VM state
+Content from the external file will alter current list of aliases
 ]
 \
 #rect(

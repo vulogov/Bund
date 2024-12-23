@@ -14,4 +14,4 @@
   - [x] #"bund runtime"
 ]
 
-Evaluating code snippet from the string stored in the stack. All errors are handled in a usual way. This function will not create a new virtual machine.
+This function is tasked with the evaluation of a code snippet that is retrieved from a string stored in the stack. The process involves standard error-handling mechanisms to manage any issues that may arise during execution. It is crucial to highlight that this function does not instantiate a new virtual machine."

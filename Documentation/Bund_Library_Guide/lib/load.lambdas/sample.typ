@@ -5,9 +5,7 @@
   numbers-side: right,
   gutter: 2em,
 )[```rust
-  //
-  // Load VM state from file _state.world_
-  //
-  "state" load
+  // Load lambda functions from file _state.world_
+  "state" load.lambdas
   ```
 ]

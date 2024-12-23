@@ -17,4 +17,4 @@
 With the help of the _save_ function, users can store the current state of the BUND VM into
 an external file. This file, called the "WORLD" file, contains a frozen version of the
 registered lambda functions, user functions, aliases, and the content of the stacks.
-The _load_ function, which can be used as ```rust "WORLD_file" load```, will load content from this file and add it to the existing BUND state.
+The _load.aliases_ function, which can be used as ```rust "WORLD_file" load.aliases```, will load VM aliases from this file and add it to the list of existing aliases.
