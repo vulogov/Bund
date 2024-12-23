@@ -8,6 +8,14 @@ You are likely well-versed in applicative programming languages like Python, C, 
 
 In contrast, concatenative programming languages facilitate the transfer of a data context from one function to another, external to the function itself. While the stack is the most common method for this transfer, some concatenative languages do not rely on a stack. This data context transfer enables the concatenation of data processing, making concatenative languages a practical choice for certain applications. Although less prevalent in software development communities, you might have come across languages such as Forth, PostScript, and Factor.
 
+## Why shall I learn a new language ?
+
+First and foremost, there is no "silver bullet" in the world of programming languages. Each language, that is delevoped and proposed may efficiently fit for one or more specific niches, aiding in software development. So, why concatenative languages and why BUND?
+
+Concatenative languages offer several compelling benefits, particularly in terms of simplicity and efficiency. By allowing functions to be composed through concatenation, these languages enable a seamless flow of data, reducing the complexity associated with managing function inputs and outputs. This approach often results in more readable and maintainable code, as the sequence of operations is straightforward and intuitive. Additionally, the stack-based execution model commonly used in concatenative languages minimizes overhead and enhances performance, making them well-suited for resource-constrained environments. The minimalistic syntax further simplifies learning and usage, allowing developers to focus on the logic and functionality of their programs. Overall, concatenative languages provide a powerful and elegant framework for building efficient and maintainable software.
+
+However, classic concatenative languages do have some faults. They are generally not very good at data storage and execution context separation and isolation. BUND addresses this problem by introducing named and anonymous data storage and execution contexts. Next, I shall speak about metaprogramming. Metaprogramming is a programming technique where programs have the ability to treat other programs as their data. This means that a program can be designed to read, generate, analyze, or transform other programs, and even modify itself while running. This approach allows for greater flexibility and abstraction, enabling developers to write more generic and reusable code. For many concatenative languages, metaprogramming is a feature that either does not exist or is "planned for the future." BUND provides advanced, out-of-the-box metaprogramming capabilities.
+
 ## Show me the code!
 
 ```rust
