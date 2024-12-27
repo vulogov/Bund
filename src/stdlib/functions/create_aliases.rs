@@ -21,5 +21,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("string.distance.".to_string(), "string.distance.levenshtein.".to_string());
     let _ = bc.vm.register_alias("stat.mean".to_string(), "stat.mean.arithmetic".to_string());
     let _ = bc.vm.register_alias("stat.mean.".to_string(), "stat.mean.arithmetic.".to_string());
+    let _ = bc.vm.register_alias("config".to_string(), "dict".to_string());
     drop(bc);
 }

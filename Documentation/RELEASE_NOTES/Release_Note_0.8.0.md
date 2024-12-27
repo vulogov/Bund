@@ -9,3 +9,4 @@ Here is what's new:
 * Function ```math.power```
 * Function ```seq.asc```
 * Function ```seq.desc```
+* Function ```seq``` - generating samples based on configuration stored in the stack 

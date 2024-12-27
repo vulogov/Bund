@@ -1,0 +1,10 @@
+//
+// Creating a configuration (which is essentially dict)
+// in the stack
+//
+config
+  :type "simple"  set
+  :X    0.0       set
+  :Step 0.1       set
+  :N    100       set
+println

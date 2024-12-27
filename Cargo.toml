@@ -50,6 +50,8 @@ markov-chain = "0.1.1"
 rstats = "2.1.12"
 ta = "0.5.0"
 mathlab = "1.2.0"
+statrs = "0.18.0"
+rand = "0.8.5"
 
 [dependencies.rusqlite]
 version = "0.32.*"

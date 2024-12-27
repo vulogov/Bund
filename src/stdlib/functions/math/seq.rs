@@ -15,6 +15,51 @@ pub enum SeqOrd {
     Desc,
 }
 
+fn seq_ascending(vm: &mut VM, conf: Value) -> Value {
+    let x = helpers::conf::conf_get(vm, conf.clone(), "X".to_string(), Value::from_float(0.0)).cast_float().unwrap();
+    let step = helpers::conf::conf_get(vm, conf.clone(), "Step".to_string(), Value::from_float(1.0)).cast_float().unwrap();
+    let n = helpers::conf::conf_get(vm, conf.clone(), "N".to_string(), Value::from_int(128)).cast_int().unwrap();
+    let fres = args::range(x, step, n as usize, "asc");
+    let mut res: Vec<Value> = Vec::new();
+    for v in fres {
+        res.push(Value::from_float(v));
+    }
+    return Value::from_list(res);
+}
+
+fn seq_descending(vm: &mut VM, conf: Value) -> Value {
+    let x = helpers::conf::conf_get(vm, conf.clone(), "X".to_string(), Value::from_float(0.0)).cast_float().unwrap();
+    let step = helpers::conf::conf_get(vm, conf.clone(), "Step".to_string(), Value::from_float(1.0)).cast_float().unwrap();
+    let n = helpers::conf::conf_get(vm, conf.clone(), "N".to_string(), Value::from_int(128)).cast_int().unwrap();
+    let fres = args::range(x, step, n as usize, "desc");
+    let mut res: Vec<Value> = Vec::new();
+    for v in fres {
+        res.push(Value::from_float(v));
+    }
+    return Value::from_list(res);
+}
+
+pub fn stdlib_float_gen_seq_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    if vm.stack.current_stack_len() < 1 {
+        bail!("Stack is too shallow for inline SEQ");
+    }
+    match vm.stack.pull() {
+        Some(conf) => {
+            let seq_type = helpers::conf::conf_get(vm, conf.clone(), "type".to_string(), Value::from_string("seq.ascending"));
+            let res = match seq_type.cast_string().unwrap().as_str() {
+                "seq.ascending" => seq_ascending(vm, conf),
+                "seq.descending" => seq_descending(vm, conf),
+                _ => bail!("Unknown SEQ type: {}", &seq_type),
+            };
+            vm.stack.push(res);
+        }
+        None => {
+            bail!("SEQ_OP returns: NO DATA #1");
+        }
+    }
+    Ok(vm)
+}
+
 pub fn stdlib_float_gen_seq_asc_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_math_float_gen_seq_inline(vm, SeqOrd::Asc)
 }
@@ -93,6 +138,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
             return;
         }
     };
+    let _ = bc.vm.register_inline("seq".to_string(), stdlib_float_gen_seq_inline);
     let _ = bc.vm.register_inline("seq.asc".to_string(), stdlib_float_gen_seq_asc_inline);
     let _ = bc.vm.register_inline("seq.desc".to_string(), stdlib_float_gen_seq_desc_inline);
 }

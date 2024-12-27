@@ -1,0 +1,9 @@
+//
+// Generate descending sequence
+//
+config
+  "type"  "seq.descending" set
+  "X"     100.0       set
+  "Step"  3.0         set
+  "N"     3           set
+"Generated sequence is: " print seq println
