@@ -49,6 +49,7 @@ decorum = "0.3.1"
 markov-chain = "0.1.1"
 rstats = "2.1.12"
 ta = "0.5.0"
+mathlab = "1.2.0"
 
 [dependencies.rusqlite]
 version = "0.32.*"
