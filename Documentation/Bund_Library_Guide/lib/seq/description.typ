@@ -14,4 +14,6 @@
   - [x] #"bund runtime"
 ]
 
-Create list filled with sequence of numbers according to configuration stored in the stack.
+Create list filled with sequence of numbers according to configuration stored in the stack. Currently suppoered types of the sequence is:
+- [ ] seq.ascending and this is the default. Parameters are: X, Step, N
+- [ ] seq.descending. Parameters are: X, Step, N
