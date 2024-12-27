@@ -7,12 +7,25 @@ use crate::cmd;
 use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 
-fn stats_count_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<&mut VM, Error> {
+fn math_normalize_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<&mut VM, Error> {
     match statistics::get_data::get_data(vm, op.clone(), smode, err_prefix.clone()) {
-        Ok(res) => {
+        Ok(source) => {
+            let min_sample = source.iter().cloned().fold(0./0., f64::min);
+            let max_sample = source.iter().cloned().fold(0./0., f64::max);
+            let mut res = Value::list();
+            if max_sample - min_sample == 0.0 {
+                for v in source {
+                    res = res.push(Value::from_float(v));
+                }
+            } else {
+                for v in source {
+                    res = res.push(Value::from_float((v-min_sample)/(max_sample-min_sample) as f64));
+                }
+            }
+
             let _ = match op {
-                StackOps::FromStack => vm.stack.push(Value::from_int(res.len() as i64)),
-                StackOps::FromWorkBench => vm.stack.push_to_workbench(Value::from_int(res.len() as i64)),
+                StackOps::FromStack => vm.stack.push(res),
+                StackOps::FromWorkBench => vm.stack.push_to_workbench(res),
             };
         }
         Err(err) => {
@@ -22,20 +35,20 @@ fn stats_count_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, er
     Ok(vm)
 }
 
-pub fn stdlib_stats_stack_consume_count(vm: &mut VM) -> Result<&mut VM, Error> {
-    stats_count_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, "STAT.COUNT".to_string())
+pub fn stdlib_math_stack_consume_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
+    math_normalize_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, "MATH.NORMALIZE".to_string())
 }
 
-pub fn stdlib_stats_wb_consume_count(vm: &mut VM) -> Result<&mut VM, Error> {
-    stats_count_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, "STAT.COUNT.".to_string())
+pub fn stdlib_math_wb_consume_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
+    math_normalize_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, "MATH.NORMALIZE.".to_string())
 }
 
-pub fn stdlib_stats_stack_keep_count(vm: &mut VM) -> Result<&mut VM, Error> {
-    stats_count_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, "STAT.COUNT,".to_string())
+pub fn stdlib_math_stack_keep_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
+    math_normalize_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, "MATH.NORMALIZE,".to_string())
 }
 
-pub fn stdlib_stats_wb_keep_count(vm: &mut VM) -> Result<&mut VM, Error> {
-    stats_count_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, "STAT.COUNT.,".to_string())
+pub fn math_math_wb_keep_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
+    math_normalize_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, "MATH.NORMALIZE.,".to_string())
 }
 
 
@@ -48,10 +61,10 @@ pub fn init_stdlib(cli: &cmd::Cli) {
             return;
         }
     };
-    let _ = bc.vm.register_inline("stat.count".to_string(), stdlib_stats_stack_consume_count);
-    let _ = bc.vm.register_inline("stat.count.".to_string(), stdlib_stats_wb_consume_count);
-    let _ = bc.vm.register_inline("stat.count,".to_string(), stdlib_stats_stack_keep_count);
-    let _ = bc.vm.register_inline("stat.count.,".to_string(), stdlib_stats_wb_keep_count);
+    let _ = bc.vm.register_inline("math.normalize".to_string(), stdlib_math_stack_consume_normalize);
+    let _ = bc.vm.register_inline("math.normalize.".to_string(), stdlib_math_wb_consume_normalize);
+    let _ = bc.vm.register_inline("math.normalize,".to_string(), stdlib_math_stack_keep_normalize);
+    let _ = bc.vm.register_inline("math.normalize.,".to_string(), math_math_wb_keep_normalize);
 
     drop(bc);
 }
