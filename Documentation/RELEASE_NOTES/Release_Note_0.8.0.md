@@ -7,3 +7,5 @@ Here is what's new:
 * Function ```math.nroot```
 * Function ```math.perimeter```
 * Function ```math.power```
+* Function ```seq.asc```
+* Function ```seq.desc```
