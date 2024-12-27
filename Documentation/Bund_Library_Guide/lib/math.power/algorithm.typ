@@ -8,19 +8,19 @@
       n-th root of X
     ]
     Assign(
-      [X], [_current stack_]
+      [N], [_current stack_]
     )
     If(cond: "N = None", {
       Return[Error("Stack is too shallow")]
     })
     Assign(
-      [Y], [_current stack_]
+      [X], [_current stack_]
     )
     If(cond: "X = None", {
       Return[Error("Stack is too shallow")]
     })
     Assign(
-      [_current stack_], [Call("Math_Power", [X, Y])]
+      [_current stack_], [Call("Math_Power", [X, N])]
     )
   })
 })

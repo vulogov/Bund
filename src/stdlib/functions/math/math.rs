@@ -111,8 +111,8 @@ pub fn stdlib_math_float_inline(vm: &mut VM, op: Ops) -> Result<&mut VM, Error> 
                             match vm.stack.pull() {
                                 Some(value2) => {
                                     match value2.cast_float() {
-                                        Ok(yvalue) => {
-                                            vm.stack.push(Value::from_float(math::pow(fvalue, yvalue)));
+                                        Ok(xvalue) => {
+                                            vm.stack.push(Value::from_float(math::pow(xvalue, fvalue)));
                                         }
                                         Err(err) => {
                                             bail!("FLOAT_OP returns error: {}", err);
