@@ -52,6 +52,8 @@ ta = "0.5.0"
 mathlab = "1.2.0"
 statrs = "0.18.0"
 rand = "0.8.5"
+csv-core = "0.1.11"
+neurons = "2.6.2"
 
 [dependencies.rusqlite]
 version = "0.32.*"
