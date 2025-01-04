@@ -1,0 +1,50 @@
+//
+// This example calculating 1.0 AND 1.0
+// Using simple perceptron
+//
+
+"Result of 1.0 AND 1.0 is " print   // Print a nice message
+
+//
+// Store and duplicate name of the neural network
+//
+:TEST dup
+
+//
+// Declaring configuration for the Neural Network
+//
+config
+  :type  "perceptron" set   // This is a simple perceptron
+  :Inputs   2         set   // 2 input layers
+  :Outputs  1         set   // 1 output layer
+  :Hidden   10        set   // 10 hidden layers
+  :LRate    0.1       set   // Set the learning rate for SGD optimizer
+  :Decay    0.01      set   // Set the decay for optimizer
+  :Batch    4         set   // Batch size for training
+  :Epoch    500       set   // Number of epochs to train network for
+  :X        [               // X vector of training data
+    [ 0.0 0.0 ]
+    [ 0.0 1.0 ]
+    [ 1.0 0.0 ]
+    [ 1.0 1.0 ]
+  ]                   set
+  :Y [                      // Y vector of training data
+    [ 0.0 ]
+    [ 0.0 ]
+    [ 0.0 ]
+    [ 1.0 ]
+  ]                   set
+
+//
+// Create Neural Network
+//
+neuralnetwork
+    //
+    // Feed input data for prediction
+    // Result of prediction is stored in stack as a LIST
+    //
+    [ 1.0 1.0 ] predict
+    //
+    // Take the head of the list and print it
+    //
+    car println

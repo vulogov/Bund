@@ -1,34 +1,44 @@
 extern crate log;
 use rust_multistackvm::multistackvm::{VM};
-use crate::stdlib::helpers;
-use rust_dynamic::value::Value;
 use crate::stdlib::functions::ai::perceptron;
 use easy_error::{Error, bail};
+use crate::stdlib::functions::ai::{NN, NNType};
 
-fn prepare_data_for_perceptron(vm: &mut VM, data: Value) -> Result<Vec<tensor::Tensor>, Error> {
-    let input_data = match data.cast_list() {
-        Ok(input_data) => input_data,
-        Err(err) => bail!("Invalid input data #1 in NEURALNETWORKS.PREDICT: {}", err),
-    };
-    let mut data: Vec<tensor::Tensor> = Vec::new();
-    let mut i_data: Vec<f32> = Nec::new();
-    for v in input_data {
-        let value = match v.cast_float() {
-            Ok(value) => value,
-            Err(err) => bail!("Invalid data in input NEURALNETWORKS.PREDICT: {}", err),
-        };
-        i_data.push(value as f32);
-    }
-    return Ok(data);
-}
+
 
 pub fn stdlib_neuralnetworks_predict_inline(vm: &mut VM) -> Result<&mut VM, Error> {
-    if vm.stack.current_stack_len() < 1 {
+    if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline NEURALNETWORKS.PREDICT");
     }
     match vm.stack.pull() {
         Some(data) => {
-
+            let name_value = match vm.stack.pull() {
+                Some(name) => name,
+                None => bail!("NEURALNETWORKS.PREDICT returns: NO DATA #2"),
+            };
+            let name = match name_value.cast_string() {
+                Ok(name) => name,
+                Err(err) => bail!("NEURALNETWORK.PREDICT casting a name returns: {}", err),
+            };
+            let ai = NN.lock().unwrap();
+            if ai.contains_key(&name) {
+                let nn = match ai.get(&name) {
+                    Some(nn) => nn,
+                    None => {
+                        drop(ai);
+                        bail!("NEURALNETWORKS.PREDICT not found network: {}. It is not there.", &name);
+                    },
+                };
+                match nn.id {
+                    NNType::Perceptron => {
+                        drop(ai);
+                        return perceptron::predict_perceptron_nn(vm, name, data);
+                    }
+                }
+            } else {
+                drop(ai);
+                bail!("NEURALNETWORKS.PREDICT not found network: {}", &name);
+            }
         }
         None => {
             bail!("NEURALNETWORKS.PREDICT returns: NO DATA #1");

@@ -4,7 +4,8 @@ use rust_dynamic::value::Value;
 pub fn conf_get(_vm: &mut VM, vconf: Value, key: String, default: Value) -> Value  {
     let conf = match vconf.cast_dict() {
         Ok(conf) => conf,
-        Err(_) => {
+        Err(err) => {
+            log::error!("Error casting conf object: {}", err);
             return default;
         }
     };

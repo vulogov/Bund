@@ -11,7 +11,7 @@ pub mod perceptron;
 pub mod neuralnetworks;
 pub mod neuralnetworks_predict;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum NNType {
     Perceptron,
 }
@@ -43,7 +43,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         }
     };
 
-    let _ = bc.vm.register_inline("neuralnetworks".to_string(), neuralnetworks::stdlib_neuralnetworks_inline);
-    let _ = bc.vm.register_inline("neuralnetworks.predict".to_string(), neuralnetworks_predict::stdlib_neuralnetworks_predict_inline);
+    let _ = bc.vm.register_inline("neuralnetwork".to_string(), neuralnetworks::stdlib_neuralnetworks_inline);
+    let _ = bc.vm.register_inline("neuralnetwork.predict".to_string(), neuralnetworks_predict::stdlib_neuralnetworks_predict_inline);
     drop(bc);
 }

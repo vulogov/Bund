@@ -16,6 +16,22 @@ impl NNEntry {
     }
 }
 
+fn prepare_input_data_for_perceptron(_vm: &mut VM, data: Value) -> Result<tensor::Tensor, Error> {
+    let input_data = match data.cast_list() {
+        Ok(input_data) => input_data,
+        Err(err) => bail!("Invalid input data #1 in NEURALNETWORKS.PREDICT: {}", err),
+    };
+    let mut i_data: Vec<f32> = Vec::new();
+    for v in input_data {
+        let value = match v.cast_float() {
+            Ok(value) => value,
+            Err(err) => bail!("Invalid data in input NEURALNETWORKS.PREDICT: {}", err),
+        };
+        i_data.push(value as f32);
+    }
+    return Ok(tensor::Tensor::single(i_data));
+}
+
 fn prepare_training_data(vm: &mut VM, conf: Value, name: String) -> Result<Vec<tensor::Tensor>, Error> {
     let training_data = helpers::conf::conf_get(vm, conf.clone(), name.to_string(), Value::list()).cast_list().unwrap();
     let mut data: Vec<tensor::Tensor> = Vec::new();
@@ -85,6 +101,51 @@ pub fn create_perceptron_nn(vm: &mut VM, name: String, conf: Value) -> Result<&m
 
     let mut ai = NN.lock().unwrap();
     ai.insert(name.to_string(), NNEntry::new_perceptron(perceptron_network));
+    drop(ai);
+    Ok(vm)
+}
+
+pub fn predict_perceptron_nn(vm: &mut VM, name: String, input: Value) -> Result<&mut VM, Error> {
+    let input_data = match prepare_input_data_for_perceptron(vm, input) {
+        Ok(input_data) => input_data,
+        Err(err) => {
+            bail!("{}", err);
+        },
+    };
+    let ai = NN.lock().unwrap();
+    if ai.contains_key(&name) {
+        let nn = match ai.get(&name) {
+            Some(nn) => nn,
+            None => {
+                drop(ai);
+                bail!("NEURALNETWORKS.PREDICT not found network: {}. It is not there.", &name);
+            },
+        };
+        match &nn.nn {
+            NNVal::Perceptron(ai_network) => {
+                let prediction = ai_network.predict(&input_data);
+                match prediction.data {
+                    tensor::Data::Single(perceptron_output) => {
+                        let mut res = Value::list();
+                        for v in perceptron_output {
+                            res = res.push(Value::from_float(v as f64));
+                        }
+                        vm.stack.push(res);
+                    }
+                    _ => {
+                        bail!("Perceptron returns an incalid data");
+                    }
+                }
+            }
+            _ => {
+                drop(ai);
+                bail!("NEURALNETWORKS.PREDICT not resolve network: {}", &name);
+            }
+        }
+    } else {
+        drop(ai);
+        bail!("NEURALNETWORKS.PREDICT not found network: {}", &name);
+    }
     drop(ai);
     Ok(vm)
 }
