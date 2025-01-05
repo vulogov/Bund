@@ -10,28 +10,22 @@ dict
     "Some apples are tart"
     "Green apples often tart"
     "Apples can be red"
+    "Apples are round"
   ] set
   :Oranges  [
     "Oranges are sweet"
     "Oranges are round"
     "Oranges are never tart"
-  ] set .
-
-// and storing it to a workbench
-
-//
-// Store and duplicate name of classifier
-//
-:TEST dup
+  ] set .                   // and storing it to a workbench
 
 //
 // Declaring configuration for the Classifier
 //
-config
+:TEST config
   :type  "naivebayes" set   // This is a NaiveBayes classifier
   :Data  take         set   // Taking training set from a workbench
 
-classifier
-  "tart" classify println
+classifier                  // First, we create classifier
+  :TEST "tart" classify println
   "Result of classification of what could be sweet: " print
   :TEST "sweet" classify println
