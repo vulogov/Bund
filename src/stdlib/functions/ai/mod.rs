@@ -5,20 +5,26 @@ use std::sync::Mutex;
 use std::collections::btree_map::BTreeMap;
 use lazy_static::lazy_static;
 use neurons::{network};
+use natural::classifier::NaiveBayesClassifier;
 use crate::stdlib::BUND;
 
 pub mod perceptron;
 pub mod neuralnetworks;
 pub mod neuralnetworks_predict;
+pub mod classifiers;
+pub mod classifiers_classify;
+pub mod naivebayes;
 
 #[derive(Clone, Debug)]
 pub enum NNType {
     Perceptron,
+    NaiveBayes,
 }
 
 pub enum NNVal {
     Null,
     Perceptron(network::Network),
+    NaiveBayes(NaiveBayesClassifier)
 }
 
 
@@ -44,6 +50,8 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     };
 
     let _ = bc.vm.register_inline("neuralnetwork".to_string(), neuralnetworks::stdlib_neuralnetworks_inline);
+    let _ = bc.vm.register_inline("classifier".to_string(), classifiers::stdlib_classifier_inline);
     let _ = bc.vm.register_inline("neuralnetwork.predict".to_string(), neuralnetworks_predict::stdlib_neuralnetworks_predict_inline);
+    let _ = bc.vm.register_inline("classifier.classify".to_string(), classifiers_classify::stdlib_classify_inline);
     drop(bc);
 }

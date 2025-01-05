@@ -1,0 +1,37 @@
+//
+// This example demonstrates NaiveBayes classifier
+//
+
+"Result of classification of what could be tart: " print   // Print a nice message
+
+// First, we preparing data for classifier
+dict
+  :Apples   [
+    "Some apples are tart"
+    "Green apples often tart"
+    "Apples can be red"
+  ] set
+  :Oranges  [
+    "Oranges are sweet"
+    "Oranges are round"
+    "Oranges are never tart"
+  ] set .
+
+// and storing it to a workbench
+
+//
+// Store and duplicate name of classifier
+//
+:TEST dup
+
+//
+// Declaring configuration for the Classifier
+//
+config
+  :type  "naivebayes" set   // This is a NaiveBayes classifier
+  :Data  take         set   // Taking training set from a workbench
+
+classifier
+  "tart" classify println
+  "Result of classification of what could be sweet: " print
+  :TEST "sweet" classify println

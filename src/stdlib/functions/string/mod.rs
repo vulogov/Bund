@@ -8,6 +8,7 @@ pub mod regex;
 pub mod regex_matches;
 pub mod regex_split;
 pub mod prefix_suffix;
+pub mod any_id;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     wildmatch::init_stdlib(cli);
@@ -17,4 +18,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     regex_matches::init_stdlib(cli);
     regex_split::init_stdlib(cli);
     prefix_suffix::init_stdlib(cli);
+    any_id::init_stdlib(cli);
 }

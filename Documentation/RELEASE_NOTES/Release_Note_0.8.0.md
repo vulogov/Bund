@@ -9,4 +9,5 @@ Here is what's new:
 * Function ```math.power```
 * Function ```seq.asc```
 * Function ```seq.desc```
-* Function ```seq``` - generating samples based on configuration stored in the stack 
+* Function ```seq``` - generating samples based on configuration stored in the stack
+* Function ```id.uuid``` - generating random v4 UUID

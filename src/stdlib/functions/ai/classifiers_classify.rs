@@ -1,24 +1,24 @@
 extern crate log;
 use rust_multistackvm::multistackvm::{VM};
-use crate::stdlib::functions::ai::perceptron;
+use crate::stdlib::functions::ai::naivebayes;
 use easy_error::{Error, bail};
 use crate::stdlib::functions::ai::{NN, NNType};
 
 
 
-pub fn stdlib_neuralnetworks_predict_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+pub fn stdlib_classify_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
-        bail!("Stack is too shallow for inline NEURALNETWORKS.PREDICT");
+        bail!("Stack is too shallow for inline CLASSIFIERS.CLASSIFY");
     }
     match vm.stack.pull() {
         Some(data) => {
             let name_value = match vm.stack.pull() {
                 Some(name) => name,
-                None => bail!("NEURALNETWORKS.PREDICT returns: NO DATA #2"),
+                None => bail!("CLASSIFIERS.CLASSIFY returns: NO DATA #2"),
             };
             let name = match name_value.cast_string() {
                 Ok(name) => name,
-                Err(err) => bail!("NEURALNETWORK.PREDICT casting a name returns: {}", err),
+                Err(err) => bail!("CLASSIFIERS.CLASSIFY casting a name returns: {}", err),
             };
             let ai = NN.lock().unwrap();
             if ai.contains_key(&name) {
@@ -26,26 +26,26 @@ pub fn stdlib_neuralnetworks_predict_inline(vm: &mut VM) -> Result<&mut VM, Erro
                     Some(nn) => nn,
                     None => {
                         drop(ai);
-                        bail!("NEURALNETWORKS.PREDICT not found network: {}. It is not there.", &name);
+                        bail!("CLASSIFIERS.CLASSIFY not found classifier: {}. It is not there.", &name);
                     },
                 };
                 match nn.id {
-                    NNType::Perceptron => {
+                    NNType::NaiveBayes => {
                         drop(ai);
-                        return perceptron::predict_perceptron_nn(vm, name, data);
+                        return naivebayes::classify_naive_bayes_classifier(vm, name, data);
                     }
                     _ => {
                         drop(ai);
-                        bail!("NEURALNETWORKS.PREDICT network having an invalid type: {}", &name);
+                        bail!("CLASSIFIERS.CLASSIFY classifier having an invalid type: {}", &name);
                     }
                 }
             } else {
                 drop(ai);
-                bail!("NEURALNETWORKS.PREDICT not found network: {}", &name);
+                bail!("CLASSIFIERS.CLASSIFY not found classifier: {}", &name);
             }
         }
         None => {
-            bail!("NEURALNETWORKS.PREDICT returns: NO DATA #1");
+            bail!("CLASSIFIERS.CLASSIFY returns: NO DATA #1");
         }
     }
 }

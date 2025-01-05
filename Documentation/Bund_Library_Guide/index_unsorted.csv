@@ -78,3 +78,4 @@ math.perimeter,"Calculate perimeter of rectangle where X and Y are taken from st
 math.power,"Calculate Y power of X where X and Y are taken from stack"
 seq.asc,"Generate a list of the sequence of floating point numbers sorted in ascending" 
 seq,"Generate a list of the sequence of floating point numbers, according to sample configuration stored in the stack" 
+id.uuid,"Generate random v4 UUID"
