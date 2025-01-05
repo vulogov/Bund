@@ -1,0 +1,34 @@
+//
+// The lesser boring demo.
+// Creating three lambdas, create PTR and call them
+// through PTR
+//
+
+//
+// First, let's create a lambda functions and register them as
+// named functions
+//
+
+:Function1 {
+  "This is lambda function with name Function1" println
+} register
+
+:Function2 {
+  "This is lambda function with name Function2" println
+} register
+
+:Function3 {
+  "This is lambda function with name Function3" println
+} register
+
+//
+// And then create PTR and call the functions
+//
+
+// We create a function name as string
+1 convert.to_string "Function"  +
+  // Convert string to PTR and call PTR
+  ptr !
+
+2 convert.to_string "Function"  + ptr !
+3 convert.to_string "Function"  + ptr !

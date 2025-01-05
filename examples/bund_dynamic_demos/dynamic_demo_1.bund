@@ -1,0 +1,26 @@
+//
+// The boring demo.
+// Creating three lambdas and calling them directly
+//
+
+//
+// First, let's create a lambda functions and register them as
+// named functions
+//
+
+:Function1 {
+  "This is lambda function with name Function1" println
+} register
+
+:Function2 {
+  "This is lambda function with name Function2" println
+} register
+
+:Function3 {
+  "This is lambda function with name Function3" println
+} register
+
+//
+// And then boringly call them as they are
+//
+Function1 Function2 Function3

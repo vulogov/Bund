@@ -1,0 +1,34 @@
+//
+// The lesser boring demo with times loop.
+// Creating three lambdas, create PTR and call them
+// through PTR using loop
+//
+
+//
+// First, let's create a lambda functions and register them as
+// named functions
+//
+
+:Function1 {
+  "This is lambda function with name Function1" println
+} register
+
+:Function2 {
+  "This is lambda function with name Function2" println
+} register
+
+:Function3 {
+  "This is lambda function with name Function3" println
+} register
+
+//
+// And do essentially the sane as in Demo #2, but using ```times``` loop
+//
+
+// First, we will iterate 3 times
+3 {
+  1 +               // We do need to increase number to 1, as we have Function1,2,3
+  convert.to_string // Convert number to string
+  "Function" +      // Create a name of the function
+  ptr !             // Create PTR and execute it
+} times             // In the ```times``` loop

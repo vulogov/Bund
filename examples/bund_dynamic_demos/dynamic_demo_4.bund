@@ -1,0 +1,41 @@
+//
+// Another lesser boring demo with loops.
+// Creating three lambdas, then create list of lambda names
+// and call them through PTR
+//
+
+//
+// First, let's create a lambda functions and register them as
+// named functions
+//
+
+:Function1 {
+  "This is lambda function with name Function1" println
+} register
+
+:Function2 {
+  "This is lambda function with name Function2" println
+} register
+
+:Function3 {
+  "This is lambda function with name Function3" println
+} register
+
+//
+// And do essentially the sane as in Demo #2, but using ```times``` loop
+//
+
+//
+// First, create an empty list, store it in Workbench
+// and prepare for the loop that will create the list
+// of the names of functions
+//
+list . 3 {
+  1 + convert.to_string "Function" +  // Create function name
+  +.                                  // Add it to the list in the workbench
+} times                               // do it in the loop
+
+take {                                // Take list from the workbench
+  ptr !                               // Create and execute PTR
+} loop                                // the LOOP function will loop over the list
+                                      // stored in the stack
