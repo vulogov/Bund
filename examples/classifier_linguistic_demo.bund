@@ -1,0 +1,22 @@
+//
+// This example demonstrates Linguistic classifier
+//
+
+   // Print a nice message
+
+//
+// Declaring configuration for the language detector
+//
+:TEST config
+  :type  "linguistic" set   // This is a language detector
+
+
+classifier                  // First, we create classifier
+  "Result of classification of the language for Hello world: " print
+  :TEST "Hello world" classify println
+  "Result of classification of the language for Привет всем: " print
+  :TEST "Привет всем" classify println
+  "Result of classification of the language for Labdien pēcpusdienā: " print
+  :TEST "Labdien pēcpusdienā" classify println
+  "Result of classification of the language for こんにちは: " print
+  :TEST "こんにちは" classify println

@@ -14,11 +14,13 @@ pub mod neuralnetworks_predict;
 pub mod classifiers;
 pub mod classifiers_classify;
 pub mod naivebayes;
+pub mod linguistic;
 
 #[derive(Clone, Debug)]
 pub enum NNType {
     Perceptron,
     NaiveBayes,
+    LangClassifier,
 }
 
 pub enum NNVal {

@@ -3,6 +3,7 @@ use crate::cmd;
 use crate::stdlib::helpers;
 use rust_dynamic::value::Value;
 use crate::stdlib::functions::{bund};
+use crate::stdlib::functions::ai::linguistic;
 
 pub fn run(cli: &cmd::Cli, script_arg: &cmd::Script) {
     log::debug!("SCRIPT::run() reached");
@@ -18,6 +19,11 @@ pub fn run(cli: &cmd::Cli, script_arg: &cmd::Script) {
             helpers::print_error::print_error_from_str(format!("{}", err), cli);
             return;
         }
+    }
+
+    if script_arg.ai.ai_preload_languages {
+        log::debug!("Triggering loading of languages for classifier at startup");
+        linguistic::languages_preload();
     }
 
     if script_arg.source.stdin {

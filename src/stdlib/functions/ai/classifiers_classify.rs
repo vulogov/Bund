@@ -1,6 +1,7 @@
 extern crate log;
 use rust_multistackvm::multistackvm::{VM};
 use crate::stdlib::functions::ai::naivebayes;
+use crate::stdlib::functions::ai::linguistic;
 use easy_error::{Error, bail};
 use crate::stdlib::functions::ai::{NN, NNType};
 
@@ -33,6 +34,10 @@ pub fn stdlib_classify_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                     NNType::NaiveBayes => {
                         drop(ai);
                         return naivebayes::classify_naive_bayes_classifier(vm, name, data);
+                    }
+                    NNType::LangClassifier => {
+                        drop(ai);
+                        return linguistic::classify_linguistic_classifier(vm, name, data);
                     }
                     _ => {
                         drop(ai);

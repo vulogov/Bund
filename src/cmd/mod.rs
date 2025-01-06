@@ -114,6 +114,9 @@ pub struct Script {
     #[clap(flatten)]
     source: ScriptSrcArgGroup,
 
+    #[clap(flatten)]
+    ai: ScriptAiArgGroup,
+
     #[clap(last = true)]
     args: Vec<String>,
 }
@@ -132,6 +135,14 @@ pub struct ScriptSrcArgGroup {
 
     #[clap(help="Take BUND script from CLI argument", long)]
     pub eval: Option<String>,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = false, multiple = true)]
+pub struct ScriptAiArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Pre-load languages for linguistic classifier")]
+    pub ai_preload_languages: bool,
 
 }
 
