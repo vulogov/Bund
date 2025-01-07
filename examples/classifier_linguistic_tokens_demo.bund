@@ -1,0 +1,24 @@
+//
+// This example tokenize string and detects
+// the language of tokens
+//
+
+//
+// Declaring configuration for the language detector
+//
+:TEST config
+  :type  "linguistic" set   // This is a language detector
+
+
+classifier                  // First, we create classifier
+
+  // Let's tokenize sentence first
+  "Greetings to the  world, привет, labdien, こんにちは!"
+    string.tokenize
+      {
+        dup                 // Duplicate passed word
+        "The word " print print " is " print  // Print nice message,
+                                              // consuming one of duplicates
+        :TEST swap classify println           // Pass name of classifier
+                                              // and properly arrange data in stack
+      } loop                                  // do the loop

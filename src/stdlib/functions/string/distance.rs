@@ -6,6 +6,7 @@ use crate::cmd;
 use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use distance;
+use natural::distance::jaro_winkler_distance;
 
 #[derive(Debug, Clone)]
 pub enum DistanceAlgorithm {
@@ -13,6 +14,7 @@ pub enum DistanceAlgorithm {
     DamerauLevenshtein,
     Hamming,
     Sift3,
+    JaroWinkler,
 }
 
 pub fn string_distance_base(vm: &mut VM, op: StackOps, aop: DistanceAlgorithm, err_prefix: String) -> Result<&mut VM, Error> {
@@ -80,7 +82,8 @@ pub fn string_distance_base(vm: &mut VM, op: StackOps, aop: DistanceAlgorithm, e
             )
         }
         DistanceAlgorithm::Sift3 => Value::from_float(distance::sift3(&string1_data, &string2_data) as f64),
-    };
+        DistanceAlgorithm::JaroWinkler => Value::from_float(jaro_winkler_distance(&string1_data, &string2_data) as f64),
+};
 
     let _ = match op {
         StackOps::FromStack => vm.stack.push(res),
@@ -117,6 +120,12 @@ pub fn stdlib_string_stack_distance_sift_inline(vm: &mut VM) -> Result<&mut VM, 
 pub fn stdlib_string_wb_distance_sift_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     string_distance_base(vm, StackOps::FromWorkBench, DistanceAlgorithm::Sift3, "STRING.DISTANCE.SIFT3.".to_string())
 }
+pub fn stdlib_string_wb_distance_jw_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_distance_base(vm, StackOps::FromWorkBench, DistanceAlgorithm::JaroWinkler, "STRING.DISTANCE.JAROWINKLER.".to_string())
+}
+pub fn stdlib_string_stack_distance_jw_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_distance_base(vm, StackOps::FromStack, DistanceAlgorithm::JaroWinkler, "STRING.DISTANCE.JAROWINKLER".to_string())
+}
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut bc = match BUND.lock() {
@@ -134,6 +143,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("string.distance.hamming.".to_string(), stdlib_string_wb_distance_ham_inline);
     let _ = bc.vm.register_inline("string.distance.sift3".to_string(), stdlib_string_stack_distance_sift_inline);
     let _ = bc.vm.register_inline("string.distance.sift3.".to_string(), stdlib_string_wb_distance_sift_inline);
-
+    let _ = bc.vm.register_inline("string.distance.jarowinkler".to_string(), stdlib_string_stack_distance_jw_inline);
+    let _ = bc.vm.register_inline("string.distance.jarowinkler.".to_string(), stdlib_string_wb_distance_jw_inline);
     drop(bc);
 }

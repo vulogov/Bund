@@ -74,6 +74,7 @@ seq.asc,"Generate a list of the sequence of floating point numbers sorted in asc
 stacks_left,"Rotate circular list of stacks to left"
 stacks_right,"Rotate circular list of stacks to right"
 stack_exists,"Check if stack exists"
+string.tokenize,"Convert string stored on stack to the list of tokens"
 swap_one,"Swap two vallues in current stack"
 to_current,"Make existing stack with name - current"
 to_stack,"Make stack with name - current"
