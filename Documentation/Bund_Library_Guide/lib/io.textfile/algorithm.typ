@@ -3,18 +3,18 @@
 
 #algorithm({
   import algorithmic: *
-  Function("system.shell", args: (), {
+  Function("io.textfile", args: (), {
     Cmt[
-      Execute an external command
+      Reading text file
     ]
     Assign(
-      [Cmd], [_current stack_]
+      [Filename], [_current stack_]
     )
-    If(cond: "Cmd = None", {
+    If(cond: "Value = None", {
       Return[Error("Stack is too shallow")]
     })
     Assign(
-      [_current stack_], [Call("System.Shell", [Cmd])]
+      [_current stack_], [Call("Io.Textfile", [Filename])]
     )
   })
 })

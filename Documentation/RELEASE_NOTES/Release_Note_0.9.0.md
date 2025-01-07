@@ -4,3 +4,5 @@ Here is what's new:
 * Function ```string.tokenize[|.]``` convert string to the list of lexical tokens
 * Function ```string.tokenize.unique[|.]``` convert string to the list of unique lexical tokens
 * Function ```string.tokenize.stemmed[|.]``` convert string to the list of unique and stemmed lexical tokens
+* Function ```string.tokenize.stemmed[|.]``` execute command in standard shell and store result into stack or workbench
+* Function ```io.textfile[|.]``` read text file into list and store result into stack or workbench

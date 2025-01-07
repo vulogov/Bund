@@ -87,3 +87,5 @@ string.tokenize.unique.,"Convert string stored in workbench to the list of uniqu
 string.tokenize.stemmed.,"Convert string stored in workbench to the list of stemmed tokens"
 system.shell,"Execute command in system shell and push result as string to stack"
 system.shell.,"Execute command in system shell and push result as string to workbench"
+io.textfile,"Read text file into a list and push result to a stack"
+io.textfile.,"Read text file into a list and push result to a workbench"

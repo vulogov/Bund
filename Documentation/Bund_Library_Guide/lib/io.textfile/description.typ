@@ -14,4 +14,4 @@
   - [x] #"bund runtime"
 ]
 
-Convert string stored on workbench to the list of unique and stemmed lexical tokens. English language is a primary language for stemming. Result is stored into workbench.
+Reading text file as a list of string, while taking filename from a stack and store result in the stack 
