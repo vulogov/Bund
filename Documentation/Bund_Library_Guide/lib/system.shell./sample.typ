@@ -6,10 +6,8 @@
   gutter: 2em,
 )[```rust
   //
-  // Print tokens from the string
+  // Finding out our uname
   //
-  "Hello world, and Привет мир!" . string.tokenize. {
-    println
-  } loop
+  "uname -a" . sh. take println
   ```
 ]

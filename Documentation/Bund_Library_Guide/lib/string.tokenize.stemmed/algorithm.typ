@@ -3,18 +3,18 @@
 
 #algorithm({
   import algorithmic: *
-  Function("string.tokenize.wb", args: (), {
+  Function("string.tokenize.stemmed.stack", args: (), {
     Cmt[
       String tokenization
     ]
     Assign(
-      [Text], [_workbench_]
+      [Text], [_current stack_]
     )
     If(cond: "Text = None", {
-      Return[Error("Workbench is too shallow")]
+      Return[Error("Stack is too shallow")]
     })
     Assign(
-      [_workbench_], [Call("String.Tokenize", [Text])]
+      [_current stack_], [Call("String.Tokenize.Stemmed", [Text])]
     )
   })
 })

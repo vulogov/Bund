@@ -8,7 +8,7 @@
   //
   // Print tokens from the string
   //
-  "Hello world, and Привет мир!" . string.tokenize. {
+  "Peace on Earth, good will to man !" . string.tokenize.stemmed. {
     println
   } loop
   ```

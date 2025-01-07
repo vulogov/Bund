@@ -8,8 +8,6 @@
   //
   // Print tokens from the string
   //
-  "Hello world, and Привет мир!" . string.tokenize. {
-    println
-  } loop
+  "Hello world, and Привет мир!" string.tokenize.unique println
   ```
 ]

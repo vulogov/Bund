@@ -3,7 +3,7 @@
 
 #algorithm({
   import algorithmic: *
-  Function("string.tokenize.wb", args: (), {
+  Function("string.tokenize.unique.wb", args: (), {
     Cmt[
       String tokenization
     ]
@@ -14,7 +14,7 @@
       Return[Error("Workbench is too shallow")]
     })
     Assign(
-      [_workbench_], [Call("String.Tokenize", [Text])]
+      [_workbench_], [Call("String.Tokenize.Unique", [Text])]
     )
   })
 })

@@ -3,7 +3,7 @@
 
 #algorithm({
   import algorithmic: *
-  Function("string.tokenize.wb", args: (), {
+  Function("string.tokenize.stemmed.wb", args: (), {
     Cmt[
       String tokenization
     ]
@@ -14,7 +14,7 @@
       Return[Error("Workbench is too shallow")]
     })
     Assign(
-      [_workbench_], [Call("String.Tokenize", [Text])]
+      [_workbench_], [Call("String.Tokenize.Stemmed", [Text])]
     )
   })
 })
