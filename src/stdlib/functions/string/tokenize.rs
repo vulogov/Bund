@@ -14,6 +14,7 @@ pub enum TokenizeAlgorithm {
     Simple,
     SimpleUnique,
     SimpleStemmed,
+    Lines,
 }
 
 fn string_tokenize_base(vm: &mut VM, op: StackOps, ta:TokenizeAlgorithm, err_prefix: String) -> Result<&mut VM, Error> {
@@ -62,6 +63,11 @@ fn string_tokenize_base(vm: &mut VM, op: StackOps, ta:TokenizeAlgorithm, err_pre
                                 res = res.push(Value::from_string(t));
                             }
                         }
+                        TokenizeAlgorithm::Lines => {
+                            for t in string_data.lines() {
+                                res = res.push(Value::from_string(t.trim()));
+                            }
+                        }
                     }
                     vm.stack.push(res);
                 }
@@ -98,6 +104,13 @@ pub fn stdlib_tokenize_simplestemmed_stack_inline(vm: &mut VM) -> Result<&mut VM
     string_tokenize_base(vm, StackOps::FromStack, TokenizeAlgorithm::SimpleStemmed, "STRING.TOKENIZE.STEMMED".to_string() )
 }
 
+pub fn stdlib_tokenize_lines_wb_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_tokenize_base(vm, StackOps::FromWorkBench, TokenizeAlgorithm::Lines, "STRING.TOKENIZE.LINES.".to_string() )
+}
+pub fn stdlib_tokenize_lines_stack_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    string_tokenize_base(vm, StackOps::FromStack, TokenizeAlgorithm::Lines, "STRING.TOKENIZE.LINES".to_string() )
+}
+
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
@@ -112,6 +125,8 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("string.tokenize.unique.".to_string(), stdlib_tokenize_simpleunique_wb_inline);
     let _ = bc.vm.register_inline("string.tokenize.stemmed".to_string(), stdlib_tokenize_simplestemmed_stack_inline);
     let _ = bc.vm.register_inline("string.tokenize.stemmed.".to_string(), stdlib_tokenize_simplestemmed_wb_inline);
+    let _ = bc.vm.register_inline("string.tokenize.lines".to_string(), stdlib_tokenize_lines_stack_inline);
+    let _ = bc.vm.register_inline("string.tokenize.lines.".to_string(), stdlib_tokenize_lines_wb_inline);
 
     drop(bc);
 }

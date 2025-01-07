@@ -26,5 +26,8 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("config".to_string(), "dict".to_string());
     let _ = bc.vm.register_alias("predict".to_string(), "neuralnetwork.predict".to_string());
     let _ = bc.vm.register_alias("classify".to_string(), "classifier.classify".to_string());
+    let _ = bc.vm.register_alias("lines".to_string(), "string.tokenize.lines".to_string());
+    let _ = bc.vm.register_alias("lines.".to_string(), "string.tokenize.lines.".to_string());
+    let _ = bc.vm.register_alias("exit".to_string(), "bund.exit".to_string());
     drop(bc);
 }

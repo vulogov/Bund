@@ -89,3 +89,4 @@ system.shell,"Execute command in system shell and push result as string to stack
 system.shell.,"Execute command in system shell and push result as string to workbench"
 io.textfile,"Read text file into a list and push result to a stack"
 io.textfile.,"Read text file into a list and push result to a workbench"
+bund.exit,"Terminate BUND interpreter and exit"
