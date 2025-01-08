@@ -6,3 +6,5 @@ Here is what's new:
 * Function ```string.tokenize.stemmed[|.]``` convert string to the list of unique and stemmed lexical tokens
 * Function ```string.tokenize.stemmed[|.]``` execute command in standard shell and store result into stack or workbench
 * Function ```io.textfile[|.]``` read text file into list and store result into stack or workbench
+* Function ```gererator```, ```generator.sample``` and ```generator.sample*``` for servicing dynamic sequences and distrinutions
+* Function ```args.parse``` - parsing passed arguments and returning a dictionary

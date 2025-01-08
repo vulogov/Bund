@@ -1,5 +1,6 @@
  debug,"Execute code snippet in the BUND debugger"
 args,"Arguments passed via CLI for script and shell subcommands"
+args.parse,"Parsing arguments passed via CLI for script and shell subcommands"
 bootstrap,"Load and execute scripts stored as bootstrap scripts in the WORLD file"
 bund.eval,"Evaluate BUND code snippet taken as string from stack"
 bund.eval-file,"Evaluate BUND code snippet taken from the file. The name of the file is taken as string from stack"
