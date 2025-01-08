@@ -2,3 +2,38 @@
 // Print number of lines in file passed through
 // command line
 //
+
+//
+// Checking if we passed filename
+// If the size of the argument list is 0,
+// we just exit with error message
+//
+args len 0 == {
+    "You must pass a filename" println
+    0 exit
+} if
+
+//
+// Read lines and store number of lines in the workbench
+//
+
+args car                  // Get filename from the arguments
+  dup                     // Duplicate filename
+  file lines len . drop   // Read file, split in lines, compute length of list
+                          // and store result to workbench
+take                      // Take number of lines to the stack
+
+//
+// Now we have number of lines and filename in the workbench
+//
+
+//
+// Print first part of the message and take and print the number of lines
+// We are formed the list of arguments in the stack and use the function
+// ```format``` to format the message
+//
+
+//
+// ```format``` is counting elements from the beginning of the stack
+//
+"We count {1} lines in the file {0}" format println

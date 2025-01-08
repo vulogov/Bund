@@ -10,6 +10,7 @@ pub mod regex_split;
 pub mod prefix_suffix;
 pub mod any_id;
 pub mod tokenize;
+pub mod grok;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     wildmatch::init_stdlib(cli);
@@ -21,4 +22,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     prefix_suffix::init_stdlib(cli);
     any_id::init_stdlib(cli);
     tokenize::init_stdlib(cli);
+    grok::init_stdlib(cli);
 }

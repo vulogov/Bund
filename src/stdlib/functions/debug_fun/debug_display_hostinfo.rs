@@ -30,11 +30,17 @@ pub fn debug_display_hostinfo_color() {
         .add_row(vec![
             Cell::new("rust_dynamic version").fg(Color::Green), Cell::new(&rust_dynamic::version()).fg(Color::White),
         ])
-        // .add_row(vec![
-        //     Cell::new("rust_multistack version").fg(Color::Green), Cell::new(&rust_multistack::version()).fg(Color::White),
-        // ])
+        .add_row(vec![
+            Cell::new("rust_multistack version").fg(Color::Green), Cell::new(&rust_multistack::version()).fg(Color::White),
+        ])
         .add_row(vec![
             Cell::new("rust_multistackvm version").fg(Color::Green), Cell::new(&rust_multistackvm::version()).fg(Color::White),
+        ])
+        .add_row(vec![
+            Cell::new("bundcore version").fg(Color::Green), Cell::new(&bundcore::version()).fg(Color::White),
+        ])
+        .add_row(vec![
+            Cell::new("bund_language_parser").fg(Color::Green), Cell::new(&bund_language_parser::version()).fg(Color::White),
         ])
         .add_row(vec![
             Cell::new("Hostname").fg(Color::Blue), Cell::new(&hostname.clone()).fg(Color::White),
@@ -73,7 +79,16 @@ pub fn debug_display_hostinfo_nocolor() {
             Cell::new("rust_dynamic version"), Cell::new(&rust_dynamic::version()),
         ])
         .add_row(vec![
+            Cell::new("rust_multistack version"), Cell::new(&rust_multistack::version()),
+        ])
+        .add_row(vec![
             Cell::new("rust_multistackvm version"), Cell::new(&rust_multistackvm::version()),
+        ])
+        .add_row(vec![
+            Cell::new("bundcore version"), Cell::new(&bundcore::version()),
+        ])
+        .add_row(vec![
+            Cell::new("bund_language_parser version"), Cell::new(&bund_language_parser::version()),
         ])
         .add_row(vec![
             Cell::new("Hostname"), Cell::new(&hostname.clone()),
