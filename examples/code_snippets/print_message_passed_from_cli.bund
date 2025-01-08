@@ -1,0 +1,11 @@
+//
+// pass message as -- --message "This is a message"
+//
+
+//
+// First, let's parse arguments and see if there is a key
+//
+args.parse :message ?key {
+  :message get            // Get the message from dict
+  car println             // This will be a list, so taking first element and print it
+} if
