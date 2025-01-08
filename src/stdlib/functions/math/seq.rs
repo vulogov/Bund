@@ -39,6 +39,17 @@ fn seq_descending(vm: &mut VM, conf: Value) -> Value {
     return Value::from_list(res);
 }
 
+fn seq_single(vm: &mut VM, conf: Value) -> Value {
+    let x = helpers::conf::conf_get(vm, conf.clone(), "X".to_string(), Value::from_float(0.0)).cast_float().unwrap();
+    let n = helpers::conf::conf_get(vm, conf.clone(), "N".to_string(), Value::from_int(128)).cast_int().unwrap();
+    let fres = args::monolist(x, n as usize);
+    let mut res: Vec<Value> = Vec::new();
+    for v in fres {
+        res.push(Value::from_float(v));
+    }
+    return Value::from_list(res);
+}
+
 pub fn stdlib_float_gen_seq_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 1 {
         bail!("Stack is too shallow for inline SEQ");
@@ -49,6 +60,7 @@ pub fn stdlib_float_gen_seq_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             let res = match seq_type.cast_string().unwrap().as_str() {
                 "seq.ascending" => seq_ascending(vm, conf),
                 "seq.descending" => seq_descending(vm, conf),
+                "single" => seq_single(vm, conf),
                 _ => bail!("Unknown SEQ type: {}", &seq_type),
             };
             vm.stack.push(res);

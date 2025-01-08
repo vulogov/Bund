@@ -1,0 +1,8 @@
+//
+// Generate single sequence
+//
+config
+  :type  "single"     set
+  :X      3.14        set
+  :N      3           set
+"Generated sequence is: " print seq println
