@@ -2,6 +2,7 @@ extern crate log;
 use crate::cmd;
 
 pub mod ai;
+pub mod generators;
 pub mod bund;
 pub mod io;
 pub mod bus;
@@ -19,6 +20,7 @@ pub mod create_aliases;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     ai::init_stdlib(cli);
+    generators::init_stdlib(cli);
     bund::init_stdlib(cli);
     io::init_stdlib(cli);
     bus::init_stdlib(cli);

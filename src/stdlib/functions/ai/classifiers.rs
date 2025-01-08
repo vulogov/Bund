@@ -20,7 +20,7 @@ pub fn stdlib_classifier_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                 Ok(name) => name,
                 Err(err) => bail!("CLASSIFIERS name casting returns: {}", err),
             };
-            let nn_type = helpers::conf::conf_get(vm, conf.clone(), "type".to_string(), Value::from_string("seq.ascending"));
+            let nn_type = helpers::conf::conf_get(vm, conf.clone(), "type".to_string(), Value::from_string("unknown"));
             let res = match nn_type.cast_string().unwrap().as_str() {
                 "naivebayes" => naivebayes::create_naivebayes_classifier(vm, name, conf),
                 "linguistic" => linguistic::create_linguistic_classifier(vm, name, conf),

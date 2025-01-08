@@ -1,0 +1,24 @@
+//
+// This sample demonstrates generation of the numbers
+// from gaussian distribution generator
+//
+
+//
+// First, let's create config and initialize generator
+// Mean = 1.0
+// STD  = 0.5
+//
+:TEST config
+  :type       "normal"  set
+  :Mean       1.0       set
+  :Deviation  0.5       set
+
+generator
+
+//
+// Then in the loop, we will sample 10 values from generator
+//
+10 {
+  drop :TEST generator.sample
+  "Generated value from Gaussian distribution = {0}" format println
+} times

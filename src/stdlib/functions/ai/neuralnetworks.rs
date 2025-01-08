@@ -19,10 +19,10 @@ pub fn stdlib_neuralnetworks_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                 Ok(name) => name,
                 Err(err) => bail!("NEURALNETWORKS name casting returns: {}", err),
             };
-            let nn_type = helpers::conf::conf_get(vm, conf.clone(), "type".to_string(), Value::from_string("seq.ascending"));
+            let nn_type = helpers::conf::conf_get(vm, conf.clone(), "type".to_string(), Value::from_string("unknown"));
             let res = match nn_type.cast_string().unwrap().as_str() {
                 "perceptron" => perceptron::create_perceptron_nn(vm, name, conf),
-                _ => bail!("Unknown CLASSIFIER type: {}", &nn_type),
+                _ => bail!("Unknown NEURALNETWORK type: {}", &nn_type),
             };
             return res;
         }
