@@ -1,17 +1,17 @@
 //
 // This sample demonstrates generation of the numbers
-// from gaussian distribution generator
+// from Log-normal distribution generator
 //
 
 //
 // First, let's create config and initialize generator
-// Mean = 1.0
-// STD  = 0.5
+// Loc  = 0.0
+// Scale  = 1.0
 //
 :TEST config
-  :type       "normal"  set
-  :Mean       1.0       set
-  :Deviation  0.5       set
+  :type     "lognormal"  set
+  :Location   0.0       set
+  :Scale      1.0       set
 
 generator
 

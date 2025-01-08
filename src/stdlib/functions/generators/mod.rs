@@ -6,20 +6,26 @@ use std::collections::btree_map::BTreeMap;
 use lazy_static::lazy_static;
 use crate::stdlib::BUND;
 
-use statrs::distribution::{Normal};
+use statrs::distribution::{Normal, Uniform, LogNormal};
 
 pub mod generator;
 pub mod normal;
+pub mod uniform;
+pub mod lognormal;
 
 #[derive(Clone, Debug)]
 pub enum DType {
     Normal,
+    Uniform,
+    LogNormal,
     Binomial,
 }
 
 pub enum DVal {
     Null,
     Normal(Normal),
+    Uniform(Uniform),
+    LogNormal(LogNormal),
 }
 
 
