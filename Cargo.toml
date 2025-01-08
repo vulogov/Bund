@@ -59,6 +59,8 @@ lingua = "1.6.2"
 rnltk = "0.4.0"
 duct_sh = "0.13.7"
 grok = "2.0.0"
+rand_mt = "4.2.2"
+fastrand = "2.3.0"
 
 [dependencies.rusqlite]
 version = "0.32.*"

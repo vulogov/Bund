@@ -1,0 +1,26 @@
+//
+// This sample demonstrates generation of the numbers
+// from sawtooth generator
+//
+
+//
+// First, let's create config and initialize generator
+//
+:TEST config
+  :type     "sawtooth"  set
+  :Period   10          set
+  :High     1.0         set
+  :Low      0.0         set
+  :Delay    3           set
+
+generator
+
+//
+// Then in the loop, we will sample 10 values from generator
+// Creating list with 10 sampled values
+//
+:TEST 15 generator.sample*
+"Generating 15 samples" println
+{
+  "Generated value = {0}" format println
+} loop

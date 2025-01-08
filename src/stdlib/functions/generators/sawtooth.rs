@@ -3,15 +3,14 @@ use crate::stdlib::functions::generators::{DIST, DEntry, DType, DVal};
 use rust_multistackvm::multistackvm::{VM};
 use crate::stdlib::helpers;
 use rust_dynamic::value::Value;
-use rand::distributions::{Distribution};
-use statrs::distribution::{Uniform};
+use statrs::generate::InfiniteSawtooth;
 use easy_error::{Error, bail};
 
 impl DEntry {
-    pub fn new_uniform(d: Uniform) -> Self {
+    pub fn new_sawtooth(d: InfiniteSawtooth) -> Self {
         Self {
-            id:     DType::Uniform,
-            nn:     DVal::Uniform(d),
+            id:     DType::Sawtooth,
+            nn:     DVal::Sawtooth(d),
         }
     }
 }
@@ -19,16 +18,15 @@ impl DEntry {
 
 
 pub fn create_generator(vm: &mut VM, name: String, conf: Value) -> Result<&mut VM, Error> {
-    log::debug!("Create uniform distribution generator: {}", &name);
-    let y_max = helpers::conf::conf_get(vm, conf.clone(), "Max".to_string(), Value::from_float(1.0)).cast_float().unwrap();
-    let y_min = helpers::conf::conf_get(vm, conf.clone(), "Min".to_string(), Value::from_float(0.0)).cast_float().unwrap();
-    log::debug!("Min: {} Max: {}", y_min, y_max);
-    let n = match Uniform::new(y_min, y_max) {
-        Ok(n) => n,
-        Err(err) => bail!("GENERATOR returned: {}", err),
-    };
+    log::debug!("Create sawtooth generator: {}", &name);
+    let period = helpers::conf::conf_get(vm, conf.clone(), "Period".to_string(), Value::from_int(10)).cast_int().unwrap();
+    let high = helpers::conf::conf_get(vm, conf.clone(), "High".to_string(), Value::from_float(1.0)).cast_float().unwrap();
+    let low = helpers::conf::conf_get(vm, conf.clone(), "Low".to_string(), Value::from_float(0.0)).cast_float().unwrap();
+    let delay = helpers::conf::conf_get(vm, conf.clone(), "Delay".to_string(), Value::from_int(1)).cast_int().unwrap();
+    log::debug!("High: {} Low: {} Period: {} Delay: {}", high, low, period, delay);
+    let n = InfiniteSawtooth::new(period, high, low, delay);
     let mut d = DIST.lock().unwrap();
-    d.insert(name.to_string(), DEntry::new_uniform(n));
+    d.insert(name.to_string(), DEntry::new_sawtooth(n));
     drop(d);
     Ok(vm)
 }
@@ -44,9 +42,11 @@ pub fn generator_sample(vm: &mut VM, name: String) -> Result<&mut VM, Error> {
             },
         };
         match &gen.nn {
-            DVal::Uniform(n) => {
-                let mut r = rand::thread_rng();
-                let val = n.sample(&mut r);
+            DVal::Sawtooth(mut n) => {
+                let val = match n.next() {
+                    Some(val) => val,
+                    None => bail!("Failed to sample next sawtooth value"),
+                };
                 vm.stack.push(Value::from_float(val));
             }
             _ => {
@@ -73,11 +73,13 @@ pub fn generator_n_sample(vm: &mut VM, name: String, n_elem: i64) -> Result<&mut
             },
         };
         match &gen.nn {
-            DVal::Uniform(n) => {
-                let mut r = rand::thread_rng();
+            DVal::Sawtooth(mut n) => {
                 let mut res = Value::list();
                 for _ in 0..n_elem {
-                    let val = n.sample(&mut r);
+                    let val = match n.next() {
+                        Some(val) => val,
+                        None => bail!("Failed to sample next sawtooth value"),
+                    };
                     res = res.push(Value::from_float(val));
                 }
 

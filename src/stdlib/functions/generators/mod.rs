@@ -7,17 +7,24 @@ use lazy_static::lazy_static;
 use crate::stdlib::BUND;
 
 use statrs::distribution::{Normal, Uniform, LogNormal};
+use statrs::generate::{InfiniteSawtooth, InfinitePeriodic, InfiniteSinusoidal};
 
 pub mod generator;
 pub mod normal;
 pub mod uniform;
 pub mod lognormal;
+pub mod sawtooth;
+pub mod periodic;
+pub mod sinusoidal;
 
 #[derive(Clone, Debug)]
 pub enum DType {
     Normal,
     Uniform,
     LogNormal,
+    Sawtooth,
+    Periodic,
+    Sinusoidal,
     Binomial,
 }
 
@@ -26,6 +33,9 @@ pub enum DVal {
     Normal(Normal),
     Uniform(Uniform),
     LogNormal(LogNormal),
+    Sawtooth(InfiniteSawtooth),
+    Periodic(InfinitePeriodic),
+    Sinusoidal(InfiniteSinusoidal),
 }
 
 

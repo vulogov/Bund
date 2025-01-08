@@ -25,6 +25,9 @@ pub fn stdlib_generator_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                 "normal" => generators::normal::create_generator(vm, name, conf),
                 "uniform" => generators::uniform::create_generator(vm, name, conf),
                 "lognormal" => generators::lognormal::create_generator(vm, name, conf),
+                "sawtooth" => generators::sawtooth::create_generator(vm, name, conf),
+                "periodic" => generators::periodic::create_generator(vm, name, conf),
+                "sinusoidal" => generators::sinusoidal::create_generator(vm, name, conf),
                 _ => bail!("Unknown GENERATOR type: {}", &g_type),
             };
             return res;
@@ -66,6 +69,18 @@ pub fn stdlib_generator_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                     DType::LogNormal => {
                         drop(g);
                         return generators::lognormal::generator_sample(vm, name);
+                    }
+                    DType::Sawtooth => {
+                        drop(g);
+                        return generators::sawtooth::generator_sample(vm, name);
+                    }
+                    DType::Periodic => {
+                        drop(g);
+                        return generators::periodic::generator_sample(vm, name);
+                    }
+                    DType::Sinusoidal => {
+                        drop(g);
+                        return generators::sinusoidal::generator_sample(vm, name);
                     }
                     _ => {
                         drop(g);
@@ -122,6 +137,18 @@ pub fn stdlib_generator_n_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                     DType::LogNormal => {
                         drop(g);
                         return generators::lognormal::generator_n_sample(vm, name, n);
+                    }
+                    DType::Sawtooth => {
+                        drop(g);
+                        return generators::sawtooth::generator_n_sample(vm, name, n);
+                    }
+                    DType::Periodic => {
+                        drop(g);
+                        return generators::periodic::generator_n_sample(vm, name, n);
+                    }
+                    DType::Sinusoidal => {
+                        drop(g);
+                        return generators::sinusoidal::generator_n_sample(vm, name, n);
                     }
                     _ => {
                         drop(g);

@@ -1,0 +1,27 @@
+//
+// This sample demonstrates generation of the numbers
+// from periodic generator
+//
+
+//
+// First, let's create config and initialize generator
+//
+:TEST config
+  :type     "periodic"  set
+  :Sampling 15.0        set
+  :Freq     3.0         set
+  :Amplitude  10.0      set
+  :Phase    1.0         set
+  :Delay    1           set
+
+generator
+
+//
+// Then in the loop, we will sample 10 values from generator
+// Creating list with 10 sampled values
+//
+:TEST 20 generator.sample*
+"Generating 20 samples" println
+{
+  "Generated value = {0}" format println
+} loop

@@ -44,16 +44,6 @@ pub fn generator_sample(vm: &mut VM, name: String) -> Result<&mut VM, Error> {
             },
         };
         match &gen.nn {
-            DVal::Normal(n) => {
-                let mut r = rand::thread_rng();
-                let val = n.sample(&mut r);
-                vm.stack.push(Value::from_float(val));
-            }
-            DVal::Uniform(n) => {
-                let mut r = rand::thread_rng();
-                let val = n.sample(&mut r);
-                vm.stack.push(Value::from_float(val));
-            }
             DVal::LogNormal(n) => {
                 let mut r = rand::thread_rng();
                 let val = n.sample(&mut r);
@@ -83,26 +73,6 @@ pub fn generator_n_sample(vm: &mut VM, name: String, n_elem: i64) -> Result<&mut
             },
         };
         match &gen.nn {
-            DVal::Normal(n) => {
-                let mut r = rand::thread_rng();
-                let mut res = Value::list();
-                for _ in 0..n_elem {
-                    let val = n.sample(&mut r);
-                    res = res.push(Value::from_float(val));
-                }
-
-                vm.stack.push(res);
-            }
-            DVal::Uniform(n) => {
-                let mut r = rand::thread_rng();
-                let mut res = Value::list();
-                for _ in 0..n_elem {
-                    let val = n.sample(&mut r);
-                    res = res.push(Value::from_float(val));
-                }
-
-                vm.stack.push(res);
-            }
             DVal::LogNormal(n) => {
                 let mut r = rand::thread_rng();
                 let mut res = Value::list();
