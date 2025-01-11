@@ -8,3 +8,4 @@ Here is what's new:
 * Function ```io.textfile[|.]``` read text file into list and store result into stack or workbench
 * Function ```gererator```, ```generator.sample``` and ```generator.sample*``` for servicing dynamic sequences and distrinutions
 * Function ```args.parse``` - parsing passed arguments and returning a dictionary
+* Function ```convert.from_html[|.]``` - converting HTML to text

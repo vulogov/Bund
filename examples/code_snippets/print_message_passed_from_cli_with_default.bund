@@ -1,0 +1,24 @@
+//
+// pass message as -- --message "This is a message"
+//
+
+//
+// First, let's parse arguments and see if there is a key
+//
+args.parse :message ?key
+
+//
+// This is an "ELSE" lambda and will be executed if ?key returns FALSE
+// Default message will be printed
+//
+{
+  "Hello world! This is default message." println
+}
+//
+// This is THEN lambda. It will be executed if ?key returns TRUE
+//
+{
+  :message get            // Get the message from dict
+  car println             // This will be a list, so taking first element and print it
+} ?true*                  // Function ?true* unlike if supports THEN and ELSE
+                          // lambdas execution

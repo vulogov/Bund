@@ -1,0 +1,20 @@
+//
+// To demonstrate SEND/RECV capabilities first, we send 15 numbers to the BUS
+//
+
+15 {
+  :A swap send    // We do need to use swap to properly align values for send in stack
+} times
+
+//
+// First, we prepare TRUE or FALSE in stack by checking if there is data in stack
+//
+:A bus.data {
+  :A recv         // Receiving data from bus "A"
+    "Received from the BUS: {0}" format println   // And formatting a nice message
+                                                  // while having data in stack
+  :A bus.data                                     // Check if we have more data
+                                                  // in the bus
+} for                                             // And do the loop while we will not
+                                                  // have FALSE returned by bus.data
+                                                  // in the stack
