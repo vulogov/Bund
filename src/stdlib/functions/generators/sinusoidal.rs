@@ -18,7 +18,7 @@ impl DEntry {
 
 
 pub fn create_generator(vm: &mut VM, name: String, conf: Value) -> Result<&mut VM, Error> {
-    log::debug!("Create sawtooth generator: {}", &name);
+    log::debug!("Create sinusoidal generator: {}", &name);
 
     let sampling = helpers::conf::conf_get(vm, conf.clone(), "Sampling".to_string(), Value::from_float(10.0)).cast_float().unwrap();
     let freq = helpers::conf::conf_get(vm, conf.clone(), "Freq".to_string(), Value::from_float(2.0)).cast_float().unwrap();

@@ -1,0 +1,47 @@
+//
+// This sample demonstrates generation of the numbers
+// and graph it
+//
+
+//
+// First, let's create config and initialize generator
+//
+"Generating sawtooth sequence" println
+:TEST config
+  :type     "sawtooth"  set
+  :Period   10          set
+  :High     10.0        set
+  :Low      0.0         set
+  :Delay    3           set
+
+generator
+:TEST 30 generator.sample* io.graph println
+
+
+//
+// Lognormal generator
+//
+"Generating lognormal sequence" println
+:TEST1 config
+  :type     "lognormal"  set
+  :Location   0.0       set
+  :Scale      1.0       set
+
+generator
+:TEST1 30 generator.sample* io.graph println
+
+//
+// Sinusoidal generator
+//
+"Generating sinusoidal sequence" println
+:TEST2 config
+  :type     "sinusoidal"  set
+  :Sampling 30.0        set
+  :Freq     3.0         set
+  :Amplitude  5.0      set
+  :Mean     5.0         set
+  :Phase    1.0         set
+  :Delay    1           set
+
+generator
+:TEST2 30 generator.sample* io.graph println
