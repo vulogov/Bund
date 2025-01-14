@@ -49,6 +49,7 @@ pub fn stdlib_float_pow_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_math_float_inline(vm, Ops::Power)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_float_inline(vm: &mut VM, op: Ops) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 1 {
         bail!("Stack is too shallow for inline float_op");

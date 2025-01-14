@@ -27,6 +27,7 @@ pub fn bund_load_bootstrap_inline<'a>(vm: &'a mut VM, conn: &mut Connection, nam
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save_bootstrap(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 3 {
         bail!("Stack is too shallow for SAVE.BOOTSTRAP");

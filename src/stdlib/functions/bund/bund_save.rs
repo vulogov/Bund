@@ -106,22 +106,27 @@ pub fn stdlib_bund_save_base(vm: &mut VM, op: helpers::world::WorldFunctions) ->
     return res;
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::All)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save_aliases(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Aliases)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save_lambdas(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Lambdas)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save_stacks(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Stacks)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_save_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund SAVE functions disabled with --noio");
 }

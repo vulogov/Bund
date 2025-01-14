@@ -12,6 +12,7 @@ pub enum PSOps {
     Suffix,
 }
 
+#[time_graph::instrument]
 fn string_is_ps_base(vm: &mut VM, op: StackOps, psop: PSOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

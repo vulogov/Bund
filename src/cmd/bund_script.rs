@@ -1,10 +1,12 @@
 extern crate log;
 use crate::cmd;
+use time_graph;
 use crate::stdlib::helpers;
 use rust_dynamic::value::Value;
 use crate::stdlib::functions::{bund};
 use crate::stdlib::functions::ai::linguistic;
 
+#[time_graph::instrument]
 pub fn run(cli: &cmd::Cli, script_arg: &cmd::Script) {
     log::debug!("SCRIPT::run() reached");
 

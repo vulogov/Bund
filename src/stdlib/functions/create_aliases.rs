@@ -29,5 +29,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("lines".to_string(), "string.tokenize.lines".to_string());
     let _ = bc.vm.register_alias("lines.".to_string(), "string.tokenize.lines.".to_string());
     let _ = bc.vm.register_alias("exit".to_string(), "bund.exit".to_string());
+    let _ = bc.vm.register_alias("version".to_string(), "sysinfo.version".to_string());
     drop(bc);
 }

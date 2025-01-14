@@ -4,6 +4,7 @@ use rust_multistackvm::multistackvm::{VM, StackOps};
 use rust_dynamic::types::*;
 use easy_error::{Error, bail};
 
+#[time_graph::instrument]
 fn get_data_for_stat_from_stack_or_workbench(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<Vec<f64>, Error> {
     match op {
         StackOps::FromStack => {
@@ -63,6 +64,7 @@ fn get_data_for_stat_from_stack_or_workbench(vm: &mut VM, op: StackOps, err_pref
     Ok(res)
 }
 
+#[time_graph::instrument]
 fn get_data_from_metrics(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<Vec<f64>, Error> {
     match op {
         StackOps::FromStack => {
@@ -112,6 +114,7 @@ fn get_data_from_metrics(vm: &mut VM, op: StackOps, smode: statistics::SourceMod
     Ok(res)
 }
 
+#[time_graph::instrument]
 fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<Vec<f64>, Error> {
     match op {
         StackOps::FromStack => {
@@ -177,6 +180,7 @@ fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, 
     Ok(res)
 }
 
+#[time_graph::instrument]
 pub fn get_data(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<Vec<f64>, Error> {
     match op {
         StackOps::FromStack => {

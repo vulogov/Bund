@@ -162,30 +162,37 @@ fn stdlib_bund_crossbus_quick_base(vm: &mut VM, op: StackOps, bop: CrossbusOpera
     }
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_send_stack(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_base(vm, StackOps::FromStack, CrossbusOperations::Send, "SEND".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_send_workbench(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_base(vm, StackOps::FromWorkBench, CrossbusOperations::Send, "SEND.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_send_stack_quick(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_quick_base(vm, StackOps::FromStack, CrossbusOperations::Send, "SEND".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_send_workbench_quick(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_quick_base(vm, StackOps::FromWorkBench, CrossbusOperations::Send, "SEND.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_recv_stack(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_base(vm, StackOps::FromStack, CrossbusOperations::Recv, "RECV".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_recv_workbench(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_crossbus_base(vm, StackOps::FromWorkBench, CrossbusOperations::Recv, "RECV.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_bus_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund BUS functions disabled with --noio");
 }

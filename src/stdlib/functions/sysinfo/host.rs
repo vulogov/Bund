@@ -6,6 +6,10 @@ use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use rust_dynamic::value::Value;
 
+pub fn stdlib_sysinfo_bund_version(vm: &mut VM) -> Result<&mut VM, Error> {
+    vm.stack.push(Value::from_string(env!("CARGO_PKG_VERSION")));
+    Ok(vm)
+}
 
 pub fn stdlib_sysinfo_host_hostname(vm: &mut VM) -> Result<&mut VM, Error> {
     let hostname = match sys_metrics::host::get_hostname() {
@@ -62,6 +66,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("sysinfo.hostname".to_string(), stdlib_sysinfo_host_hostname);
     let _ = bc.vm.register_inline("sysinfo.kernel_version".to_string(), stdlib_sysinfo_host_kernel_version);
     let _ = bc.vm.register_inline("sysinfo.os_version".to_string(), stdlib_sysinfo_host_os_version);
+    let _ = bc.vm.register_inline("sysinfo.version".to_string(), stdlib_sysinfo_bund_version);
     let _ = bc.vm.register_inline("sysinfo.system".to_string(), stdlib_sysinfo_host_system);
     drop(bc);
 }

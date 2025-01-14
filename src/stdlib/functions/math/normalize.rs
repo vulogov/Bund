@@ -35,18 +35,22 @@ fn math_normalize_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode,
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_stack_consume_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
     math_normalize_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, "MATH.NORMALIZE".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_wb_consume_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
     math_normalize_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, "MATH.NORMALIZE.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_stack_keep_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
     math_normalize_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, "MATH.NORMALIZE,".to_string())
 }
 
+#[time_graph::instrument]
 pub fn math_math_wb_keep_normalize(vm: &mut VM) -> Result<&mut VM, Error> {
     math_normalize_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, "MATH.NORMALIZE.,".to_string())
 }

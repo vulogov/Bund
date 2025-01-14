@@ -16,6 +16,7 @@ lazy_static! {
     };
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_random_int_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     let mut rnd = RAND.lock().unwrap();
     let val = rnd.next_u64();

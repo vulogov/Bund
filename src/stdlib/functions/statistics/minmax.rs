@@ -32,30 +32,38 @@ fn stats_minmax_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, m
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_stack_consume_min(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, MinMaxOperation::Min, "MATH.MIN".to_string())
 }
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_stack_consume_max(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, MinMaxOperation::Max, "MATH.MAX".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_workbench_consume_min(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, MinMaxOperation::Min, "MATH.MIN.".to_string())
 }
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_workbench_consume_max(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, MinMaxOperation::Max, "MATH.MAX.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_stack_keep_min(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, MinMaxOperation::Min, "MATH.MIN,".to_string())
 }
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_stack_keep_max(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, MinMaxOperation::Max, "MATH.MAX,".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_workbench_keep_min(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, MinMaxOperation::Min, "MATH.MIN.,".to_string())
 }
+#[time_graph::instrument]
 pub fn stdlib_math_minmax_workbench_keep_max(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_minmax_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, MinMaxOperation::Max, "MATH.MAX.,".to_string())
 }

@@ -48,15 +48,17 @@ pub fn bund_use_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&m
     }
 }
 
-
+#[time_graph::instrument]
 pub fn stdlib_bund_use_from_stack_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_use_base(vm, StackOps::FromStack, "USE".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_use_from_workbech_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_use_base(vm, StackOps::FromWorkBench, "USE.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_use_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund USE functions disabled with --noeval");
 }

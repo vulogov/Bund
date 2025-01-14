@@ -8,7 +8,7 @@ use easy_error::{Error, bail};
 use fuzzy_matcher::FuzzyMatcher;
 use fuzzy_matcher::skim::SkimMatcherV2;
 
-
+#[time_graph::instrument]
 pub fn string_fuzzy_match_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

@@ -156,22 +156,27 @@ pub fn stdlib_bund_bootstrap(vm: &mut VM) -> Result<&mut VM, Error> {
     return res;
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_load(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::All)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_load_aliases(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::Aliases)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_load_lambdas(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::Lambdas)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_load_stacks(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_load_base(vm, helpers::world::WorldFunctions::Stacks)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_load_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund LOAD functions disabled with --noio");
 }

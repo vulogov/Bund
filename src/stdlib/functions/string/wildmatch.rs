@@ -7,7 +7,7 @@ use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use wildmatch::{WildMatch};
 
-
+#[time_graph::instrument]
 pub fn string_wildcard_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

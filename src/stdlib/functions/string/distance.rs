@@ -17,6 +17,7 @@ pub enum DistanceAlgorithm {
     JaroWinkler,
 }
 
+#[time_graph::instrument]
 pub fn string_distance_base(vm: &mut VM, op: StackOps, aop: DistanceAlgorithm, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

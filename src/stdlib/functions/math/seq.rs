@@ -72,15 +72,17 @@ pub fn stdlib_float_gen_seq_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_float_gen_seq_asc_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_math_float_gen_seq_inline(vm, SeqOrd::Asc)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_float_gen_seq_desc_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_math_float_gen_seq_inline(vm, SeqOrd::Desc)
 }
 
-
+#[time_graph::instrument]
 pub fn stdlib_math_float_gen_seq_inline(vm: &mut VM, ord: SeqOrd) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 3 {
         bail!("Stack is too shallow for inline SEQ");

@@ -7,6 +7,7 @@ use crate::cmd;
 use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 
+#[time_graph::instrument]
 fn stats_count_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<&mut VM, Error> {
     match statistics::get_data::get_data(vm, op.clone(), smode, err_prefix.clone()) {
         Ok(res) => {

@@ -1,5 +1,6 @@
 extern crate log;
 use std::env;
+use time_graph;
 use crate::stdlib::BUND;
 use crate::stdlib::{init_stdlib};
 use clap::{Parser, Subcommand, Args};
@@ -42,6 +43,10 @@ pub fn main() {
             log::debug!("No BUND bootstrap specified");
         }
     }
+    if cli.profile {
+        log::debug!("Enable BUND profiler");
+        time_graph::enable_data_collection(true);
+    }
     bund_bus::bund_bus_init(&cli);
     match &cli.command {
         Commands::Script(script) => {
@@ -62,6 +67,11 @@ pub fn main() {
         Commands::Version(_) => {
             bund_version::run(&cli);
         }
+    }
+    if cli.profile {
+        log::debug!("Generating BUND profiler report");
+        let graph = time_graph::get_full_graph();
+        println!("{}", graph.as_table());
     }
 }
 
@@ -84,6 +94,9 @@ pub struct Cli {
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Run BUND interpreter as a node in distributed environment")]
     pub distributed: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Execute internal profiler")]
+    pub profile: bool,
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in output")]
     pub nocolor: bool,

@@ -6,6 +6,7 @@ use crate::stdlib::functions::ai::naivebayes;
 use crate::stdlib::functions::ai::linguistic;
 use easy_error::{Error, bail};
 
+#[time_graph::instrument]
 pub fn stdlib_classifier_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline CLASSIFIERS");

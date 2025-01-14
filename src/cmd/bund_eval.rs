@@ -2,7 +2,7 @@ extern crate log;
 use crate::cmd;
 use crate::stdlib::helpers;
 
-
+#[time_graph::instrument]
 pub fn run(cli: &cmd::Cli, eval_arg: &cmd::Eval) {
     log::debug!("EVAL::run() reached");
 

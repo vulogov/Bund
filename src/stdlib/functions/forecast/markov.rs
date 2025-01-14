@@ -41,18 +41,22 @@ fn forecast_markov_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_forecast_stack_consume_markov(vm: &mut VM) -> Result<&mut VM, Error> {
     forecast_markov_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, "FORECAST.MARKOV".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_forecast_wb_consume_markov(vm: &mut VM) -> Result<&mut VM, Error> {
     forecast_markov_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, "FORECAST.MARKOV.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_forecast_stack_keep_markov(vm: &mut VM) -> Result<&mut VM, Error> {
     forecast_markov_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, "FORECAST.MARKOV,".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_forecast_wb_keep_markov(vm: &mut VM) -> Result<&mut VM, Error> {
     forecast_markov_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, "FORECAST.MARKOV.,".to_string())
 }

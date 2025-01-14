@@ -8,7 +8,7 @@ use easy_error::{Error};
 
 use uuid::Uuid;
 
-
+#[time_graph::instrument]
 pub fn stdlib_uuid_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     vm.stack.push(Value::from_string(Uuid::new_v4().to_string()));
     Ok(vm)

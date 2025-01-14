@@ -73,11 +73,12 @@ pub fn string_io_textfile_base(vm: &mut VM, op: StackOps, err_prefix: String) ->
     Ok(vm)
 }
 
-
+#[time_graph::instrument]
 pub fn stdlib_io_textfile_stack(vm: &mut VM) -> Result<&mut VM, Error> {
     string_io_textfile_base(vm, StackOps::FromStack, "IO.TEXTFILE".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_io_textfile_workbench(vm: &mut VM) -> Result<&mut VM, Error> {
     string_io_textfile_base(vm, StackOps::FromWorkBench, "IO.TEXTFILE.".to_string())
 }

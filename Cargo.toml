@@ -66,6 +66,7 @@ nanohtml2text = "0.2.1"
 charabia = "0.9.2"
 zenoh = "1.1.0"
 rasciigraph = "0.2.0"
+time-graph = { version="0.3.2", features=["table"] }
 
 
 [dependencies.rusqlite]

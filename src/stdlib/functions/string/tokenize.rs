@@ -17,6 +17,7 @@ pub enum TokenizeAlgorithm {
     Lines,
 }
 
+#[time_graph::instrument]
 fn string_tokenize_base(vm: &mut VM, op: StackOps, ta:TokenizeAlgorithm, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

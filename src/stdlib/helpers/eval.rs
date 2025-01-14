@@ -3,6 +3,7 @@ use rust_multistackvm::multistackvm::{VM};
 use bund_language_parser::bund_parse;
 use easy_error::{Error, bail};
 
+#[time_graph::instrument]
 pub fn bund_compile_and_eval(vm: &mut VM, code: String) -> Result<&mut VM, Error>  {
     let source = format!("{}\n", code.clone());
     match bund_parse(&source) {

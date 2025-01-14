@@ -7,7 +7,7 @@ use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use fancy_regex::{Regex};
 
-
+#[time_graph::instrument]
 pub fn string_regex_split_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
         StackOps::FromStack => {

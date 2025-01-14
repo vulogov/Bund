@@ -7,7 +7,7 @@ use crate::stdlib::functions::debug_fun;
 use std::ops::DerefMut;
 use crate::stdlib::BUND;
 
-
+#[time_graph::instrument]
 pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
     let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
@@ -54,6 +54,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
     drop(bc);
 }
 
+#[time_graph::instrument]
 pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
     let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
@@ -91,6 +92,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
     drop(bc);
 }
 
+#[time_graph::instrument]
 pub fn run_snippet(snippet: String) {
     log::debug!("Running snippet: {}", &snippet);
     let code = format!("{}\n", &snippet);

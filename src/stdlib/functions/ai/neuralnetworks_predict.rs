@@ -5,7 +5,7 @@ use easy_error::{Error, bail};
 use crate::stdlib::functions::ai::{NN, NNType};
 
 
-
+#[time_graph::instrument]
 pub fn stdlib_neuralnetworks_predict_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline NEURALNETWORKS.PREDICT");

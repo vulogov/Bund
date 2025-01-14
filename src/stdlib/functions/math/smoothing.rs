@@ -30,18 +30,22 @@ fn math_smoothing_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode,
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_stack_consume_smooth(vm: &mut VM) -> Result<&mut VM, Error> {
     math_smoothing_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, "MATH.SMOOTH".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_wb_consume_smooth(vm: &mut VM) -> Result<&mut VM, Error> {
     math_smoothing_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Consume, "MATH.SMOOTH.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_stack_keep_smooth(vm: &mut VM) -> Result<&mut VM, Error> {
     math_smoothing_base(vm, StackOps::FromStack, statistics::SourceMode::Keep, "MATH.SMOOTH,".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_math_wb_keep_smooth(vm: &mut VM) -> Result<&mut VM, Error> {
     math_smoothing_base(vm, StackOps::FromWorkBench, statistics::SourceMode::Keep, "MATH.SMOOTH.,".to_string())
 }

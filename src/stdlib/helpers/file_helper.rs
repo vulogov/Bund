@@ -2,6 +2,7 @@ extern crate log;
 use std::io::{self, BufRead};
 use curl::easy::{Easy2, Handler, WriteError};
 
+#[time_graph::instrument]
 pub fn get_file_from_stdin() -> String {
     let mut lines = io::stdin().lock().lines();
     let mut user_input = String::new();
@@ -26,6 +27,7 @@ pub fn get_file_from_stdin() -> String {
     user_input.clone()
 }
 
+#[time_graph::instrument]
 pub fn get_file_from_uri(some_url: String) -> Option<String>  {
     struct Collector(Vec<u8>);
 

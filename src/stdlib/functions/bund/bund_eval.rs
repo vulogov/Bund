@@ -82,14 +82,17 @@ pub fn bund_eval_file_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Res
     }
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_eval_from_stack_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_eval_base(vm, StackOps::FromStack, "BUND.EVAL".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_eval_from_workbech_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_eval_base(vm, StackOps::FromWorkBench, "BUND.EVAL.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_eval_file_from_stack_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_eval_file_base(vm, StackOps::FromStack, "BUND.EVAL-FILE".to_string())
 }
@@ -98,6 +101,7 @@ pub fn stdlib_bund_eval_file_from_workbench_inline(vm: &mut VM) -> Result<&mut V
     bund_eval_file_base(vm, StackOps::FromWorkBench, "BUND.EVAL-FILE.".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_eval_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund EVAL functions disabled with --noeval");
 }

@@ -19,6 +19,7 @@ pub enum StatisticsAlgo {
     HarmonicSpread,
 }
 
+#[time_graph::instrument]
 fn stats_statistics_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, salgo: StatisticsAlgo, err_prefix: String) -> Result<&mut VM, Error> {
     match statistics::get_data::get_data(vm, op.clone(), smode, err_prefix.clone()) {
         Ok(source) => {
@@ -48,9 +49,7 @@ fn stats_statistics_base(vm: &mut VM, op: StackOps, smode: statistics::SourceMod
     }
     Ok(vm)
 }
-//
-// AMEAN
-//
+
 pub fn stdlib_stats_stack_consume_amean(vm: &mut VM) -> Result<&mut VM, Error> {
     stats_statistics_base(vm, StackOps::FromStack, statistics::SourceMode::Consume, StatisticsAlgo::ArithmeticMean, "STAT.MEAN.ARITHMETICMEAN".to_string())
 }

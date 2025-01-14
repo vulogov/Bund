@@ -44,10 +44,12 @@ fn stdlib_convert_html_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Re
     return Ok(vm);
 }
 
+#[time_graph::instrument]
 pub fn stdlib_convert_from_html_stack_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_convert_html_base(vm, StackOps::FromStack, "CONVERT.FROM_HTML".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_convert_from_html_workbench_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_convert_html_base(vm, StackOps::FromWorkBench, "CONVERT.FROM_HTML.".to_string())
 }

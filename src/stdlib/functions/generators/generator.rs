@@ -6,6 +6,7 @@ use crate::stdlib::functions::generators;
 use crate::stdlib::functions::generators::{DIST, DType};
 use easy_error::{Error, bail};
 
+#[time_graph::instrument]
 pub fn stdlib_generator_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline GENERATOR");
@@ -38,6 +39,7 @@ pub fn stdlib_generator_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     }
 }
 
+#[time_graph::instrument]
 pub fn stdlib_generator_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 1 {
         bail!("Stack is too shallow for inline GENERATOR.SAMPLE");
@@ -98,6 +100,7 @@ pub fn stdlib_generator_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     }
 }
 
+#[time_graph::instrument]
 pub fn stdlib_generator_n_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline GENERATOR.SAMPLE*");

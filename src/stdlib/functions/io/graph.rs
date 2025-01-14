@@ -59,10 +59,12 @@ pub fn bund_io_graph_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Resu
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_io_graph_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_io_graph_base(vm, StackOps::FromStack, "IO.GRAPH".to_string())
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_io_graph_from_wrokbench_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     bund_io_graph_base(vm, StackOps::FromWorkBench, "IO.GRAPH.".to_string())
 }
