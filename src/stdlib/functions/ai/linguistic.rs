@@ -30,12 +30,14 @@ impl NRLanguage {
     }
 }
 
+#[time_graph::instrument]
 pub fn languages_preload() {
     log::debug!("Pre-loading languages");
     let e = LANG_DETECTOR.lock().unwrap();
     drop(e);
 }
 
+#[time_graph::instrument]
 fn detect_language(d: String) -> Result<String, Error> {
     let detector = LANG_DETECTOR.lock().unwrap();
     let detected_language = detector.d.detect_language_of(d);
@@ -55,7 +57,7 @@ impl NNEntry {
     }
 }
 
-
+#[time_graph::instrument]
 pub fn create_linguistic_classifier(vm: &mut VM, name: String, _conf: Value) -> Result<&mut VM, Error> {
     log::debug!("Create Language classifier named: {}", &name);
 
@@ -66,6 +68,7 @@ pub fn create_linguistic_classifier(vm: &mut VM, name: String, _conf: Value) -> 
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn classify_linguistic_classifier(vm: &mut VM, name: String, input: Value) -> Result<&mut VM, Error> {
     let input_text = match input.cast_string() {
         Ok(input_text) => input_text,
