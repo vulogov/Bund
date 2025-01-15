@@ -6,6 +6,7 @@ pub mod aliases;
 pub mod lambdas;
 pub mod stacks;
 pub mod bootstrap;
+pub mod models;
 
 #[derive(Debug, Clone)]
 pub enum WorldFunctions {

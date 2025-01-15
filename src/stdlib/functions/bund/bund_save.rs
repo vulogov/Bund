@@ -126,7 +126,6 @@ pub fn stdlib_bund_save_stacks(vm: &mut VM) -> Result<&mut VM, Error> {
     stdlib_bund_save_base(vm, helpers::world::WorldFunctions::Stacks)
 }
 
-#[time_graph::instrument]
 pub fn stdlib_bund_save_disabled(_vm: &mut VM) -> Result<&mut VM, Error> {
     bail!("bund SAVE functions disabled with --noio");
 }

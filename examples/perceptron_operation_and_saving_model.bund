@@ -1,0 +1,33 @@
+//
+// This example preparing and saving model for AND perceptron
+//
+
+:TEST                           // Defining the name for the model
+
+//
+// Declaring configuration for the Neural Network
+//
+config
+  :type  "perceptron" set   // This is a simple perceptron
+  :Inputs   2         set   // 2 input layers
+  :Outputs  1         set   // 1 output layer
+  :Hidden   10        set   // 10 hidden layers
+  :LRate    0.1       set   // Set the learning rate for SGD optimizer
+  :Decay    0.01      set   // Set the decay for optimizer
+  :Batch    4         set   // Batch size for training
+  :Epoch    500       set   // Number of epochs to train network for
+  :X        [               // X vector of training data
+    [ 0.0 0.0 ]
+    [ 0.0 1.0 ]
+    [ 1.0 0.0 ]
+    [ 1.0 1.0 ]
+  ]                   set
+  :Y [                      // Y vector of training data
+    [ 0.0 ]
+    [ 0.0 ]
+    [ 0.0 ]
+    [ 1.0 ]
+  ]                   set
+
+"Perceptron_For_And" save.model // And saving the model
+  "Model saved" println         // Print the nice message

@@ -45,7 +45,7 @@ pub fn load_lambdas<'a>(vm: &'a mut VM, conn: &mut Connection) -> Result<&'a mut
                     }
                     Ok(None) => break,
                     Err(err) => {
-                        log::debug!("Error getting ALIAS row: {}", err);
+                        log::debug!("Error getting LAMBDA row: {}", err);
                         break;
                     }
                 }

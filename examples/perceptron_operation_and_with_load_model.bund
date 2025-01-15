@@ -1,0 +1,27 @@
+//
+// This example calculating 1.0 AND 1.0
+// Using simple perceptron
+//
+
+"Result of 1.0 AND 1.0 is " print         // Print a nice message
+
+//
+// Loading the model and prepare model name for
+// other functions
+//
+:TEST dup dup
+  "Perceptron_For_And" load.model 
+
+//
+// Create Neural Network
+//
+neuralnetwork
+    //
+    // Feed input data for prediction
+    // Result of prediction is stored in stack as a LIST
+    //
+    [ 1.0 1.0 ] predict
+    //
+    // Take the head of the list and print it
+    //
+    car println
