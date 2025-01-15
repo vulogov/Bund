@@ -1,0 +1,8 @@
+//
+// Print 10 loremipsum strings
+//
+list 10 {
+  drop 25 string.random.lorem swap +
+} times {
+  println
+} loop
