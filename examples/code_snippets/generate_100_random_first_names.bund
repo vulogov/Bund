@@ -1,0 +1,6 @@
+//
+// Make a list with 100 random first names
+//
+list 100 {
+  drop string.random.name swap +
+} times println

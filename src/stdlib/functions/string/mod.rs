@@ -11,6 +11,7 @@ pub mod prefix_suffix;
 pub mod any_id;
 pub mod tokenize;
 pub mod grok;
+pub mod random;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     wildmatch::init_stdlib(cli);
@@ -23,4 +24,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     any_id::init_stdlib(cli);
     tokenize::init_stdlib(cli);
     grok::init_stdlib(cli);
+    random::init_stdlib(cli);
 }
