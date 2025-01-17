@@ -15,6 +15,7 @@ pub fn stdlib_bund_exit_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     let err_code_val = match vm.stack.pull() {
         Some(err_code_val) => err_code_val,
         None => {
+            log::debug!("BUND is exiting error code 0. Can not get an error code");
             process::exit(0);
         },
     };

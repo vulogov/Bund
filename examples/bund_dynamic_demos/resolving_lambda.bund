@@ -1,0 +1,43 @@
+//
+// This script demonstrates a dynamic nature of the BUND
+// where you can register, check and resolve lambda functions
+// on the fly
+//
+
+
+//
+// First, let's define and register lambda function that will take
+// two values from stack and print formatted message
+//
+:HelloWorld  {
+  "Hello World!" "Printing {0} by {1}" format println
+} register
+
+//
+// In this example, we call named lambda function directly
+// No surprises here
+//
+"calling lambda directly." HelloWorld
+
+//
+// Next, we execute lambda through lambda resolution
+//
+:HelloWorld ?lambda                       // First, we check if lambda exists and
+                                          // printing message if is not
+{
+  "Lambda HelloWorld not found" println
+}
+{
+  "resolving and calling lambda"          // Store one of the messages on the stack
+      :HelloWorld lambda=                 // Put lambda body on the stack
+  !                                       // And execute it
+} ?true*                                  // Only if function HelloWorld exists
+
+"Unregistering HelloWorld" println :HelloWorld unregister
+
+:HelloWorld ?lambda not {                 // Anter unregister, function ?lambda
+                                          // must return FALSE, but by calling ```not```
+                                          // we are making it TRUE
+  "Lambda function HelloWorld is not here anylonger" println
+} if                                      // This IF statement will print a message
+                                          // confirming that the function is unregistered
