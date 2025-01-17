@@ -7,3 +7,4 @@ Here is what's new:
 * Function ```alias=```
 * Function ```?lambda```
 * Function ```lambda=```
+* Function ```?word```

@@ -1,0 +1,30 @@
+//
+// In this example, we will create lambda function programmatically
+// in a temporary context
+//
+
+//
+// We will be creating LAMBDA in the temporary context
+// enclosed between (..)
+//
+(
+
+  "Hello World!"  // Let's put the string
+  :println        // And atom with function name we will call
+  call,           // Take string from the name and return CALL
+                  // object to the stack
+lambda*           // Create LAMBDA from the content of the stack
+:HelloWorld swap  // Put the name of the new function and re-arrange data
+register          // Register our new lambda
+
+)
+
+//
+// Then we can call our named lambda as usual
+//
+:HelloWorld dup ?lambda {
+  "Something doesn't work. Lambda {0} did not exist" format println
+} {
+  "Calling: HelloWorld" println
+  HelloWorld
+} ?true*

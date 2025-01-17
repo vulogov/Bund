@@ -1,0 +1,38 @@
+//
+// Checking if word is callable
+//
+
+//
+// Just to make a point, let's register named lambda FourtyTwo
+//
+:FourtyTwo {
+  42
+} register
+
+//
+// Then form a list of the names, that we are hoping
+// the name of the WORD in the BUND universe
+//
+[
+  :println          // Spoiler: it is a STDLIB function
+  :version          // Spoiler: it is an ALIAS
+  "FourtyTwo"       // Spoiler: it is a named LAMBDA
+  "FourtyThree"     // Spoiler: I do not know what it is :)
+] {
+  dup               // We duplicate name, that is be used in ```format```
+  ?word             // Testing if this is a WORD
+  //
+  // This is ELSE branch and we are printing this message if NAME is not
+  // corresponding to the WORD
+  //
+  {
+    "{0} is not an ALIAS, or STDLIB FUNCTION OR NAMED LAMBDA. It is not a WORD"
+        format println
+  }
+  //
+  // This is THEN branch. We are printin a message about NAME->WORD succesful association
+  //
+  {
+    "{0} is a WORD" format println
+  } ?true*            // If this is a WORD?
+} loop                // LOOP over list

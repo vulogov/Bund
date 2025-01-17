@@ -16,6 +16,7 @@ lazy_static! {
     };
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_args(vm: &mut VM) -> Result<&mut VM, Error> {
     let args = match ARGS.lock() {
         Ok(args) => args,
@@ -34,6 +35,7 @@ pub fn stdlib_bund_args(vm: &mut VM) -> Result<&mut VM, Error> {
     Ok(vm)
 }
 
+#[time_graph::instrument]
 pub fn stdlib_bund_args_parse(vm: &mut VM) -> Result<&mut VM, Error> {
     let args = match ARGS.lock() {
         Ok(args) => args,
