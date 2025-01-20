@@ -22,3 +22,24 @@
   :then { "Example 3: You IF conditional returns: TRUE" println } set
   :else { "Example 3: You IF conditional returns: FALSE" println } set
 !
+
+"Example 4: Your TRY/EXCEPT conditional" println
+?try
+  :try {
+        "Raising an exception" println
+        "Example 4: Exception" raise
+  } set
+  :except {
+        "Example 4: exception handler engaged for '{0}'" format println
+  } set
+!
+
+"Example 5: Your TRY/EXCEPT conditional without exception" println
+?try
+  :try {
+        41 1 + "Innocent computation of {0}" format println
+  } set
+  :except {
+        "Example 5: exception handler engaged for '{0}'" format println
+  } set
+!

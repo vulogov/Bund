@@ -10,3 +10,4 @@ Here is what's new:
 * Function ```?word```
 * Function ```lambda*```
 * Introducing ```?ifthenelse``` conditional
+* Introducing ```?try``` conditional
