@@ -8,3 +8,5 @@ Here is what's new:
 * Function ```?lambda```
 * Function ```lambda=```
 * Function ```?word```
+* Function ```lambda*```
+* Introducing ```?ifthenelse``` conditional

@@ -1,0 +1,62 @@
+//
+// In this snippet I will demonstrate all func functions
+// that could be used to control logic flow of application
+// execution
+//
+
+"Example 1: Your usual IF example" println
+true {
+  "Example 1: this code is executed because TRUE is on the stack" println
+} if
+
+"Example 2: Your usual IF example where FALSE turned TRUE" println
+false not {
+  "Example 2: this code is executed because FALSE turned into TRUE on the stack" println
+} if
+
+"Example 3: Your usual IF/THEN/ELSE" println
+true {
+  "Example 3: this code is not executed because of TRUE" println
+} {
+  "Example 3: this code is executed because of TRUE" println
+} ?true*
+
+"Example 4: Your usual IF/THEN/ELSE" println
+false {
+  "Example 4: this code is executed because of FALSE" println
+} {
+  "Example 4: this code is not executed because of not TRUE" println
+} ?true*
+
+"Example 5: Your first {} times loop" println
+0 . 42 {
+  drop 1 +.
+} times
+take "Example 5: loop has been executed {0} times" format println
+
+"Example 6: Your {} while loop" println
+0 . true {
+  1 +. take dup . 42 >
+} while
+take "Example 6: loop has been executed {0} times" format println
+
+"Example 7: Your {} loop loop" println
+"" . [ "Hello " "world " "!" ] {
+  +.
+} loop
+take "Example 7: loop makes {0}" format println
+
+"Example 9: Your {} map loop" println
+config
+  "X"    0.0       set
+  "Step" 1.0       set
+  "N"    10        set
+"Generated sequence is: " print seq dup println
+{ math.sin } map
+"Example 9: Calculating SIN table for 10 generated values {0}" format println
+
+"Example 10: Your default conditional" println
+? :run {
+  "Hello world!"
+} set !
+"Example 10: You simple conditional returns: {0}" format println

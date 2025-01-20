@@ -1,0 +1,24 @@
+//
+// In this snippet I will demonstrate all conditional
+// execution
+//
+
+"Example 1: Your default conditional" println
+? :run {
+  "Hello world!"
+} set !
+"Example 1: You simple conditional returns: {0}" format println
+
+"Example 2: Your IF/THEN/ELSE conditional" println
+?ifthenelse
+  :if { "Example 2: IF returns TRUE" println true } set
+  :then { "Example 2: You IF conditional returns: TRUE" println } set
+  :else { "Example 2: You IF conditional returns: FALSE" println } set
+!
+
+"Example 3: Your IF/THEN/ELSE conditional" println
+?ifthenelse
+  :if { "Example 3: IF returns FALSE" println false } set
+  :then { "Example 3: You IF conditional returns: TRUE" println } set
+  :else { "Example 3: You IF conditional returns: FALSE" println } set
+!
