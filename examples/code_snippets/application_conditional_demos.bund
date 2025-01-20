@@ -3,12 +3,20 @@
 // execution
 //
 
+//
+// Upon execution, this conditional runs lambda function
+// registered on :run key of the conditional
+//
 "Example 1: Your default conditional" println
 ? :run {
   "Hello world!"
 } set !
 "Example 1: You simple conditional returns: {0}" format println
 
+//
+// This conditional act similar to the ?true* function, but
+// aestetically different
+//
 "Example 2: Your IF/THEN/ELSE conditional" println
 ?ifthenelse
   :if { "Example 2: IF returns TRUE" println true } set
@@ -23,6 +31,10 @@
   :else { "Example 3: You IF conditional returns: FALSE" println } set
 !
 
+//
+// This is a classin try {} except {} conditional. If :try lambda function throws
+// an exception, and conditional executes lambda function registered on :except key
+//
 "Example 4: Your TRY/EXCEPT conditional" println
 ?try
   :try {
