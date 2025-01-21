@@ -7,6 +7,7 @@ use crate::stdlib::helpers;
 use easy_error::{Error};
 
 use uuid::Uuid;
+use ulid::Ulid;
 
 #[time_graph::instrument]
 pub fn stdlib_uuid_inline(vm: &mut VM) -> Result<&mut VM, Error> {
@@ -14,6 +15,12 @@ pub fn stdlib_uuid_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     Ok(vm)
 }
 
+#[time_graph::instrument]
+pub fn stdlib_ulid_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    let ulid = Ulid::new();
+    vm.stack.push(Value::from_string(ulid.to_string()));
+    Ok(vm)
+}
 
 
 
@@ -26,6 +33,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         }
     };
     let _ = bc.vm.register_inline("id.uuid".to_string(), stdlib_uuid_inline);
-
+    let _ = bc.vm.register_inline("id.ulid".to_string(), stdlib_ulid_inline);
     drop(bc);
 }
