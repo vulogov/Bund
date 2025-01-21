@@ -5,6 +5,7 @@ use rust_dynamic::value::Value;
 use crate::cmd;
 use crate::stdlib::helpers;
 use rand::thread_rng;
+use passwords::PasswordGenerator;
 use easy_error::{Error, bail};
 
 #[derive(Debug, Clone)]
@@ -16,6 +17,21 @@ pub enum StringRandomAlgorithm {
     Phone,
     IPv4,
     Word,
+}
+
+#[time_graph::instrument]
+fn string_password_generator() -> String {
+    let pg = PasswordGenerator {
+       length: 16,
+       numbers: true,
+       lowercase_letters: true,
+       uppercase_letters: true,
+       symbols: true,
+       spaces: false,
+       exclude_similar_characters: true,
+       strict: true,
+   };
+   pg.generate_one().unwrap()
 }
 
 #[time_graph::instrument]
@@ -58,7 +74,7 @@ pub fn string_random_base(vm: &mut VM, op: StackOps, rop: StringRandomAlgorithm,
         StringRandomAlgorithm::Name => Value::from_string(fakeit::name::first()),
         StringRandomAlgorithm::LastName => Value::from_string(fakeit::name::last()),
         StringRandomAlgorithm::FullName => Value::from_string(fakeit::name::full()),
-        StringRandomAlgorithm::Password => Value::from_string(fakeit::password::generate(true,true,true,12)),
+        StringRandomAlgorithm::Password => Value::from_string(string_password_generator()),
         StringRandomAlgorithm::Phone => Value::from_string(fakeit::contact::phone_formatted()),
         StringRandomAlgorithm::IPv4 => Value::from_string(fakeit::internet::ipv4_address()),
         StringRandomAlgorithm::Word => Value::from_string(fakeit::words::word()),
