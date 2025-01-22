@@ -1,0 +1,22 @@
+//
+// Generate ascending sequence and
+//
+
+//
+// First, create a sequence
+//
+config
+  "type"  "seq.descending" set
+  "X"    100.0       set
+  "Step" 1.       set
+  "N"    15         set
+seq dup
+"Before sorting" println {
+  "N(unsorted) = {0}" format println
+} loop
+//
+// Then sort it
+//
+"After sorting" println sort {
+  "N = {0}" format println
+} loop
