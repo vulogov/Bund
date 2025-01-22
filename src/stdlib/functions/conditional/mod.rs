@@ -8,6 +8,8 @@ pub mod raise;
 
 pub mod conditional_ifthenelse;
 pub mod conditional_tryexcept;
+pub mod conditional_error;
+
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut cf = CF.lock().unwrap();
@@ -23,6 +25,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     };
     let _ = bc.vm.register_inline("?ifthenelse".to_string(), conditional_ifthenelse::stdlib_conditional_ifthenelse);
     let _ = bc.vm.register_inline("?try".to_string(), conditional_tryexcept::stdlib_conditional_tryexcept);
+    let _ = bc.vm.register_inline("?error".to_string(), conditional_error::stdlib_conditional_error);
     let _ = bc.vm.register_inline("raise".to_string(), raise::stdlib_conditional_raise);
 
     drop(bc);

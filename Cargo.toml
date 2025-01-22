@@ -74,7 +74,7 @@ lipsum = "0.9.1"
 rusty_math = "0.7.0"
 ulid = "1.1.4"
 passwords = "3.1.16"
-algos = { version="0.6.*", repository="https://github.com/Brad-Edwards/algos.git" }
+algos = { version="0.6.*", git="https://github.com/Brad-Edwards/algos.git" }
 
 
 [dependencies.rusqlite]

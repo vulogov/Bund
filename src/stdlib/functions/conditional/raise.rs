@@ -1,6 +1,5 @@
 extern crate log;
 use rust_multistackvm::multistackvm::{VM};
-use rust_dynamic::value::Value;
 use easy_error::{Error, bail};
 
 pub fn stdlib_conditional_raise(vm: &mut VM) -> Result<&mut VM, Error> {
@@ -14,6 +13,5 @@ pub fn stdlib_conditional_raise(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => "No message for raise".to_string(),
     };
-    vm.stack.push(Value::from_string(msg.clone()));
     bail!("{}", msg)
 }

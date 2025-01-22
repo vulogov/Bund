@@ -1,0 +1,36 @@
+//
+// Demonstration of try/except conditional
+//
+
+//
+// First, we are creating ?try conditional
+//
+?try
+  //
+  // This is a TRY block. It will be executed and if there
+  // is an error, EXCEPT block will be executed
+  //
+  :try {
+    "I am raising an exception. Because I can" raise
+  } set
+  //
+  // This is EXCEPT block. If there is an error, TRY block will pass
+  // ?error conditional in the stack
+  //
+  :except {
+    dup :context get "I AM IN EXCEPT BLOCK: {0}" format println
+    :associated get !
+  } set
+  //
+  // Associated lambda. Will be passed with ?error conditional
+  //
+  :associated {
+    "I am associated lambda" println
+  } set
+  //
+  // Recovery lambda. Will be executed after except
+  //
+  :recovery {
+    "I am a RECOVERY lambda" println
+  } set
+!
