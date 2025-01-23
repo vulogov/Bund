@@ -35,6 +35,7 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
             err_res = err_res.set("type", Value::from_string("error"));
             err_res = err_res.set("associated", associated_lambda);
             err_res = err_res.set("context", Value::from_string(err.ctx));
+            log::debug!("TRY lambda storing error conditional to the stack");
             vm.stack.push(err_res);
             match vm.lambda_eval(except_lambda) {
                 Ok(_) => {},

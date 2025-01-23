@@ -15,6 +15,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let mut cf = CF.lock().unwrap();
     cf.insert("ifthenelse".to_string(), conditional_ifthenelse::conditional_run);
     cf.insert("tryexcept".to_string(), conditional_tryexcept::conditional_run);
+    cf.insert("error".to_string(), conditional_error::conditional_run);
     drop(cf);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,

@@ -3,6 +3,8 @@ use std::env;
 use time_graph;
 use crate::stdlib::BUND;
 use crate::stdlib::{init_stdlib};
+use lazy_static::lazy_static;
+use std::sync::Mutex;
 use clap::{Parser, Subcommand, Args};
 
 pub mod setloglevel;
@@ -18,11 +20,20 @@ pub mod bund_display_banner;
 pub mod bund_bootstrap;
 pub mod bund_bus;
 
+lazy_static! {
+    pub static ref CLI: Mutex<Cli> = {
+        let e: Mutex<Cli> = Mutex::new(Cli::parse());
+        e
+    };
+}
 
 pub fn main() {
     let cli = Cli::parse();
     setloglevel::setloglevel(&cli);
     init_stdlib(&cli);
+    let init_cli = CLI.lock().unwrap();
+    log::debug!("Initialize global CLI");
+    drop(init_cli);
     log::debug!("BUND interpterer initialized ...");
     match &cli.stack {
         Some(initial_stack) => {

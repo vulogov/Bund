@@ -18,7 +18,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
         }
     };
     if cli.debugger {
-        log::warn!("Sropping into DEBUGGER");
+        log::warn!("Dropping into DEBUGGER");
         match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
             Ok(_) => {
 
@@ -44,7 +44,7 @@ pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
                 }
             }
             Err(err) => {
-                helpers::print_error::print_error(err, cli);
+                helpers::print_error::print_error_with_vm(&mut bc.vm, err, cli);
                 if cli.debug_shell {
                     let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
                 }
@@ -65,7 +65,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         }
     };
     if cli.debugger {
-        log::warn!("Sropping into DEBUGGER");
+        log::warn!("Dropping into DEBUGGER");
         match debug_fun::debug_debug::bund_debugger(&mut bc.vm, snippet) {
             Ok(_) => {
 
@@ -82,7 +82,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         match bc.eval(code) {
             Ok(_) => {}
             Err(err) => {
-                helpers::print_error::print_error(err, cli);
+                helpers::print_error::print_error_with_vm(&mut bc.vm, err, cli);
                 if cli.debug_shell {
                     let _ = debug_fun::debug_shell::debug_shell(&mut bc.deref_mut().vm);
                 }
@@ -96,10 +96,13 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
 pub fn run_snippet(snippet: String) {
     log::debug!("Running snippet: {}", &snippet);
     let code = format!("{}\n", &snippet);
+    let the_arg = cmd::CLI.lock().unwrap();
+    let cli = the_arg.clone();
+    drop(the_arg);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
         Err(err) => {
-            helpers::print_error::print_error_from_str_plain(format!("{}", err));
+            helpers::print_error::print_error_from_str(format!("{}", err), &cli);
             return;
         }
     };
@@ -107,7 +110,7 @@ pub fn run_snippet(snippet: String) {
     match bc.eval(code) {
         Ok(_) => {}
         Err(err) => {
-            helpers::print_error::print_error_plain(err);
+            helpers::print_error::print_error_with_vm(&mut bc.vm, err, &cli);
         }
     }
     drop(bc);
