@@ -9,6 +9,7 @@ pub mod raise;
 pub mod conditional_ifthenelse;
 pub mod conditional_tryexcept;
 pub mod conditional_error;
+pub mod conditional_ctx;
 
 
 pub fn init_stdlib(cli: &cmd::Cli) {
@@ -16,6 +17,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     cf.insert("ifthenelse".to_string(), conditional_ifthenelse::conditional_run);
     cf.insert("tryexcept".to_string(), conditional_tryexcept::conditional_run);
     cf.insert("error".to_string(), conditional_error::conditional_run);
+    cf.insert("context".to_string(), conditional_ctx::conditional_run);
     drop(cf);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
@@ -27,6 +29,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("?ifthenelse".to_string(), conditional_ifthenelse::stdlib_conditional_ifthenelse);
     let _ = bc.vm.register_inline("?try".to_string(), conditional_tryexcept::stdlib_conditional_tryexcept);
     let _ = bc.vm.register_inline("?error".to_string(), conditional_error::stdlib_conditional_error);
+    let _ = bc.vm.register_inline("context".to_string(), conditional_ctx::stdlib_conditional_ctx);
     let _ = bc.vm.register_inline("raise".to_string(), raise::stdlib_conditional_raise);
 
     drop(bc);

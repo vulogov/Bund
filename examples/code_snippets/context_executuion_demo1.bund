@@ -1,0 +1,60 @@
+//
+// This is demonstration of the context execution
+//
+
+//
+// We will call function with name "call" in the context
+//
+:call
+  //
+  // Then we do create execution context with name "TEST"
+  // all execution will be in the stack named TEST
+  //
+  :TEST context
+    //
+    // This is precondition lambda:
+    //      will be executed before main call
+    //
+    :call.pre {
+      "I am in pre-condition" println
+      "Hello "
+    } ,
+    //
+    // This is main entry lambda:
+    //      will be as the main body call
+    //
+    :call {
+      "I am in the main body of the call" println
+      "world"
+    } ,
+    //
+    // This is postcondition lambda:
+    //      will be executed after main call
+    //
+    :call.post {
+      "I am in postcondition" println
+      swap + "{0} !" format
+    } ,   // do not forget ether 'set' or ',' this will assign data into a context
+  //
+  // Then execute context
+  //
+  !
+
+//
+// Let's go to the execution context, the string "Hello world !" gotta be here
+//
+@TEST
+  //
+  // Check the distance between expected and actual data
+  //
+  dup "Hello world !" string.distance.levenshtein 0 == {
+    //
+    // This I print in case of failure
+    //
+    "In TEST we do not expect to have: {0}" format println
+  } {
+    //
+    // This I print if strings matches
+    //
+    "In TEST we do have: {0}" format println
+  } ?true*
