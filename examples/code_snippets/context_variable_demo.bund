@@ -1,0 +1,9 @@
+//
+// This is demonstration of context variables
+//
+
+:Answer 42 var
+
+:Answer var? 42 == {
+  "Yes, the Answer is 42!" println
+} if
