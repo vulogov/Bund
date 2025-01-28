@@ -11,6 +11,7 @@ impl DEntry {
         Self {
             id:     DType::Periodic,
             nn:     DVal::Periodic(d),
+            skip:   0,
         }
     }
 }
@@ -35,9 +36,9 @@ pub fn create_generator(vm: &mut VM, name: String, conf: Value) -> Result<&mut V
 }
 
 pub fn generator_sample(vm: &mut VM, name: String) -> Result<&mut VM, Error> {
-    let g = DIST.lock().unwrap();
+    let mut g = DIST.lock().unwrap();
     if g.contains_key(&name) {
-        let gen = match g.get(&name) {
+        let gen = match g.get_mut(&name) {
             Some(gen) => gen,
             None => {
                 drop(g);
@@ -45,11 +46,12 @@ pub fn generator_sample(vm: &mut VM, name: String) -> Result<&mut VM, Error> {
             },
         };
         match &gen.nn {
-            DVal::Periodic(mut n) => {
-                let val = match n.next() {
+            DVal::Periodic(n) => {
+                let val = match n.skip(gen.skip as usize).next() {
                     Some(val) => val,
                     None => bail!("Failed to sample next periodic value"),
                 };
+                gen.skip += 1;
                 vm.stack.push(Value::from_float(val));
             }
             _ => {
@@ -66,9 +68,9 @@ pub fn generator_sample(vm: &mut VM, name: String) -> Result<&mut VM, Error> {
 }
 
 pub fn generator_n_sample(vm: &mut VM, name: String, n_elem: i64) -> Result<&mut VM, Error> {
-    let g = DIST.lock().unwrap();
+    let mut g = DIST.lock().unwrap();
     if g.contains_key(&name) {
-        let gen = match g.get(&name) {
+        let gen = match g.get_mut(&name) {
             Some(gen) => gen,
             None => {
                 drop(g);
@@ -76,16 +78,18 @@ pub fn generator_n_sample(vm: &mut VM, name: String, n_elem: i64) -> Result<&mut
             },
         };
         match &gen.nn {
-            DVal::Periodic(mut n) => {
+            DVal::Periodic(n) => {
                 let mut res = Value::list();
+                let mut i = n.skip(gen.skip as usize);
                 for _ in 0..n_elem {
-                    let val = match n.next() {
+                    let val = match i.next() {
                         Some(val) => val,
                         None => bail!("Failed to sample next periodic value"),
                     };
+                    gen.skip += 1;
                     res = res.push(Value::from_float(val));
                 }
-
+                gen.skip += 1;
                 vm.stack.push(res);
             }
             _ => {

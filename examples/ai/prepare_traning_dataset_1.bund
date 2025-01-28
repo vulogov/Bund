@@ -1,0 +1,21 @@
+@main
+
+list .
+
+:DATASET1 config
+  :type     "sawtooth"  set
+  :Period   10          set
+  :High     1.0         set
+  :Low      0.0         set
+  :Delay    1           set
+
+generator
+
+20 {
+  :DATASET1 16 generator.sample* +.
+} times
+
+@X
+take dup println
+
+@main

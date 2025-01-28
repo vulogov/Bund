@@ -6,3 +6,4 @@ Here is what's new:
 * Function ```system.ip``` pushing local IPv4 address to stack
 * Function ```system.ipv6``` pushing local IPv6 address to stack
 * Improve error messages
+* Generator for quare waves

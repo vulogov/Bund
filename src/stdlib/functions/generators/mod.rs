@@ -7,7 +7,7 @@ use lazy_static::lazy_static;
 use crate::stdlib::BUND;
 
 use statrs::distribution::{Normal, Uniform, LogNormal};
-use statrs::generate::{InfiniteSawtooth, InfinitePeriodic, InfiniteSinusoidal};
+use statrs::generate::{InfiniteSawtooth, InfinitePeriodic, InfiniteSinusoidal, InfiniteSquare};
 
 pub mod generator;
 pub mod normal;
@@ -16,6 +16,7 @@ pub mod lognormal;
 pub mod sawtooth;
 pub mod periodic;
 pub mod sinusoidal;
+pub mod square;
 
 #[derive(Clone, Debug)]
 pub enum DType {
@@ -23,6 +24,7 @@ pub enum DType {
     Uniform,
     LogNormal,
     Sawtooth,
+    Square,
     Periodic,
     Sinusoidal,
     Binomial,
@@ -36,12 +38,14 @@ pub enum DVal {
     Sawtooth(InfiniteSawtooth),
     Periodic(InfinitePeriodic),
     Sinusoidal(InfiniteSinusoidal),
+    Square(InfiniteSquare),
 }
 
 
 pub struct DEntry {
     pub id:     DType,
     pub nn:     DVal,
+    pub skip:   i64,
 }
 
 lazy_static! {

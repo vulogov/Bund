@@ -12,6 +12,7 @@ impl DEntry {
         Self {
             id:     DType::LogNormal,
             nn:     DVal::LogNormal(d),
+            skip:   0,
         }
     }
 }

@@ -29,6 +29,7 @@ pub fn stdlib_generator_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                 "sawtooth" => generators::sawtooth::create_generator(vm, name, conf),
                 "periodic" => generators::periodic::create_generator(vm, name, conf),
                 "sinusoidal" => generators::sinusoidal::create_generator(vm, name, conf),
+                "square" => generators::square::create_generator(vm, name, conf),
                 _ => bail!("Unknown GENERATOR type: {}", &g_type),
             };
             return res;
@@ -84,6 +85,10 @@ pub fn stdlib_generator_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                         drop(g);
                         return generators::sinusoidal::generator_sample(vm, name);
                     }
+                    DType::Square => {
+                        drop(g);
+                        return generators::square::generator_sample(vm, name);
+                    }
                     _ => {
                         drop(g);
                         bail!("GENERATOR.SAMPLE generator having an invalid type: {}", &name);
@@ -107,7 +112,7 @@ pub fn stdlib_generator_n_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     }
     let n_value = match vm.stack.pull() {
         Some(n_value) => n_value,
-        None => bail!("GENERATOR.SAMPLE returns: NO DATA #2"),
+        None => bail!("GENERATOR.SAMPLE* returns: NO DATA #2"),
     };
     let n = match n_value.cast_int() {
         Ok(name) => name,
@@ -153,6 +158,10 @@ pub fn stdlib_generator_n_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                         drop(g);
                         return generators::sinusoidal::generator_n_sample(vm, name, n);
                     }
+                    DType::Square => {
+                        drop(g);
+                        return generators::square::generator_n_sample(vm, name, n);
+                    }
                     _ => {
                         drop(g);
                         bail!("GENERATOR.SAMPLE* generator having an invalid type: {}", &name);
@@ -164,7 +173,7 @@ pub fn stdlib_generator_n_sample_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             }
         }
         None => {
-            bail!("GENERATOR.SAMPLE returns: NO DATA #1");
+            bail!("GENERATOR.SAMPLE* returns: NO DATA #1");
         }
     }
 }

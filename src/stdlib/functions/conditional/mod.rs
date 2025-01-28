@@ -10,6 +10,7 @@ pub mod conditional_ifthenelse;
 pub mod conditional_tryexcept;
 pub mod conditional_error;
 pub mod conditional_ctx;
+pub mod conditional_curry;
 
 
 pub fn init_stdlib(cli: &cmd::Cli) {
@@ -18,6 +19,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     cf.insert("tryexcept".to_string(), conditional_tryexcept::conditional_run);
     cf.insert("error".to_string(), conditional_error::conditional_run);
     cf.insert("context".to_string(), conditional_ctx::conditional_run);
+    cf.insert("curry".to_string(), conditional_curry::conditional_run);
     drop(cf);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,

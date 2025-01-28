@@ -12,6 +12,7 @@ impl DEntry {
         Self {
             id:     DType::Uniform,
             nn:     DVal::Uniform(d),
+            skip:   0,
         }
     }
 }
