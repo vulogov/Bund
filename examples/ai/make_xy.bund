@@ -1,0 +1,32 @@
+//
+// Switching to namespace X, for our X data for perceptron
+//
+@X
+  list .      // Set an empty list in WORKBENCH
+  {
+    +++.      // Running a loop for a training dataset #1
+  } loop
+  {
+    +++.      // Running a loop for a training dataset #2
+  } loop
+  take        // Bringing from WORKBENCH X dataset
+//
+// Switching to namespace Y, for our Y data for perceptron
+//
+@Y
+  list .      // Set an empty list for Y in workbench
+  {
+    +++.      // Running a loop for a training dataset #1
+  } loop
+  {
+    +++.
+  } loop      // Running a loop for a training dataset #1
+  //
+  // Our Y data is in WORKBENCH
+  //
+//
+// Switching to namespace X, where is X data for perceptron
+//
+@X
+  .           // Sending X dataset to a WORKBENCH
+@main         // And switching back to main namespace

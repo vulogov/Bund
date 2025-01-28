@@ -1,0 +1,47 @@
+@main
+
+  "Preparing SQUARE training data" println
+  //
+  // Sending empty list for X data to a WORKBENCH
+  //
+  list .
+
+  //
+  // Create SQUARE generator
+  //
+  :DATASET2 config
+    :type     "square"    set
+    :High     1.0         set
+    :DurationHigh 3       set
+    :DurationLow  3       set
+    :Low      0.0         set
+    :Delay    3           set
+
+  generator
+
+  //
+  // Create 20 training datasets from generator
+  // Each dataset is created for 16 inputs
+  // Append datasets to the list in WORKBENCH
+  //
+  20 {
+    drop :DATASET2 16 generator.sample* +++.
+  } times
+
+  //
+  // Same approach is used to properly allocate X and Y dataset in
+  // respective namespaces
+  //
+
+  @X
+    take
+
+  @main
+    list .
+    20 {
+      drop [ 0.0 1.0 ] +++.     // Make a note, that Y vector is
+                                // made for SQUARE output
+    } times
+
+  @Y
+    take

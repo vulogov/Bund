@@ -1,0 +1,24 @@
+//
+// This is main script
+//
+
+//
+// Generate training data from SAWTOOTH generator
+//
+cwd "file:///{a}/examples/ai/prepare_traning_dataset_1.bund" format use
+//
+// Generate training data from SQUARE generator
+//
+cwd "file:///{a}/examples/ai/prepare_traning_dataset_2.bund" format use
+//
+// Combining X and Y training data into WORKBENCH
+//
+cwd "file:///{a}/examples/ai/make_xy.bund" format use
+//
+// Creating and training perceptron
+//
+cwd "file:///{a}/examples/ai/make_perceptron.bund" format use
+//
+// Running prediction and printing outcome
+//
+cwd "file:///{a}/examples/ai/predict_from_gen.bund" format use

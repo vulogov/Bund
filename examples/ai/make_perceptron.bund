@@ -1,0 +1,24 @@
+@main
+
+"Making and training perceptron" println
+
+//
+// Set the name of the perceptron in stack
+//
+:TEST dup dup
+
+  //
+  // Creating 1D perceptron with 16 inputs and 2 outputs
+  //
+  config
+    :type  "perceptron" set   // This is a simple perceptron
+    :Inputs   16        set   // 16 input layers
+    :Outputs  2         set   // 2 output layer
+    :Hidden   10        set   // 160 hidden layers
+    :LRate    0.1       set   // Set the learning rate for SGD optimizer
+    :Decay    0.01      set   // Set the decay for optimizer
+    :Batch    4         set   // Batch size for training
+    :Epoch    500       set   // Number of epochs to train network for
+    :X        take      set   // Taking X dataset from WORKBENCH
+    :Y        take      set   // Taking Y dataset from WORKBENCH
+  neuralnetwork

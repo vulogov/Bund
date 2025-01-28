@@ -1,21 +1,49 @@
 @main
+  "Preparing SAWTOOTH training data" println
 
-list .
+  //
+  // Sending empty list for X data to a WORKBENCH
+  //
+  list .
 
-:DATASET1 config
-  :type     "sawtooth"  set
-  :Period   10          set
-  :High     1.0         set
-  :Low      0.0         set
-  :Delay    1           set
+  //
+  // Create SAWTOOTH generator
+  //
+  :DATASET1 config
+    :type     "sawtooth"  set
+    :Period   10          set
+    :High     1.0         set
+    :Low      0.0         set
+    :Delay    1           set
 
-generator
+  generator
 
-20 {
-  :DATASET1 16 generator.sample* +.
-} times
+  //
+  // Create 20 training datasets from generator
+  // Each dataset is created for 16 inputs
+  // Append datasets to the list in WORKBENCH
+  //
+  20 {
+    drop :DATASET1 16 generator.sample* +++.
+  } times
 
 @X
-take dup println
+  //
+  // Switching to namespace X, and taking prepared data from WORKBENCH
+  //
+  take
 
+//
+// Switching to namespace main and preparing Y dataset
+//
 @main
+  list .
+  20 {
+    drop [ 1.0 0.0 ] +++.   // Prepare Y dataset
+  } times
+
+@Y
+  //
+  // Switching to namespace Y, and taking prepared data from WORKBENCH
+  //
+  take

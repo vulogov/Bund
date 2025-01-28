@@ -1,0 +1,23 @@
+"Taking data sample from SAWTOOTH generator" println
+//
+// Generate sample for prediction
+//
+:DATASET1 16 generator.sample*
+  //
+  // Predicting and unfolding outcome in stack
+  //
+  predict unfold
+"Chances that provided sample is close to SQUARE is {a} " format println
+"Chances that provided sample is close to SAWTOOTH is {a} " format println
+
+"Taking data sample from SQUARE generator" println
+//
+// Generate sample for prediction
+//
+:DATASET2 16 generator.sample*
+  //
+  // Predicting and unfolding outcome in stack
+  //
+  predict unfold
+"Chances that provided sample is close to SQUARE is {a} " format println
+"Chances that provided sample is close to SAWTOOTH is {a} " format println
