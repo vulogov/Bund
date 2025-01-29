@@ -1,0 +1,53 @@
+//
+// This is demonstration of the context execution
+//
+
+//
+// Make divisor in stack @TEST
+//
+@TEST
+0
+
+//
+// Go back to @main context
+//
+@main
+
+//
+// We will call function with name "call" in the context
+//
+:call
+  //
+  // Then we do create execution context with name "TEST"
+  // all execution will be in the stack named TEST
+  //
+  :TEST context
+    //
+    // This is precondition lambda:
+    //      will be executed before main call
+    //
+    :call.pre {
+      dup 0 == {
+        "I detected a 0 as a divisor and I am fixing the problem by turning divisor to 1"
+          println
+        drop 1
+      } if
+    } ,
+    //
+    // This is main entry lambda:
+    //      will be as the main body call
+    //
+    :call {
+      1 /
+    } ,
+    //
+    // This is postcondition lambda:
+    //      will be executed after main call
+    //
+    :call.post {
+      "The result = {0}" format println
+    } ,   // do not forget ether 'set' or ',' this will assign data into a context
+  //
+  // Then execute context
+  //
+  !

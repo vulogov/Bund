@@ -1,0 +1,28 @@
+//
+// Demonstration of try/except conditional with 0 1 /
+//
+
+//
+// First, we are creating ?try conditional
+//
+
+//
+// Put some data to the stack, for a demonstration of stack display
+//
+0
+?try
+  //
+  // In the TRY block we will divide and divisor will be placed
+  // outside of TRY block
+  //
+  :try {
+     1 /
+  } set
+  //
+  // This is EXCEPT block. If there is an error, TRY block will pass
+  // ?error conditional in the stack
+  //
+  :except {
+    !                       // Just executing the ERROR conditional that in the stack
+  } set
+!
