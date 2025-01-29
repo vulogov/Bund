@@ -1,9 +1,10 @@
 //
 // This is demonstration of the context execution
+// where precondition controls the data for the main call
 //
 
 //
-// Make divisor in stack @TEST
+// Store divisor in stack @TEST
 //
 @TEST
 0
@@ -38,7 +39,7 @@
     //      will be as the main body call
     //
     :call {
-      1 /
+      42 /
     } ,
     //
     // This is postcondition lambda:
