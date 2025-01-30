@@ -76,6 +76,8 @@ ulid = "1.1.4"
 passwords = "3.1.16"
 algos = { version="0.6.*", git="https://github.com/Brad-Edwards/algos.git" }
 local-ip-address = "0.6.3"
+sys-locale = "0.3.2"
+leon = "3.0.2"
 
 
 [dependencies.rusqlite]

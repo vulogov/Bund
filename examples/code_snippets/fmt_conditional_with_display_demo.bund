@@ -1,0 +1,14 @@
+3.14
+:greeting
+fmt
+  :greeting
+    "Hello somebody! Answer is {answer} and 𝜋={pi}"
+    set
+  "greeting.en-US"
+    "Hello World! Here is the {answer} and 𝜋 is {pi}"
+    set
+  "greeting.ru-RU"
+    "Привет Мир! В котором ответ {answer} и 𝜋 равно {pi}"
+    set
+  :answer 42 set
+display
