@@ -33,6 +33,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("?try".to_string(), conditional_tryexcept::stdlib_conditional_tryexcept);
     let _ = bc.vm.register_inline("?error".to_string(), conditional_error::stdlib_conditional_error);
     let _ = bc.vm.register_inline("context".to_string(), conditional_ctx::stdlib_conditional_ctx);
+    let _ = bc.vm.register_inline("curry".to_string(), conditional_curry::stdlib_conditional_curry);
     let _ = bc.vm.register_inline("fmt".to_string(), conditional_fmt::stdlib_conditional_fmt);
     let _ = bc.vm.register_inline("raise".to_string(), raise::stdlib_conditional_raise);
 

@@ -8,3 +8,4 @@ Here is what's new:
 * Improve error messages
 * Generator for square waves
 * fmt conditional - improved print with locale support
+* curry conditional - You can create curry functions

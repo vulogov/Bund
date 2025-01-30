@@ -1,0 +1,25 @@
+//
+// Let's create a curry function that will be known
+// as "greeting"
+//
+:greeting curry
+  //
+  // Upon calling those values will be placed in stack
+  //
+  :data [
+    "world "
+    "!"
+  ] set
+  //
+  // Here is a maon body of curry function
+  //
+  :lambda { + swap + println } set
+//
+// Executing definition of curry function
+// will create a new named lambda function on-the-fly
+//
+!
+//
+// We can call curry functions as any other named lambdas
+//
+"Hello " greeting
