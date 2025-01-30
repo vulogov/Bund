@@ -1,6 +1,6 @@
 [package]
 name = "bund"
-version = "0.11.0"
+version = "0.12.0"
 edition = "2021"
 description = "Interpreter and CLI for a Virtual Machine for BUND programming language"
 license-file = "LICENSE"
