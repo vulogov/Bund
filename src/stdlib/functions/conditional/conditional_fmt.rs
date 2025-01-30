@@ -11,6 +11,10 @@ fn render_template(vm: &mut VM, fmt_value: Value, value: Value) -> Result<String
         Ok(str_tpl) => str_tpl,
         Err(err) => bail!("FMT.STR error casting template: {}", err),
     };
+    let locale = match sys_locale::get_locale() {
+        Some(loc) => loc,
+        None => "en-US".to_string(),
+    };
     let template = match Template::parse(str_tpl.as_str()) {
         Ok(template) => template,
         Err(err) => {
@@ -18,24 +22,26 @@ fn render_template(vm: &mut VM, fmt_value: Value, value: Value) -> Result<String
         }
     };
     let mut values: HashMap<String, String> = HashMap::new();
-    for name in template.keys() {
+    'outer: for name in template.keys() {
         if values.contains_key(&name.to_string().clone()) {
             continue;
         }
-        if fmt_value.has_key(&name).unwrap().cast_bool().unwrap() {
-            let inner_value = match fmt_value.get(&name) {
-                Ok(inner_value) => inner_value,
-                Err(err) => bail!("FMT.STR error getting object key: {}", err),
-            };
-            match conditional_fmt_str(vm, fmt_value.clone(), inner_value) {
-                Ok(val) => {
-                    values.insert(name.to_string(), val);
+        for n in vec![format!("{}.{}", &name, &locale), name.to_string()] {
+            if fmt_value.has_key(&n).unwrap().cast_bool().unwrap() {
+                let inner_value = match fmt_value.get(&n) {
+                    Ok(inner_value) => inner_value,
+                    Err(err) => bail!("FMT.STR error getting object key: {}", err),
+                };
+                match conditional_fmt_str(vm, fmt_value.clone(), inner_value) {
+                    Ok(val) => {
+                        values.insert(n.to_string(), val);
+                    }
+                    Err(err) => {
+                        bail!("FMT.STR error processing object key: {}", err);
+                    }
                 }
-                Err(err) => {
-                    bail!("FMT.STR error processing object key: {}", err);
-                }
+                continue 'outer;
             }
-            continue;
         }
         match vm.stack.pull() {
             Some(value) => {

@@ -11,7 +11,7 @@
     "!"
   ] set
   //
-  // Here is a maon body of curry function
+  // Here is a main body of curry function
   //
   :lambda { + swap + println } set
 //
