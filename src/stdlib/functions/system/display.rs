@@ -7,6 +7,7 @@ use crate::cmd;
 use crate::stdlib::helpers;
 use std::io::Write;
 use std::io;
+use termimad::print_text;
 use easy_error::{Error, bail};
 
 
@@ -39,7 +40,7 @@ pub fn stdlib_display_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                             };
                             match out_value.cast_string() {
                                 Ok(str_val) => {
-                                    println!("{}", &str_val);
+                                    print_text(&str_val);
                                 }
                                 Err(err) => bail!("DISPLAY: casting out value returns error: {}", err),
                             };
@@ -58,7 +59,7 @@ pub fn stdlib_display_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             log::debug!("Running Value::conv(STRING)");
             match value.conv(STRING) {
                 Ok(str_value) => {
-                    println!("{}", str_value.cast_string().unwrap());
+                    print_text(&str_value.cast_string().unwrap());
                 }
                 Err(err) => {
                     bail!("FMT.STR: conversion to STRING returned error: {}", err);

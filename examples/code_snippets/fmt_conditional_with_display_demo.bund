@@ -5,7 +5,46 @@ fmt
     "Hello somebody! Answer is {answer} and 𝜋={pi}"
     set
   "greeting.en-US"
-    "Hello World! Here is the {answer} and 𝜋 is {pi}"
+
+"
+
+**Hello World!** greetings from ```:greeting fmt display``` of the BUND
+
+The *display* word of BUND language supports *Markdown* formatting
+|:-|-
+| *Message* | *Details* |
+| There is an example of the data from *FMT* conditional | Here is the *{answer}* |
+|-
+| And here is data from the stack | 𝜋 is *{pi}* |
+|-
+
+Here is an instructions
+
+```
+
+You place a variable between \{ and \}
+
+```
+
+And how variable is resolved:
+* If variable with the same name exists in FMT conditional, it will be used
+* Otherwise data will be taken from the stack
+
+If you add locale name to the end of the message, like ```greeting.en-US```
+this message will be used during display and locale will be detected according
+to the setting of yur OS
+
+```
+//
+// You can insert the computer code to your display
+//
+'Hello world!' println
+//
+// Just do not forget to keep BUND parser happy!
+//
+```
+
+"
     set
   "greeting.ru-RU"
     "Привет Мир! В котором ответ {answer} и 𝜋 равно {pi}"

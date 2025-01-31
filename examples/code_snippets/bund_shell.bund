@@ -1,0 +1,30 @@
+version "BUND.shell {a}" format system.setproctitle
+
+version "BUND {a}" format io.banner println
+
+:index fmt
+  :version version set
+  :index "
+
+Welcome to the **BUND SHELL** written using BUND itself!
+
+The version of BUND is *{version}*
+
+Type BUND statements. Press Ctrl^D for exit
+
+" set
+
+display
+
+debug.display_hostinfo
+
+bund.prompt {
+  ?try
+    :try {
+      bund.eval
+    } set
+    :except {
+      !
+    } set
+  !
+} input*
