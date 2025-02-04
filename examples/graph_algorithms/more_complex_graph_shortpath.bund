@@ -1,0 +1,48 @@
+//
+// Computes shortest paths from a source vertex to all other
+// vertices using Dijkstra’s algorithm.
+//
+
+//
+// Set starting node as :A and create simple A->B->C graph
+// A->B path is weighted 1.0
+// B->C path weighted 2.0
+//
+:H :A [
+  [ :A :B 1.0 ]
+  [ :A :C 10.0 ]
+  [ :D :B 10.0 ]
+  [ :D :C 1.0 ]
+  [ :B :E 1.0 ]
+  [ :C :E 10.0 ]
+  [ :E :F 10.0 ]
+  [ :E :G 1.0 ]
+  [ :F :H 1.0 ]
+  [ :G :H 2.0 ]
+
+]
+//
+// So, we do have a directed graph with nodes A, B and C
+//
+[
+  :A :B :C :D :E :F :G :H
+]
+
+//
+// Grate graph
+//
+graph!
+
+//
+// Compute shortest paths. Return dict, where key :path indicates
+// a list of node names for shortest path, and :weight indicates weighted path
+// to that node
+//
+graph.path
+  :found swap get, {
+    :path swap get, .
+    :weight swap get, .
+    take "Weight: {A}" format println
+    take "Path: {A}" format println
+  } if
+drop
