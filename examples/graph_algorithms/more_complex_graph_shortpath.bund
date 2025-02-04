@@ -1,12 +1,10 @@
 //
-// Computes shortest paths from a source vertex to all other
-// vertices using Dijkstra’s algorithm.
+// Computes shortest paths from a source vertex to a destination vertex
 //
 
 //
-// Set starting node as :A and create simple A->B->C graph
-// A->B path is weighted 1.0
-// B->C path weighted 2.0
+// Set starting node as :A and create simple A->B
+// .. graph
 //
 :H :A "Shortest path from {A} -> {B}" format println
 :H :A [
@@ -23,7 +21,7 @@
 
 ]
 //
-// So, we do have a directed graph with nodes A, B and C
+// So, we do have a directed graph with nodes A, B and ... so on
 //
 [
   :A :B :C :D :E :F :G :H
