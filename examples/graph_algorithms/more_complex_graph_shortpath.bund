@@ -8,6 +8,7 @@
 // A->B path is weighted 1.0
 // B->C path weighted 2.0
 //
+:H :A "Shortest path from {A} -> {B}" format println
 :H :A [
   [ :A :B 1.0 ]
   [ :A :C 10.0 ]
