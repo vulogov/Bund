@@ -10,6 +10,8 @@ use easy_error::{Error, bail};
 pub mod make_graph;
 pub mod dijkstra;
 pub mod transitiveclosure;
+pub mod allshortpath;
+pub mod getpath;
 
 pub fn stdlib_make_graph_base(vm: &mut VM, op: StackOps, err_prefix: String) -> Result<&mut VM, Error> {
     match op {
@@ -114,4 +116,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     drop(bc);
     dijkstra::init_stdlib(cli);
     transitiveclosure::init_stdlib(cli);
+    allshortpath::init_stdlib(cli);
+    getpath::init_stdlib(cli);
 }

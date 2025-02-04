@@ -41,7 +41,7 @@ pub fn stdlib_graph_transitiveclosure_stack(vm: &mut VM) -> Result<&mut VM, Erro
     if vertex_val.dt != LIST {
         bail!("GRAPH.TRANSITIVECLOSURE: Edges list must be a list");
     }
-    let (t, t_res, graph) = match graph::make_graph::make_graph(&nodes_val, &vertex_val) {
+    let (_t, t_res, graph) = match graph::make_graph::make_graph(&nodes_val, &vertex_val) {
         Ok((t, t_res, graph)) => (t, t_res, graph),
         Err(err) => bail!("{}", err),
     };
