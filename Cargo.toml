@@ -83,6 +83,8 @@ deunicode = "1.6.0"
 termimad = "0.31.2"
 convert_case = "0.7.1"
 fast_paths = "1.0.0"
+hexdump = "0.1.2"
+bytemuck = "1.21.0"
 
 
 [dependencies.rusqlite]
