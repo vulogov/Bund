@@ -1,6 +1,6 @@
 [package]
 name = "bund"
-version = "0.12.0"
+version = "0.14.0"
 edition = "2021"
 description = "Interpreter and CLI for a Virtual Machine for BUND programming language"
 license-file = "LICENSE"
@@ -85,6 +85,9 @@ convert_case = "0.7.1"
 fast_paths = "1.0.0"
 hexdump = "0.1.2"
 bytemuck = "1.21.0"
+distimate = "0.2.1"
+anomaly_detection = "0.3.0"
+breakout = "0.3.0"
 
 
 [dependencies.rusqlite]

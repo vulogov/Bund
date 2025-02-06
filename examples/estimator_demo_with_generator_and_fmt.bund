@@ -1,0 +1,66 @@
+//
+// This code will demostrate of use the Theory of Probability
+// to estimate a next value of the sequence and format the output using fmt
+// conditional
+//
+:index            // Document name from fmt that will be used by display function
+6.0               // Will set a shape of the sample (between 2.0 and 6.0)
+                  // higher the value, more "jumpier" we expect the sample to be
+
+//
+// And then provide a data sample of 32 values from NORMAL generator
+//
+:TEST dup config
+  :type       "normal"  set
+  :Mean       10.0      set
+  :Deviation  1.5       set
+
+generator 32 generator.sample*
+//
+// Get some values that will be feeded int fmt
+//
+dup
+  len .
+  io.graph .
+//
+// Run the estimation of the sample and feed formatter
+//
+forecast.estimate! dup println
+//
+// Create formatter
+//
+fmt
+  :chart take ,
+  :sample.size take ,
+  :index "
+
+Generated sample size len()=*{sample.size}*
+
+{chart}
+
+|:-|-
+| *Sample's parameter* | *Value* |
+|-
+| Expected value | {expected_value} |
+|-
+| Width of the sample | {min} - {max} |
+|-
+| Uncertainty | {uncertainty} |
+|-
+| Optimistic prediction | {optimistic} |
+|-
+| Pessimistic prediction | {pessimistic} |
+|-
+| Anomalies in sample | {anomalies} |
+|-
+| Breakouts in sample | {breakouts} |
+|-
+| Harmonic mean of the sample | {mean.harmonic} |
+|-
+
+" ,
+
+//
+// Merge formatter with output of estimate function and display the result
+//
+++ display

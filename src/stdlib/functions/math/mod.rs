@@ -6,6 +6,8 @@ pub mod smoothing;
 pub mod math;
 pub mod seq;
 pub mod rand;
+pub mod anomalies;
+pub mod breakout;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     normalize::init_stdlib(cli);

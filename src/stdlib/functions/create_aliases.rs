@@ -33,5 +33,9 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_alias("call,".to_string(), "make.call".to_string());
     let _ = bc.vm.register_alias("+++".to_string(), "push".to_string());
     let _ = bc.vm.register_alias("+++.".to_string(), "push.".to_string());
+    let _ = bc.vm.register_alias("++".to_string(), "merge".to_string());
+    let _ = bc.vm.register_alias("++.".to_string(), "merge.".to_string());
+    let _ = bc.vm.register_alias("sample.analysis".to_string(), "forecast.estimate!".to_string());
+    let _ = bc.vm.register_alias("sample.analysis.".to_string(), "forecast.estimate!.".to_string());
     drop(bc);
 }

@@ -1,0 +1,69 @@
+//
+// This code will demostrate of use the Theory of Probability
+// to estimate a next value of the sequence
+//
+:PrintHeaderLine {
+  "" println println "=" 50 * println
+} register
+
+6.0               // Will set a shape of the sample (between 2.0 and 6.0)
+                  // higher the value, more "jumpier" we expect the sample to be
+
+//
+// And then provide a data sample of 16 values from NORMAL generator
+//
+:TEST dup config
+  :type       "normal"  set
+  :Mean       10.0      set
+  :Deviation  1.5       set
+
+generator 16 generator.sample*
+//
+// Printing the chart of the sample
+//
+dup
+  len "Telemetry sample. len()={A}" format println
+  io.graph println
+//
+// Run the estimation of the sample
+//
+forecast.estimate!
+"Assurance that the next estimated value will be within those ranges" PrintHeaderLine
+  :confidence3 swap get, .
+  :confidence2 swap get, .
+  :confidence1 swap get, .
+take "Sample confidence 10% = {A}" format println
+take "Sample confidence 50% = {A}" format println
+take "Sample confidence 90% = {A}" format println
+
+"Alpha, Beta and other data from distribution" PrintHeaderLine
+:kurtosis   swap get, .
+:beta       swap get, .
+:alpha      swap get, .
+take "Kurtosisis a measure of the tailedness  = {A}" format println
+take "Beta parameter of Beta distribution     = {A}" format println
+take "Alpha parameter of Beta distribution    = {A}" format println
+
+"Sample statistics" PrintHeaderLine
+:mean.arithmetic   swap get, .
+:mean.geometric    swap get, .
+:mean.harmonic     swap get, .
+take "Harmonic mean       = {A}" format println
+take "Geometric mean      = {A}" format println
+take "Arithmetic mean     = {A}" format println
+
+"Min/Max values" PrintHeaderLine
+:min  swap get, .
+:max  swap get, .
+take "Sample maximum value  = {A}" format println
+take "Sample minimum value  = {A}" format println
+
+"Expectations, Uncertanty and irregularities in the data" PrintHeaderLine
+"expected_value"  swap get, .
+"uncertainty"     swap get, .
+"anomalies"       swap get, .
+"breakouts"       swap get, .
+take "Breakouts in the data sample = {A}" format println
+take "Anomalies in the data sample = {A}" format println
+take "Uncertainty about next value = {A}" format println
+take "Expected next value          = {A}" format println

@@ -115,7 +115,7 @@ fn get_data_from_metrics(vm: &mut VM, op: StackOps, smode: statistics::SourceMod
 }
 
 #[time_graph::instrument]
-fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<Vec<f64>, Error> {
+pub fn get_data_from_list(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_prefix: String) -> Result<Vec<f64>, Error> {
     match op {
         StackOps::FromStack => {
             if vm.stack.current_stack_len() < 1 {

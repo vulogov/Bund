@@ -4,6 +4,7 @@ use crate::cmd;
 pub mod make_call_value;
 pub mod sort_lists;
 pub mod push;
+pub mod merge;
 pub mod unfold;
 pub mod getsetinplace;
 
@@ -13,4 +14,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     push::init_stdlib(cli);
     unfold::init_stdlib(cli);
     getsetinplace::init_stdlib(cli);
+    merge::init_stdlib(cli);
 }

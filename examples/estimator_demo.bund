@@ -1,0 +1,43 @@
+//
+// This code will demostrate of use the Theory of Probability
+// to estimate a next value of the sequence
+//
+
+4.0               // Will set a shape of the sample (between 2.0 and 6.0)
+                  // higher the value, more "jumpier" we expect the sample to be
+
+//
+// And then provide a data sample of 16 values
+//
+[
+  1.0 1.0 1.0 1.0
+  2.0 3.0 4.0 3.5
+  1.9 1.5 9.0 1.2
+  1.2 1.3 1.1 1.0
+]
+//
+// Printing the chart of the sample
+//
+dup
+  len "Telemetry sample. len()={A}" format println
+  io.graph println
+//
+// Run the estimation of the sample
+//
+forecast.estimate!
+  :confidence3 swap get, .
+  :confidence2 swap get, .
+  :confidence1 swap get, .
+
+"Assurance that the next estimated value will be within thoise ranges
+" println
+
+take "Sample confidence 10% = {A}" format println
+take "Sample confidence 50% = {A}" format println
+take "Sample confidence 90% = {A}" format println
+
+"expected_value"  swap get, .
+"uncertainty"     swap get, .
+
+take "Uncertainty about next value = {A}" format println
+take "Expected next value          = {A}" format println
