@@ -7,6 +7,7 @@ use crate::stdlib::helpers;
 use easy_error;
 use easy_error::{bail};
 use rstats::*;
+use statrs::statistics::Statistics;
 use distimate::prelude::*;
 use distimate::Pert;
 use crate::stdlib::functions::statistics;
@@ -59,6 +60,7 @@ fn forecast_estimate_base(vm: &mut VM, op: StackOps, eop: EOperation, err_prefix
                 }
                 EOperation::Analysis => {
                     let mut res = Value::dict();
+                    res = res.set("sample.size", Value::from_int(source.len() as i64));
                     res = res.set("expected_value", Value::from_float(pert.expected_value()));
                     res = res.set("uncertainty", Value::from_float(pert.uncertainty()));
                     res = res.set("likely", Value::from_float(pert.most_likely_estimate()));
@@ -72,6 +74,12 @@ fn forecast_estimate_base(vm: &mut VM, op: StackOps, eop: EOperation, err_prefix
                     res = res.set("mean.arithmetic", Value::from_float(source.amean().unwrap()));
                     res = res.set("mean.geometric", Value::from_float(source.gmean().unwrap()));
                     res = res.set("mean.harmonic", Value::from_float(source.hmean().unwrap()));
+                    let medmad = source.medmad().unwrap();
+                    res = res.set("median", Value::from_float(medmad.centre));
+                    res = res.set("stddev", Value::from_float(medmad.spread));
+                    res = res.set("variance", Value::from_float(source.clone().variance()));
+                    res = res.set("mean", Value::from_float(source.clone().mean()));
+                    res = res.set("entropy", Value::from_float(source.clone().entropy()));
                     let (min_1, max_1) = pert.confidence_interval(0.1);
                     let (min_2, max_2) = pert.confidence_interval(0.5);
                     let (min_3, max_3) = pert.confidence_interval(0.99);

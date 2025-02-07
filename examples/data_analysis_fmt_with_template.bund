@@ -8,19 +8,18 @@
                   // higher the value, more "jumpier" we expect the sample to be
 
 //
-// And then provide a data sample of 32 values from NORMAL generator
+// And then provide a data sample of 64 values from NORMAL generator
 //
 :TEST dup config
   :type       "normal"  set
   :Mean       10.0      set
   :Deviation  1.5       set
 
-generator 32 generator.sample*
+generator 64 generator.sample*
 //
 // Get some values that will be feeded int fmt
 //
 dup
-  len .
   io.graph .
 //
 // Run analysis of the sample and feed formatter
@@ -31,34 +30,7 @@ sample.analysis
 //
 fmt
   :chart take ,
-  :sample.size take ,
-  :index "
-
-Generated sample size len()=*{sample.size}*
-
-{chart}
-
-|:-|-
-| **Sample's parameter** | *Value* |
-|-
-| Expected next value | *{expected_value}* |
-|-
-| Width of the sample | {min} - {max} |
-|-
-| Uncertainty | {uncertainty} |
-|-
-| Optimistic prediction | {optimistic} |
-|-
-| Pessimistic prediction | {pessimistic} |
-|-
-| Anomalies in sample | {anomalies} |
-|-
-| Breakouts in sample | {breakouts} |
-|-
-| Harmonic mean of the sample | {mean.harmonic} |
-|-
-
-" ,
+  :index cwd "{A}/examples/data_analysis_fmt_with_template.md" format file ,
 
 //
 // Merge formatter with output of estimate function and display the result
