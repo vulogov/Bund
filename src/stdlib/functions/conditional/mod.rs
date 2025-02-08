@@ -12,6 +12,7 @@ pub mod conditional_error;
 pub mod conditional_ctx;
 pub mod conditional_curry;
 pub mod conditional_fmt;
+pub mod conditional_csv;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     let mut cf = CF.lock().unwrap();
@@ -21,6 +22,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     cf.insert("context".to_string(), conditional_ctx::conditional_run);
     cf.insert("curry".to_string(), conditional_curry::conditional_run);
     cf.insert("fmt".to_string(), conditional_fmt::conditional_run);
+    cf.insert("csv".to_string(), conditional_csv::conditional_run);
     drop(cf);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
@@ -35,6 +37,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("context".to_string(), conditional_ctx::stdlib_conditional_ctx);
     let _ = bc.vm.register_inline("curry".to_string(), conditional_curry::stdlib_conditional_curry);
     let _ = bc.vm.register_inline("fmt".to_string(), conditional_fmt::stdlib_conditional_fmt);
+    let _ = bc.vm.register_inline("csv".to_string(), conditional_csv::stdlib_conditional_csv);
     let _ = bc.vm.register_inline("raise".to_string(), raise::stdlib_conditional_raise);
 
     drop(bc);

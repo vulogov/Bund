@@ -88,6 +88,10 @@ bytemuck = "1.21.0"
 distimate = "0.2.1"
 anomaly_detection = "0.3.0"
 breakout = "0.3.0"
+filesystem = "0.4.4"
+polars = "0.46.0"
+polars-core = "0.46.0"
+polars-io = "0.46.0"
 
 
 [dependencies.rusqlite]

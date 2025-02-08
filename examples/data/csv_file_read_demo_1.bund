@@ -1,0 +1,36 @@
+//
+// This is demonstration of how processing data stored in CSV file.
+// In this demo, we will calculate total summary of the field Score
+//
+
+//
+// First, we put 0 into workbench for a summary
+//
+0.0 .
+//
+// Placing CSV filename into stack
+//
+cwd "{A}/examples/data_sets/sample.csv" format dup
+"Processing data from {A}" format println
+//
+// And create CSV conditional
+//
+csv
+  //
+  // CSV processor will place list with row data into stack
+  // and will call this lambda for every row in the file
+  //
+  :lambda {
+    //
+    // Extract fifth column from the row beginning from number 1
+    //
+    5 swap at
+      // And add the value to the value stored in Workbench
+      +.
+  } set
+//
+// Execute CSV conditional
+//
+!
+
+take "Total value of all Scores stored in in CSV file is {A}" format println

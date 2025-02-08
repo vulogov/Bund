@@ -1,6 +1,6 @@
 //
-// This code will demostrate of use the Theory of Probability
-// to estimate a next value of the sequence and format the output using fmt
+// This code will demonstrate the use of the Theory of Probability
+// to estimate the next value in a sequence and format the output using fmt
 // conditional
 //
 :index            // Document name from fmt that will be used by display function
