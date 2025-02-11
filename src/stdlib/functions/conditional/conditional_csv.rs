@@ -8,11 +8,11 @@ use easy_error::{Error, bail};
 
 pub fn stdlib_conditional_csv(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 1 {
-        bail!("Stack is too shallow for curry");
+        bail!("Stack is too shallow for CSV");
     }
     let name_val = match vm.stack.pull() {
         Some(name_val) => name_val,
-        None => bail!("CONTEXT: No context name discovered on the stack"),
+        None => bail!("CONTEXT: No CSV filename discovered on the stack"),
     };
     let name = match name_val.cast_string() {
         Ok(name) => name,

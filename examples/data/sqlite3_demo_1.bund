@@ -1,0 +1,60 @@
+//
+// This is demonstration of how you can query data stored in
+// SQLite3 database, perform data analysis and display results
+//
+
+//
+// Store document name for fmt conditional
+//
+:index
+
+//
+// Prepare SQLite3 database filename in the stack
+//
+cwd "{A}/examples/data_sets/sample.db" format dup
+"Processing data from {A}" format println
+//
+// And create SQLITE conditional
+//
+sqlite
+  //
+  // Skip the first row
+  //
+  "skip_first" 1 set
+  //
+  // Run this query
+  //
+  :sql "select * from sample" set
+  //
+  // And execute this lambda on result
+  //
+  :lambda {
+    // Add list to the workbench
+    list .
+    {
+      // Get the score, add to the list in the workbench and drop the row
+      :Score swap get, ++. drop
+    } loop
+    // Set shapr for sample.analysis
+    4.0
+    // Perform Marov chain forecasting and store result in workbench
+    take dup forecast.markov .
+    // Perform analysis of the sample
+    sample.analysis
+      // And add results of Markov forecast
+      :next.markov take set
+  } set
+//
+// Execute SQLITE conditional
+//
+!
+
+//
+// Create fmt conditional
+//
+fmt
+  :index cwd "{A}/examples/data/sqlite3_demo_1.md" format file ,
+//
+// Merge fmt with result of analysis and display it
+//
+++ display
