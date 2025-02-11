@@ -37,6 +37,10 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
         Ok(name) => name,
         Err(err) => bail!("CONTEXT.RUN: casting CSV file name returns error: {}", err),
     };
+    let column_val = match value.get("column") {
+        Ok(column_val) => Some(column_val),
+        Err(_) => None,
+    };
     let header_val = match value.get("is_header") {
         Ok(header_val) => header_val,
         Err(_) => Value::make_true(),
@@ -53,49 +57,117 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
         Ok(lambda_val) => lambda_val,
         Err(_) => Value::lambda(),
     };
-    match CsvReadOptions::default().with_has_header(is_header).try_into_reader_with_file_path(Some(name.into())) {
-        Ok(df_unfinished) => {
-            match df_unfinished.finish() {
-                Ok(df) => {
-                    for i in  0..df.height() {
-                        match df.get(i) {
-                            Some(df_row) => {
-                                let mut row = Value::list();
-                                for f in df_row {
-                                    match f {
-                                        AnyValue::String(str_value) => {
-                                            row = row.push(Value::from_string(str_value));
+    match column_val {
+        Some(column_val) => {
+            match CsvReadOptions::default().with_has_header(is_header).try_into_reader_with_file_path(Some(name.into())) {
+                Ok(df_unfinished) => {
+                    match df_unfinished.finish() {
+                        Ok(df) => {
+                            let column_name = match column_val.cast_string() {
+                                Ok(column_name) => column_name,
+                                Err(err) => bail!("CONTEXT.RUN error casting column name: {}", err),
+                            };
+                            match df.select([column_name.clone()]) {
+                                Ok(df_column) => {
+                                    let mut res = Value::list();
+                                    for i in  0..df_column.height() {
+                                        match df_column.get(i) {
+                                            Some(df_row) => {
+                                                if df_row.len() > 0 {
+                                                    match df_row[0] {
+                                                        AnyValue::String(str_value) => {
+                                                            res = res.push(Value::from_string(str_value));
+                                                        }
+                                                        AnyValue::Int64(int_value) => {
+                                                            res = res.push(Value::from_int(int_value));
+                                                        }
+                                                        AnyValue::Float64(float_value) => {
+                                                            res = res.push(Value::from_float(float_value));
+                                                        }
+                                                        AnyValue::Boolean(bool_value) => {
+                                                            res = res.push(Value::from_bool(bool_value));
+                                                        }
+                                                        _ => continue,
+                                                    }
+                                                }
+                                            }
+                                            None => {
+                                                break;
+                                            }
                                         }
-                                        AnyValue::Int64(int_value) => {
-                                            row = row.push(Value::from_int(int_value));
-                                        }
-                                        AnyValue::Float64(float_value) => {
-                                            row = row.push(Value::from_float(float_value));
-                                        }
-                                        _ => continue,
                                     }
+                                    vm.stack.push(res);
+                                    let ret = vm.lambda_eval(lambda_val.clone());
+                                    match ret {
+                                        Ok(_) => {},
+                                        Err(err) => bail!("CSV processing lambda returns: {}", err),
+                                    };
                                 }
-                                vm.stack.push(row);
-                                let ret = vm.lambda_eval(lambda_val.clone());
-                                match ret {
-                                    Ok(_) => {},
-                                    Err(err) => bail!("CSV processing lambda returns: {}", err),
-                                };
+                                Err(err) => {
+                                    bail!("CONTEXT.RUN: Error selecting column {}: {}", &column_name, err);
+                                }
                             }
-                            None => {
-                                break;
-                            }
+                        }
+                        Err(err) => {
+                            bail!("CONTEXT.RUN: Error finishing dataframe: {}", err);
                         }
                     }
                 }
                 Err(err) => {
-                    bail!("CONTEXT.RUN: Error finishing dataframe: {}", err);
+                    bail!("CONTEXT.RUN: Error creating dataframe: {}", err);
                 }
             }
         }
-        Err(err) => {
-            bail!("CONTEXT.RUN: Error creating dataframe: {}", err);
+        None => {
+            match CsvReadOptions::default().with_has_header(is_header).try_into_reader_with_file_path(Some(name.into())) {
+                Ok(df_unfinished) => {
+                    match df_unfinished.finish() {
+                        Ok(df) => {
+                            for i in  0..df.height() {
+                                match df.get(i) {
+                                    Some(df_row) => {
+                                        let mut row = Value::list();
+                                        for f in df_row {
+                                            match f {
+                                                AnyValue::String(str_value) => {
+                                                    row = row.push(Value::from_string(str_value));
+                                                }
+                                                AnyValue::Int64(int_value) => {
+                                                    row = row.push(Value::from_int(int_value));
+                                                }
+                                                AnyValue::Float64(float_value) => {
+                                                    row = row.push(Value::from_float(float_value));
+                                                }
+                                                AnyValue::Boolean(bool_value) => {
+                                                    row = row.push(Value::from_bool(bool_value));
+                                                }
+                                                _ => continue,
+                                            }
+                                        }
+                                        vm.stack.push(row);
+                                        let ret = vm.lambda_eval(lambda_val.clone());
+                                        match ret {
+                                            Ok(_) => {},
+                                            Err(err) => bail!("CSV processing lambda returns: {}", err),
+                                        };
+                                    }
+                                    None => {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        Err(err) => {
+                            bail!("CONTEXT.RUN: Error finishing dataframe: {}", err);
+                        }
+                    }
+                }
+                Err(err) => {
+                    bail!("CONTEXT.RUN: Error creating dataframe: {}", err);
+                }
+            }
         }
     }
+
     Ok(vm)
 }

@@ -5,4 +5,4 @@ Here is what's new:
 * Anomaly and breakout detection functions
 * Function ```merge[|.]``` merging two complex values. MATH operation ```+``` is default action.
 * Function ```fs.is_file``` returns TRUE/FALSE if file exists or not
-* Conditional ```csv```
+* Conditional ```csv``` with "by row" and "column" selection

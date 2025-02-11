@@ -1,0 +1,53 @@
+//
+// This is demonstration of how processing data stored in CSV file.
+// In this demo, we will we analyze data stored in Score column
+//
+:index            // Document name from fmt that will be used by display function
+6.0               // Will set a shape of the sample (between 2.0 and 6.0)
+                  // higher the value, more "jumpier" we expect the sample to be
+//
+// Placing CSV filename into stack
+//
+cwd "{A}/examples/data_sets/sample.csv" format dup
+"Processing data from {A}" format println
+//
+// And create CSV conditional
+//
+csv
+  //
+  // We do have a header ? YES!
+  //
+  "is_header" true set
+  //
+  // Will get the column from conditional. Not the rows
+  //
+  :column "Score" set
+  //
+  // If you specify :column for CSV processor
+  // it will returned a column, and it will be pushed into the stack
+  //
+  :lambda {
+      //
+      // Let's run some forecasting using Markov chains
+      //
+      dup forecast.markov .
+      //
+      // Then do statistical analysis of the sample
+      //
+      sample.analysis
+        //
+        // Add Markov forecasting to the result
+        //
+        :next.markov take set
+      fmt
+        :index cwd "{A}/examples/data/csv_file_read_demo_2.md" format file ,
+      //
+      // Merge formatter with output of estimate function and display the result
+      //
+      ++ display
+  } set
+
+//
+// Execute CSV conditional
+//
+!
