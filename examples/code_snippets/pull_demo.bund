@@ -1,0 +1,40 @@
+//
+// This is demonstration of how you pull data from the stack
+// and merge it with fmt conditional
+//
+
+:index  // This is a name of the document from fmt to display
+
+1       // This is first data that is pushed to stack
+dup "First value pushed to stack = {A}" format println
+2       // This is second data that is pushed to stack
+dup "Second value pushed to stack = {A}" format println
+3       // This is third data that is pushed to stack
+dup "Third value pushed to stack = {A}" format println
+
+//
+// Take three values from the stack and
+// make a dictionary with following keys
+//
+[ :FIRST :SECOND :THIRD ] pull
+
+fmt
+  :index "
+|:-|-
+| **Description** | *Value* |
+|-
+| First value | *{FIRST}* |
+|-
+| Second value | *{SECOND}* |
+|-
+| Third value | *{THIRD}* |
+|-
+
+Hopefully you can see that ```pull``` is pulling data in **reverse** order from pushing
+
+" set
+
+//
+// Merge dictionary and conditional and print it
+//
+++ display

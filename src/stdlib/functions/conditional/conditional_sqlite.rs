@@ -11,7 +11,7 @@ use easy_error::{Error, bail};
 fn prql_to_sql(query: String) -> Result<String, Error> {
     let prql_opt = prqlc::Options{
         format: true,
-        signature_comment: true,
+        signature_comment: false,
         color: false,
         display: prqlc::DisplayOptions::Plain,
         target: prqlc::Target::Sql(Some(prqlc::sql::Dialect::SQLite)),
@@ -135,7 +135,6 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
     }
     match stmt.query([]) {
         Ok(mut rows) => {
-            let mut result = Value::list();
             let mut row_count: usize = 0;
             loop {
                 match rows.next() {
@@ -177,7 +176,12 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
                                 }
                             }
                         }
-                        result = result.push(bund_row.clone());
+                        vm.stack.push(bund_row.clone());
+                        let ret = vm.lambda_eval(lambda_val.clone());
+                        match ret {
+                            Ok(_) => {},
+                            Err(err) => bail!("SQLITE3 processing lambda returns: {}", err),
+                        };
                         row_count += 1;
                     }
                     Ok(None) => break,
@@ -186,12 +190,6 @@ pub fn conditional_run(vm: &mut VM, value: Value) -> Result<&mut VM, Error> {
                     }
                 }
             }
-            vm.stack.push(result);
-            let ret = vm.lambda_eval(lambda_val.clone());
-            match ret {
-                Ok(_) => {},
-                Err(err) => bail!("SQLITE3 processing lambda returns: {}", err),
-            };
         }
         Err(err) => {
             bail!("CONTEXT.RUN: Error execution of SQL query: {}", err);

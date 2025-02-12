@@ -1,6 +1,7 @@
 //
 // This is demonstration of how you can query data stored in
 // SQLite3 database, perform data analysis and display results
+// In this demo we are using PRQL rather than SQL which supports transparently
 //
 
 //
@@ -23,9 +24,9 @@ sqlite
   //
   "skip_first" 1 set
   //
-  // Run this query
+  // Run this PRQL query, that is equivalent to "select * from sample"
   //
-  :sql "select * from sample" set
+  :prql "from sample" set
   //
   // And execute this lambda on result
   //
