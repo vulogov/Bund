@@ -1,0 +1,63 @@
+//
+// This script demonstrate how to use internal SQL database
+//
+
+//
+// First, since we are using in-memory database, we are to create a table
+// for the data. Unless you specify --internal-db in CLI
+// your internal database is in memory
+//
+"create table sample (
+	ID	INTEGER,
+	Name	TEXT,
+	Age	INTEGER,
+	DateOfBirth TEXT,
+	Score	FLOAT,
+	Active  BOOL,
+	Description TEXT,
+	JoinDate  TEXT
+)" internaldb.execute
+
+//
+// How, since you database is created, let's load it with the
+// data from CSV file
+//
+
+// First, we creating the name wth full path to the CSV file
+cwd "{A}/examples/data_sets/sample_noheader.csv" format
+
+// Then we create an SQL query that is loading data and execute it
+"COPY sample FROM '{A}'" format internaldb.execute
+
+//
+// Create parameter for fmt conditional
+// and for creating a data sample
+//
+:index
+list .
+
+//
+// Run the query over internal database using PRQL
+//
+"from sample" internaldb.prql internaldb.sql {
+  // Select Score field and add this to the list of samples in workbench
+  :Score swap get, ++. drop
+} loop
+
+// Set shape for sample.analysis
+4.0
+// Perform Markov chain forecasting and store result in workbench
+take dup forecast.markov .
+// Perform analysis of the sample
+sample.analysis
+  // And add results of Markov forecast
+  :next.markov take set
+//
+// Create fmt conditional
+//
+fmt
+  :index cwd "{A}/examples/data/sqlite3_demo_1.md" format file ,
+//
+// Merge fmt with result of analysis and display it
+//
+++ display

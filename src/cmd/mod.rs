@@ -106,6 +106,9 @@ pub struct Cli {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Run BUND interpreter as a node in distributed environment")]
     pub distributed: bool,
 
+    #[clap(help="Filename for an internal database", long)]
+    pub internal_db: Option<String>,
+
     #[clap(long, action = clap::ArgAction::SetTrue, help="Execute internal profiler")]
     pub profile: bool,
 

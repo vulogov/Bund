@@ -7,3 +7,4 @@ pub mod run_snippet;
 pub mod eval;
 pub mod world;
 pub mod conf;
+pub mod internaldb;

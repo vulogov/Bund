@@ -43,6 +43,9 @@ pub fn debug_display_hostinfo_color() {
             Cell::new("bund_language_parser").fg(Color::Green), Cell::new(&bund_language_parser::version()).fg(Color::White),
         ])
         .add_row(vec![
+            Cell::new("internaldb").fg(Color::Green), Cell::new(&helpers::internaldb::internaldb_version()).fg(Color::White),
+        ])
+        .add_row(vec![
             Cell::new("Hostname").fg(Color::Blue), Cell::new(&hostname.clone()).fg(Color::White),
         ])
         .add_row(vec![
@@ -89,6 +92,9 @@ pub fn debug_display_hostinfo_nocolor() {
         ])
         .add_row(vec![
             Cell::new("bund_language_parser version"), Cell::new(&bund_language_parser::version()),
+        ])
+        .add_row(vec![
+            Cell::new("internaldb"), Cell::new(&helpers::internaldb::internaldb_version()),
         ])
         .add_row(vec![
             Cell::new("Hostname"), Cell::new(&hostname.clone()),

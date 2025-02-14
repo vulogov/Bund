@@ -9,3 +9,4 @@ Here is what's new:
 * Conditional ```sqlite``` supporting both SQL and PRQL
 * Function ```pull[|.]``` which is taking a list with names and places on the stack dict with name and value taken from stack
 * Function ```pull.workbench[|.]``` which is taking a list with names and places on the stack dict with name and value taken from workbench
+* Add an internal SQL database
