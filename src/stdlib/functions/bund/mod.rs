@@ -10,6 +10,7 @@ pub mod bund_models;
 pub mod bund_world_bootstrap;
 pub mod bund_exit;
 pub mod bund_fun;
+pub mod bund_interpreter;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     log::debug!("Initializing BUND: module");
@@ -22,4 +23,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     bund_world_bootstrap::init_stdlib(cli);
     bund_exit::init_stdlib(cli);
     bund_fun::init_stdlib(cli);
+    bund_interpreter::init_stdlib(cli);
 }

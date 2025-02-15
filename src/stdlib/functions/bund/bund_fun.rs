@@ -12,13 +12,13 @@ pub fn stdlib_bund_is_alias(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for ?ALIAS");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("?ALIAS returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("?ALIAS casting string returns: {}", err);
         }
@@ -34,13 +34,13 @@ pub fn stdlib_bund_is_lambda(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for ?LAMBDA");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("?LAMBDA returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("?LAMBDA casting string returns: {}", err);
         }
@@ -56,13 +56,13 @@ pub fn stdlib_bund_is_stdlib(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for ?STDLIB");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("?STDLIB returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("?STDLIB casting string returns: {}", err);
         }
@@ -78,13 +78,13 @@ pub fn stdlib_bund_is_callable(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for ?WORD");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("?WORD returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("?WORD casting string returns: {}", err);
         }
@@ -109,13 +109,13 @@ pub fn stdlib_bund_get_alias(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for ?ALIAS");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("?ALIAS.GET returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("?ALIAS.GET casting string returns: {}", err);
         }
@@ -137,13 +137,13 @@ pub fn stdlib_bund_get_lambda(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("Stack is too shallow for LAMBDA.GET");
     }
     let fn_name_value = match vm.stack.pull() {
-        Some(file_name_value) => file_name_value,
+        Some(fn_name_value) => fn_name_value,
         None => {
             bail!("LAMBDA.GET returns NO DATA #1");
         }
     };
     let fn_name = match fn_name_value.cast_string() {
-        Ok(file_name) => file_name,
+        Ok(fn_name) => fn_name,
         Err(err) => {
             bail!("LAMBDA.GET casting string returns: {}", err);
         }

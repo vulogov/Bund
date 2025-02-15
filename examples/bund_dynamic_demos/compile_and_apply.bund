@@ -1,0 +1,24 @@
+//
+// This script demonstrates the interface to the BUND parser and executor
+//
+
+//
+// We are compiling BUND source code to the list of TERMS
+//
+"   41 1 +
+'Have an answer for you? Yes. But youre not going to like it.
+Okay. The answer to the ultimate question of life,
+the universe, and everything is... {A}'
+    format println
+" compile
+//
+// Then we are porinting a nice message about the number of terms compiled
+//
+dup len
+"I compiled {A} BUND terms for you and now I am executing them" format println
+//
+// And next, we are running a loop over them and applying the TERM's
+//
+{
+  apply
+} loop

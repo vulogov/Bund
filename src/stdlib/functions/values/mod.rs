@@ -8,6 +8,7 @@ pub mod pull;
 pub mod merge;
 pub mod unfold;
 pub mod getsetinplace;
+pub mod listop;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     make_call_value::init_stdlib(cli);
@@ -17,4 +18,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     unfold::init_stdlib(cli);
     getsetinplace::init_stdlib(cli);
     merge::init_stdlib(cli);
+    listop::init_stdlib(cli);
 }
