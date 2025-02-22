@@ -27,9 +27,19 @@ lazy_static! {
     };
 }
 
+fn do_panic() {
+    log::debug!("Setting a global panic handler");
+    better_panic::Settings::auto()
+        .most_recent_first(false)
+        .lineno_suffix(true)
+        .verbosity(better_panic::Verbosity::Full)
+        .install();
+}
+
 pub fn main() {
     let cli = Cli::parse();
     setloglevel::setloglevel(&cli);
+    do_panic();
     init_stdlib(&cli);
     let init_cli = CLI.lock().unwrap();
     log::debug!("Initialize global CLI");
@@ -86,7 +96,7 @@ pub fn main() {
     }
 }
 
-#[derive(Parser, Clone)]
+#[derive(Parser, Clone, Debug)]
 #[clap(name = "bund")]
 #[clap(author = "Vladimir Ulogov <vladimir@ulogov.us>")]
 #[clap(version = env!("CARGO_PKG_VERSION"))]

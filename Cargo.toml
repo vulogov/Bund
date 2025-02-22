@@ -94,6 +94,9 @@ polars-core = "0.46.*"
 polars-io = "0.46.*"
 prqlc = "0.13.*"
 duckdb = { version = "1.2.0", features = ["bundled"] }
+better-panic = "0.3.0"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
 
 
 [dependencies.rusqlite]

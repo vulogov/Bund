@@ -8,6 +8,7 @@ pub mod debug_display_stack;
 pub mod debug_display_workbench;
 pub mod debug_debug;
 pub mod debug_dump;
+pub mod debug_trace;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     debug_shell::init_stdlib(cli);
@@ -17,4 +18,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     debug_display_workbench::init_stdlib(cli);
     debug_debug::init_stdlib(cli);
     debug_dump::init_stdlib(cli);
+    debug_trace::init_stdlib(cli);
 }

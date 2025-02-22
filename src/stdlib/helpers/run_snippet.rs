@@ -92,6 +92,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
     drop(bc);
 }
 
+
 #[time_graph::instrument]
 pub fn run_snippet(snippet: String) {
     log::debug!("Running snippet: {}", &snippet);
