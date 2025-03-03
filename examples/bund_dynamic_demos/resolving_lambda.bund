@@ -35,7 +35,7 @@
 
 "Unregistering HelloWorld" println :HelloWorld unregister
 
-:HelloWorld ?lambda not {                 // Anter unregister, function ?lambda
+:HelloWorld ?lambda not {                 // After unregister, function ?lambda
                                           // must return FALSE, but by calling ```not```
                                           // we are making it TRUE
   "Lambda function HelloWorld is not here anylonger" println

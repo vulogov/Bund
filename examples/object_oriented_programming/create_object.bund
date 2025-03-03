@@ -1,0 +1,8 @@
+:A dup class
+  :hello  "Hello world!" set
+  :greet  {
+    :hello swap get println
+  } set register
+object ?object {
+  "Yes, object of class A has been created" println
+} if

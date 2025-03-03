@@ -1,0 +1,9 @@
+:A dup class
+  :hello  "Hello world!" set
+  :greet  {
+    :hello swap get println
+  } set register
+?class
+{
+  "Class A has been registered" println
+} if
