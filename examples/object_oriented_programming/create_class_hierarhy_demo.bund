@@ -3,18 +3,30 @@
 // A.hello - just a string
 // A.greet - lambda, or in OOP terminology "a method"
 //
-:A dup class
+:A class
   :hello  "Hello world!" set
   :greet  {
     :hello swap get println
   } set
 register
 //
-// We are creating the object of class A and placing
+// Class B having a single attribute
+// B.pi - just a floating number
+//
+:B class
+  :pi   3.14 set
+  //
+  // But this special attribute is listing a parent classes for the class B
+  //
+  ".super" [ :A ] set
+register
+
+//
+// We are creating the object of class B and placing
 // it on the stack. The "word" ?object is testing
 // if value on top of the stack is an object
 // and return TRUE/FALSE
 //
-object ?object {
-  "Yes, object of class A has been created" println
+:B object ?object {
+  "Object of class B has been created" println
 } if

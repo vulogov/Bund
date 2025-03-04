@@ -1,0 +1,42 @@
+//
+// First, we are registering class A, that having a following attributes:
+// A.hello - just a string
+// A.greet - lambda, or in OOP terminology "a method"
+//
+:A class
+  :hello  "Hello world!" set
+  :greet  {
+    :hello swap get println
+  } set
+register
+//
+// Class B having a single attribute
+// B.pi - just a floating number
+//
+:B class
+  :pi   3.14 set
+  //
+  // But this special attribute is listing a parent classes for the class B
+  //
+  ".super" [ :A ] set
+register
+
+//
+// We are define the names of the attributes we will request:
+// B.pi and B.hello
+//
+:pi
+  :hello
+    //
+    // Then we create an object of class B
+    //
+    :B object
+  //
+  // Executing "the object" and if attribute is not a lambda
+  // and B.hello is not, it is just placed to the stack
+  //
+  ! "Object of class B returns from B.hello: {A}" format println
+//
+// Same for B.pi
+//
+! "Object of class B returns from B.pi: {A}" format println

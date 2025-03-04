@@ -1,0 +1,33 @@
+//
+// First, we are registering class A, that having a following attributes:
+// A.hello - just a string
+// A.greet - lambda, or in OOP terminology "a method"
+//
+:A class
+  :hello    "Hello world!" set
+  :greet    {
+    :hello swap ! "A.hello returns: {A}" format println
+    :pi swap ! "And PI is {A}" format println
+  } set
+register
+//
+// Class B having a single attribute
+// B.pi - just a floating number
+//
+:B class
+  :pi     3.14    set
+  //
+  // But this special attribute is listing a parent classes for the class B
+  //
+  :.super [ :A ]  set
+register
+
+"Object B.greet lambda call defined in class A will be executed" println
+//
+// We will be calling method "greet" by executing "!" word
+//
+:greet
+  //
+  // of the object of class B
+  //
+  :B object !

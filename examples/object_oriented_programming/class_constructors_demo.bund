@@ -1,0 +1,18 @@
+:A class
+  :.super [ :B :E ]  set
+  :.init { :.class_name get "Constructor of {A}" format println } set register
+
+:B class
+  :.super [ :C :D ]  set
+  :.init { :.class_name get "Constructor of {A}" format println } set register
+
+:C class
+  :.init { :.class_name get "Constructor of {A}" format println } set register
+
+:D class
+  :.init { :.class_name get "Constructor of {A}" format println } set register
+
+:E class
+  :.init { :.class_name get "Constructor of {A}" format println } set register
+
+:A object

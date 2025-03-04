@@ -48,7 +48,7 @@ fn stdlib_inplacegetset_base(vm: &mut VM, op: StackOps, dop: DictOp, err_prefix:
         None => bail!("{} returns NO DATA #1", &err_prefix),
     };
     match dict_val.dt {
-        MAP | INFO | CONFIG | ASSOCIATION | CURRY | MESSAGE | CONDITIONAL => {
+        MAP | INFO | CONFIG | ASSOCIATION | CURRY | MESSAGE | CONDITIONAL | OBJECT  => {
             match dop {
                 DictOp::GetInplace => {
                     let key_val = match vm.stack.pull() {

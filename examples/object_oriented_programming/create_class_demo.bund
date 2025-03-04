@@ -1,9 +1,28 @@
+//
+// This is a demonstration of how you are defining class
+// First, you place class name on the stack and call the "word" class
+//
 :A dup class
+  //
+  // Set the class attributes as you usually do for the DICT-like BUND objects
+  // here we define two attribute: value A.hello and lambda (or method) A.greet
+  //
   :hello  "Hello world!" set
   :greet  {
     :hello swap get println
+  //
+  // The word "register" is registering class in the list of available classes
+  //
   } set register
+//
+// Remember we've called "dup" ? First class name was consumed by the "word" class
+// Second class name will be consumed by the word "?class" which will check if class
+// is registered and place TRUE/FALSE to the stack
+//
 ?class
 {
+  //
+  // And of course, IF must succeeded and we will print a nice message
+  //
   "Class A has been registered" println
 } if

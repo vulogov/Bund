@@ -1,0 +1,16 @@
+//
+// First, we are registering class A, that having a following attributes:
+// A.hello - just a string
+// A.greet - lambda, or in OOP terminology "a method"
+//
+:greet :A dup class
+  :hello  "Hello world!" set
+  :greet  {
+    :hello swap get, println
+  } set register
+//
+// We are creating object of class A,
+// taking method name from the stack
+// and execute that method
+//
+object !
