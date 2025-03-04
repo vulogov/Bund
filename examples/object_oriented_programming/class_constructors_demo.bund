@@ -1,3 +1,13 @@
+//
+// In this demo program, we will create an object that is derived from the class
+// that have a multiple parent classes. Yes, BUND supports multiple inheritance.
+// A -> B-> C
+// |    |
+// E    D
+// Each class have a constructor method referred as ".init"
+// When object is created, BUND walks the hierarch tree and create parent
+// objects from classes and calling constructor methods
+//
 :A class
   :.super [ :B :E ]  set
   :.init { :.class_name get "Constructor of {A}" format println } set register
@@ -15,4 +25,7 @@
 :E class
   :.init { :.class_name get "Constructor of {A}" format println } set register
 
+//
+// Let's make an object that is triggering constructors call 
+//
 :A object
