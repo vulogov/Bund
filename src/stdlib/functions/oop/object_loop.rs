@@ -11,11 +11,11 @@ fn stdlib_object_loop_base(vm: &mut VM, depth: usize, op: StackOps, err_prefix: 
     if vm.stack.current_stack_len() < depth {
         bail!("Stack is too shallow for inline {}", &err_prefix);
     }
-    let lambda_val = match vm.stack.pull() {
-        Some(lambda_val) => if lambda_val.type_of() == LAMBDA {
-            lambda_val
-        } else {
-            bail!("{} NO LAMBDA IN #1", &err_prefix);
+    let _lambda_val = match vm.stack.pull() {
+        Some(lambda_val) => match lambda_val.type_of() {
+            LAMBDA => lambda_val,
+            PTR => lambda_val,
+            _ => bail!("{} NO LAMBDA or PTR IN #1", &err_prefix),
         },
         None => bail!("{} NO DATA IN #1", &err_prefix),
     };
@@ -23,7 +23,7 @@ fn stdlib_object_loop_base(vm: &mut VM, depth: usize, op: StackOps, err_prefix: 
         StackOps::FromStack => vm.stack.pull(),
         StackOps::FromWorkBench => vm.stack.pull_from_workbench(),
     };
-    let obj_val = match object_val {
+    let _obj_val = match object_val {
         Some(obj_val) => if obj_val.type_of() == OBJECT {
             obj_val
         } else {

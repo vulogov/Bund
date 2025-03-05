@@ -2,8 +2,8 @@
 // This is a demonstration of how you are defining class
 // First, you place class name on the stack and call the "word" class
 //
-3.14 :display :Answer dup class
+3.14 :Answer dup class
   :.super     [ :Object ]  set
   :answer     42 set
   :.template  "The answer is {answer} and Pi = {Pi}" set
-register object !
+register object display
