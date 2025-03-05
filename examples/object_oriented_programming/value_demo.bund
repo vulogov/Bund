@@ -1,0 +1,22 @@
+//
+// This script demonstrates creation of a generic Value object
+//
+
+//
+// First, we will store a method name to call
+//
+:str
+  //
+  // Then create a Value object that stored 42
+  //
+  42 :Value object
+//
+// Then execute the 'str' method
+//
+!
+"Object is storing a value: {A}" format println
+:str
+  [ 1 2 3 ] :Value object !
+"Another object storing a list: {A}"
+  format
+    println 

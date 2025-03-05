@@ -1,5 +1,6 @@
 extern crate log;
 use crate::stdlib::BUND;
+use rust_dynamic::value::Value;
 use rust_dynamic::types::*;
 use rust_multistackvm::multistackvm::{VM};
 use crate::stdlib::functions::conditional::conditional_fmt;
@@ -54,6 +55,11 @@ pub fn stdlib_display_inline(vm: &mut VM) -> Result<&mut VM, Error> {
                     bail!("FMT.STR: conditional is of incorrect type: {}", &fmt_type);
                 }
             }
+        }
+        OBJECT => {
+            vm.stack.push(Value::from_string("display"));
+            vm.stack.push(value);
+            return vm.apply(Value::call("!".to_string(), Vec::new()))
         }
         _ => {
             log::debug!("Running Value::conv(STRING)");
