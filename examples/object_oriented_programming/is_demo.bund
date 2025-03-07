@@ -1,0 +1,25 @@
+//
+// This is demonstration of how word "IS" is working
+//
+
+//
+// First, we create a Bool object that containing value TRUE
+// and applying word "IS". Unlike "UNWRAP", word "IS" leaving
+// reference to the object in stack
+//
+true :Bool object is {
+  //
+  // Reference to the object is still in stack and we unwrapping it
+  // thus consuming the object
+  //
+  unwrap "Boolean object having value {A} which is TRUE"
+    //
+    // Then formatting and printlng value
+    //
+    format
+      println
+//
+// the word "IS" is taking value from the object and placing it on the stack
+// Since the value is TRUE, the word "IF" executes the lambda 
+//
+} if

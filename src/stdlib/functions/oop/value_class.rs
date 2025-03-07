@@ -114,13 +114,35 @@ pub fn stdlib_object_value_unwrap(vm: &mut VM) -> Result<&mut VM, Error> {
         Some(obj_val) => if obj_val.type_of() == OBJECT {
             obj_val
         } else {
-            bail!("UNWRAP NO OBJECT IN #1");
+            bail!("UNWRAP: NO OBJECT IN #1");
         },
-        None => bail!("UNWRAP NO DATA IN #1"),
+        None => bail!("UNWRAP: NO DATA IN #1"),
     };
     match locate_value_in_object(".data".to_string(), obj_val) {
         Some(value) => vm.stack.push(value),
-        None => bail!("UNWRAP found no wrapped VALUE"),
+        None => bail!("UNWRAP: found no wrapped VALUE"),
+    };
+    Ok(vm)
+}
+
+pub fn stdlib_object_value_is(vm: &mut VM) -> Result<&mut VM, Error> {
+    if vm.stack.current_stack_len() < 1 {
+        bail!("Stack is too shallow for inline IS");
+    }
+    let obj_val = match vm.stack.pull() {
+        Some(obj_val) => if obj_val.type_of() == OBJECT {
+            obj_val
+        } else {
+            bail!("IS: NO OBJECT IN #1");
+        },
+        None => bail!("IS: NO DATA IN #1"),
+    };
+    match locate_value_in_object(".data".to_string(), obj_val.clone()) {
+        Some(value) => {
+            vm.stack.push(obj_val);
+            vm.stack.push(value);
+        }
+        None => bail!("IS: found no wrapped VALUE"),
     };
     Ok(vm)
 }
@@ -146,5 +168,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     }
     let _ = bc.vm.register_inline("wrap".to_string(), stdlib_object_value_wrap);
     let _ = bc.vm.register_inline("unwrap".to_string(), stdlib_object_value_unwrap);
+    let _ = bc.vm.register_inline("is".to_string(), stdlib_object_value_is);
     drop(bc);
 }
