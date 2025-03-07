@@ -7,6 +7,50 @@ use rust_multistackvm::multistackvm::VM;
 use crate::stdlib::{helpers, functions};
 use easy_error::{Error, bail};
 
+pub fn locate_value_in_object(name: String, value: Value) -> Option<Value> {
+    match value.get(name.clone()) {
+        Ok(value) => return Some(value),
+        Err(_) => {}
+    }
+    let super_list = match value.get(".super") {
+        Ok(super_list) => super_list,
+        Err(_) => return None,
+    };
+    if super_list.type_of() != LIST {
+        return None;
+    }
+    for s in super_list {
+        match locate_value_in_object(name.clone(), s) {
+            Some(v) => return Some(v),
+            None => continue,
+        }
+    }
+    return None;
+}
+
+pub fn set_value_in_object(name: String, mut value: Value, n_value: Value) -> Value {
+    match value.get(name.clone()) {
+        Ok(_) => {
+            value = value.set(name, n_value);
+            return value;
+        }
+        Err(_) => {}
+    }
+    let super_list = match value.get(".super") {
+        Ok(super_list) => super_list,
+        Err(_) => return value,
+    };
+    if super_list.type_of() != LIST {
+        return value;
+    }
+    let mut new_super = Value::list();
+    for s in super_list {
+        new_super = new_super.push(set_value_in_object(name.clone(), s, n_value.clone()))
+    }
+    value = value.set(".super".to_string(), new_super);
+    return value;
+}
+
 fn register_method_value_init(vm: &mut VM) -> Result<&mut VM, Error> {
     let mut value = match vm.stack.pull() {
         Some(value) => value,
@@ -41,7 +85,7 @@ pub fn stdlib_object_value_wrap(vm: &mut VM) -> Result<&mut VM, Error> {
     if vm.stack.current_stack_len() < 2 {
         bail!("Stack is too shallow for inline UNWRAP");
     }
-    let mut obj_val = match vm.stack.pull() {
+    let obj_val = match vm.stack.pull() {
         Some(obj_val) => if obj_val.type_of() == OBJECT {
             obj_val
         } else {
@@ -49,21 +93,16 @@ pub fn stdlib_object_value_wrap(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("UNWRAP NO DATA IN #1"),
     };
-    match obj_val.has_key_raw(".data") {
-        Ok(is_key) => {
-            if ! is_key {
-                bail!("WRAP: this object is not devrived from Value class");
-            }
-        }
-        Err(err) => bail!("WRAP: can not detect if OBJECT is wrappable: {}", err),
+    match locate_value_in_object(".data".to_string(), obj_val.clone()) {
+        Some(_) => {}
+        None => bail!("WRAP: can not detect if OBJECT is wrappable"),
 
     }
     let data_val = match vm.stack.pull() {
         Some(data_val) => data_val,
         None => bail!("WRAP NO DATA IN #1"),
     };
-    obj_val = obj_val.set(".data", data_val);
-    vm.stack.push(obj_val);
+    vm.stack.push(set_value_in_object(".data".to_string(), obj_val.clone(), data_val));
     Ok(vm)
 }
 
@@ -79,9 +118,9 @@ pub fn stdlib_object_value_unwrap(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("UNWRAP NO DATA IN #1"),
     };
-    match obj_val.get(".data") {
-        Ok(value) => vm.stack.push(value),
-        Err(err) => bail!("UNWRAP found no wrapped VALUE: {}", err),
+    match locate_value_in_object(".data".to_string(), obj_val) {
+        Some(value) => vm.stack.push(value),
+        None => bail!("UNWRAP found no wrapped VALUE"),
     };
     Ok(vm)
 }

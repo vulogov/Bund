@@ -1,0 +1,33 @@
+//
+// This demo shows how to wrap enternal value into object and
+// unwrap object leaving a value data in the stack
+//
+
+//
+// Leave string value in the stack
+//
+"42"
+  :Integer object         // And then create an integer object
+                          // Integer object will try it best to
+                          // convert data in stack to INTEGER
+
+     dup                  // We will make a copy of the object
+                          // we conna need it for a wrap "word"
+
+     unwrap               // Take an object from stack and unwrap a value
+                          // that will be left in the stack
+
+     1 -                  // Do some math
+
+     swap                 // Result of the math will be on top of the stack as well
+                          // as cop of the object. Let's swap them to make "wrap"
+                          // word happy
+
+     wrap                 // Take the object and math result and wrap it into
+                          // object, leave object into stack
+
+     unwrap println       // Let's see what is inside
+
+//
+// The outcome shall be -41
+//
