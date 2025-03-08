@@ -5,6 +5,7 @@ use rust_dynamic::types::*;
 use rust_dynamic::value::Value;
 use rust_multistackvm::multistackvm::VM;
 use crate::stdlib::{helpers, functions};
+use crate::stdlib::functions::oop;
 use easy_error::{Error, bail};
 
 fn register_method_id(vm: &mut VM) -> Result<&mut VM, Error> {
@@ -40,8 +41,8 @@ fn register_method_to_str(vm: &mut VM) -> Result<&mut VM, Error> {
                 Ok(cl_name) => cl_name,
                 Err(err) => bail!("'.str' error casting class name: {}", err),
             };
-            match value.get(".data") {
-                Ok(data_val) => {
+            match oop::value_class::locate_value_in_object(".data".to_string(), value.clone()) {
+                Some(data_val) => {
                     match data_val.conv(STRING) {
                         Ok(str_value) => {
                             vm.stack.push(str_value);
@@ -51,7 +52,7 @@ fn register_method_to_str(vm: &mut VM) -> Result<&mut VM, Error> {
                         }
                     }
                 }
-                Err(_) => {
+                None => {
                     vm.stack.push(Value::from_string(format!("Object({})", &cl_name)));
                 }
             };

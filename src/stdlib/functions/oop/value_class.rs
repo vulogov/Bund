@@ -74,7 +74,6 @@ fn register_value(vm: &mut VM) -> Result<&mut VM, Error> {
     let mut obj_class = Value::make_class();
     let mut super_class = Value::list();
     super_class = super_class.push(Value::from_string("Object"));
-    super_class = super_class.push(Value::from_string("Iterable"));
     obj_class = obj_class.set(".class_name".to_string(), Value::from_string("Value"));
     obj_class = obj_class.set(".super".to_string(), super_class);
     obj_class = obj_class.set(".init".to_string(), Value::ptr(".value_init".to_string(), Vec::new()));

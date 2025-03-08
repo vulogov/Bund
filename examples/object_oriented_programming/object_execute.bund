@@ -1,0 +1,19 @@
+//
+// This code snippet demonstrates execution of external lambda or BUND
+// function over wrapped value
+//
+
+//
+// First, we create an INTEGER object with wrapped value 41
+//
+41 :Integer object
+  //
+  // Then we define the LAMBDA and execute this LAMBDA
+  // with the data of theis wrapped object
+  //
+  { 1 + } #
+  //
+  // Then, we format and print the result
+  //
+  "Answer is {A}"
+    format println
