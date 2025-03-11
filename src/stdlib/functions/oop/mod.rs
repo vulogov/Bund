@@ -9,6 +9,7 @@ pub mod float_class;
 pub mod bool_class;
 pub mod list_class;
 pub mod floatlist_class;
+pub mod intervals_class;
 pub mod object_execute;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
@@ -20,5 +21,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     bool_class::init_stdlib(cli);
     list_class::init_stdlib(cli);
     floatlist_class::init_stdlib(cli);
+    intervals_class::init_stdlib(cli);
     object_execute::init_stdlib(cli);
 }

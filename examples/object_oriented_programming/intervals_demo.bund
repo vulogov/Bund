@@ -1,0 +1,42 @@
+//
+// This script demonstrates the checking if the value
+// overlaps with any known interval. This is done with a help of
+// Intervals class
+//
+
+//
+// Entering the number from the input
+//
+"Enter an integer number: " input
+
+//
+// We will handle an exceptions if interval is not found
+//
+?try
+  :try {
+    //
+    // Prepare intervals including 1-10, 20-30
+    //
+    :overlap [
+      [1.0 10.0]
+      [20.0 30.0]
+      //
+      // Execute Ontervals::overlap
+      //
+    ] :Intervals object !
+    //
+    // And print a nice message if entered number is a part of intervals
+    //
+    "Entered number is a part of the interval {A}"
+      format
+        println
+  } set
+  :except {
+    //
+    // Print some error message if number is not belong to the intervals
+    //
+    !
+    "If you see an error message, entered number is not a part of any known intervals"
+      println
+  } set
+!
