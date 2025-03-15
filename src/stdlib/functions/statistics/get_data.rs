@@ -209,6 +209,7 @@ pub fn get_data(vm: &mut VM, op: StackOps, smode: statistics::SourceMode, err_pr
                     log::debug!("Processing data from metrics.");
                     return get_data_from_metrics(vm, op, smode, err_prefix);
                 }
+                NODATA => bail!("{} END OF DATA", &err_prefix),
                 _ => {
                     log::debug!("Processing data from stack.");
                     return get_data_for_stat_from_stack_or_workbench(vm, op, err_prefix);

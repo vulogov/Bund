@@ -1,0 +1,21 @@
+//
+// This code will demostrate of use the Theory of Probability
+// to estimate a next value of the sequence
+//
+:PrintHeaderLine {
+  "" println println "=" 50 * println
+} register
+
+//
+// And then provide a two data sample of 16 values from NORMAL generator
+//
+:TEST config
+  :type       "uniform"  set
+  :Mean       10.0      set
+  :Deviation  1.5       set
+generator
+
+:TEST 512 generator.sample*
+:TEST 512 generator.sample*
+
+0.5 outlier.detect println
