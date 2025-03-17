@@ -1,0 +1,46 @@
+//
+// Demonstration of use of Multiple Seasonal-Trend decomposition with LOESS
+// for samples forecasting
+//
+
+//
+// We will do compute in @Compujte namespace
+//
+@Compute
+
+//
+// First, we will generate a data sample
+//
+0.95 3 config
+  "X"    0.0       set
+  "Step" 1.0       set
+  "N"    32        set
+//
+// And run forecasting, store results in workbech
+// then getting the data to the loop
+//
+seq forecast.mstl . [ 1 2 3 ] {
+  // Duplicate indexes for `at`
+  dup dup
+    // Take the lower index
+    take dup .
+      :lower get at .
+        @Res
+          take
+        @Compute
+    // Take the forecasted value
+    take dup .
+      :forecast get at .
+        @Res
+          take
+        @Compute
+    // Take upper index
+    take dup .
+      :upper get at .
+        @Res
+          // And print a nice message about Upper/Forecasted/Lower values
+          take
+            "Upper: {A} Forecasted: {B} Lower: {C}"
+              format println
+        @Compute
+} loop

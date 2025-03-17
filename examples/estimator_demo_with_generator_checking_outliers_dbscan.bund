@@ -1,10 +1,10 @@
 //
-// This code will demostrate of use the MAD
+// This code will demostrate of use the DBSCAN
 // to detect outliers in a sample
 //
 
 //
-// And then provide a two data sample of 32 values from UNIFORM generator
+// And then provide a two data sample of 16 values from UNIFORM generator
 //
 :TEST config
   :type       "uniform"  set
@@ -15,4 +15,4 @@ generator
 :TEST 32 generator.sample* dup io.graph println
 :TEST 32 generator.sample* dup io.graph println
 
-0.99 outlier.detect println
+0.99999 outlier.detect.dbscan println
