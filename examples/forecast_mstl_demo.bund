@@ -4,7 +4,7 @@
 //
 
 //
-// We will do compute in @Compujte namespace
+// We will do compute in @Compute namespace
 //
 @Compute
 
@@ -22,7 +22,7 @@
 seq forecast.mstl . [ 1 2 3 ] {
   // Duplicate indexes for `at`
   dup dup
-    // Take the lower index
+    // Take forecasting result lower index
     take dup .
       :lower get at .
         @Res
@@ -34,7 +34,7 @@ seq forecast.mstl . [ 1 2 3 ] {
         @Res
           take
         @Compute
-    // Take upper index
+    // Take forecasted upper index
     take dup .
       :upper get at .
         @Res

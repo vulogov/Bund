@@ -7,6 +7,7 @@ pub mod math;
 pub mod seq;
 pub mod rand;
 pub mod anomalies;
+pub mod clusters;
 pub mod breakout;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
