@@ -7,6 +7,7 @@ pub mod estimation;
 pub mod outliers;
 pub mod outliers_dbscan;
 pub mod clustering;
+pub mod periodic_detector;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     markov::init_stdlib(cli);
@@ -15,4 +16,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     outliers::init_stdlib(cli);
     outliers_dbscan::init_stdlib(cli);
     clustering::init_stdlib(cli);
+    periodic_detector::init_stdlib(cli);
 }

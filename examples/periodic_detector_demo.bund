@@ -1,0 +1,23 @@
+//
+// This sample demonstrates detection of periodic pattern
+// in collected sample
+//
+
+//
+// First, let's create config and initialize generator
+//
+:TEST config
+  :type     "sawtooth"  set
+  :Period   4           set
+  :High     1.0         set
+  :Low      0.0         set
+  :Delay    3           set
+
+generator
+
+//
+// Then in the loop, we will print detected periodic patterns
+//
+:TEST 64 generator.sample* periodic.detect {
+    println
+} loop
