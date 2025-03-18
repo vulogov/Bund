@@ -12,6 +12,7 @@ pub mod setloglevel;
 pub mod bund_version;
 pub mod bund_shell;
 pub mod bund_eval;
+pub mod bund_test;
 pub mod bund_script;
 pub mod bund_wscript;
 pub mod bund_load;
@@ -78,6 +79,9 @@ pub fn main() {
         }
         Commands::Shell(shell) => {
             bund_shell::run(&cli, &shell);
+        }
+        Commands::Test(test) => {
+            bund_test::run(&cli, &test);
         }
         Commands::Load(load) => {
             bund_load::run(&cli, &load);
@@ -149,6 +153,7 @@ enum Commands {
     Script(Script),
     Eval(Eval),
     Shell(Shell),
+    Test(Test),
     Load(Load),
     Wscript(Wscript),
     Version(Version),
@@ -263,6 +268,13 @@ pub struct Shell {
 
     #[clap(last = true)]
     args: Vec<String>,
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Run test cases inside the BUND environment")]
+pub struct Test {
+    #[clap(last = true)]
+    cases: Vec<String>,
 }
 
 #[derive(Args, Clone, Debug)]

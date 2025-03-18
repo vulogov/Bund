@@ -6,6 +6,9 @@ use crate::stdlib::helpers;
 use crate::stdlib::functions::debug_fun;
 use std::ops::DerefMut;
 use crate::stdlib::BUND;
+use rust_dynamic::value::Value;
+
+use easy_error::{Error, bail};
 
 #[time_graph::instrument]
 pub fn run_snippet_for_cmd(snippet: String, cli: &cmd::Cli) {
@@ -90,6 +93,35 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
         }
     }
     drop(bc);
+}
+
+#[time_graph::instrument]
+pub fn run_snippet_and_return_value(snippet: String) -> Result<Value, Error> {
+    let code = format!("{}\n", &snippet);
+    let mut bc = match BUND.lock() {
+        Ok(bc) => bc,
+        Err(err) => bail!("Locking interpreter returns: {}", err),
+    };
+
+    log::debug!("Execute code");
+    match bc.eval(code) {
+        Ok(_) => {}
+        Err(err) => bail!("BUND script exit with: {}", err),
+    };
+    if bc.vm.stack.current_stack_len() < 1 {
+        bail!("Stack is too shallow for returning a value");
+    } else {
+        match bc.vm.stack.pull() {
+            Some(value) => {
+                drop(bc);
+                return Ok(value);
+            }
+            None => {
+                drop(bc);
+                bail!("Can not obtain value for return operation");
+            }
+        }
+    }
 }
 
 

@@ -1,4 +1,5 @@
 extern crate log;
+use std::fs;
 use std::io::{self, BufRead};
 use curl::easy::{Easy2, Handler, WriteError};
 
@@ -55,4 +56,11 @@ pub fn get_file_from_uri(some_url: String) -> Option<String>  {
 
 pub fn get_file_from_file(full_path: String) -> Option<String> {
     get_file_from_uri(format!("file://{}", &full_path.as_str()))
+}
+
+pub fn get_file_from_relative_file(full_path: String) -> Option<String> {
+    match fs::read_to_string(full_path) {
+        Ok(data) => Some(data),
+        Err(_) => None,
+    }
 }
