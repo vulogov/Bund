@@ -1,0 +1,7 @@
+"Testing [...] sort"
+config
+  "type"  "seq.descending" set
+  "X"    100.0       set
+  "Step" 1.       set
+  "N"    15         set
+seq sort car 86.0 ==

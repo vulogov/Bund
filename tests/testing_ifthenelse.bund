@@ -1,0 +1,6 @@
+"Testing {} {} ?true* word"
+42 42 != {
+  true
+} {
+  false
+} ?true*

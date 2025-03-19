@@ -1,0 +1,9 @@
+"Testing ?try TRY ... EXCEPT feature"
+?try
+  :try {
+    "I am raising an exception. Because I can" raise
+  } set
+  :except {
+    drop true
+  } set
+!
