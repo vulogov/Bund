@@ -101,6 +101,7 @@ arrow = "54.2.1"
 arrow-arith = "54.2.1"
 iset = "0.3.1"
 augurs =  { version = "0.9.*", features = ["forecaster", "ets", "mstl", "outlier", "dtw", "clustering", "seasons"] }
+execution-time = "0.3.1"
 
 
 [dependencies.rusqlite]

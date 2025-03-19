@@ -1,14 +1,19 @@
 extern crate log;
 use crate::cmd;
+use rust_dynamic::types::*;
 use std::path::Path;
 use scan_dir::ScanDir;
+use execution_time::ExecutionTime;
+use comfy_table::modifiers::UTF8_ROUND_CORNERS;
+use comfy_table::presets::UTF8_FULL;
+use comfy_table::*;
 use crate::stdlib::helpers;
 
 fn run_test_file(file: String) -> bool {
     if file.ends_with(".bund") {
         match helpers::file_helper::get_file_from_relative_file(file.clone()) {
             Some(script) => {
-                return run_test_case(script);
+                return run_test_case(script, file.clone());
             }
             None => {
                 log::error!("Case {} is not file", &file);
@@ -21,9 +26,11 @@ fn run_test_file(file: String) -> bool {
     true
 }
 
-fn run_test_case(script: String) -> bool {
+fn run_test_case(script: String, source: String) -> bool {
+    let timer = ExecutionTime::start();
     match helpers::run_snippet::run_snippet_and_return_value(script) {
-        Ok(value) => {
+        Ok((value, is_desc)) => {
+            let elapsed_time = timer.get_elapsed_time();
             let res = match value.cast_bool() {
                 Ok(res) => res,
                 Err(err) => {
@@ -31,6 +38,34 @@ fn run_test_case(script: String) -> bool {
                     return false;
                 }
             };
+            let mut table = Table::new();
+            let desc = match is_desc {
+                Some(is_desc) => match is_desc.conv(STRING) {
+                    Ok(desc) => match desc.cast_string() {
+                        Ok(desc) => desc,
+                        Err(err) => format!("Error getting description: {}", err),
+                    },
+                    Err(err) => format!("Error casting description: {}", err),
+                },
+                None => "NO DESCRIPTION".to_string(),
+            };
+            table
+                .load_preset(UTF8_FULL)
+                .apply_modifier(UTF8_ROUND_CORNERS)
+                .set_content_arrangement(ContentArrangement::Dynamic)
+                .add_row(vec![
+                    Cell::new("Test case status").fg(Color::Green), Cell::new(res).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("Test case source").fg(Color::Blue), Cell::new(&source).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("Elapsed time").fg(Color::Blue), Cell::new(&elapsed_time).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("Test case description").fg(Color::Blue), Cell::new(&desc).fg(Color::White),
+                ]);
+            println!("{table}");
             return res;
         }
         Err(err) => {
@@ -67,7 +102,7 @@ pub fn run(_cli: &cmd::Cli, test_arg: &cmd::Test) {
         } else {
             match helpers::file_helper::get_file_from_uri(c.clone()) {
                 Some(script) => {
-                    if run_test_case(script) {
+                    if run_test_case(script, c.clone()) {
                         log::info!("Test case: {} OK", &c);
                     } else {
                         log::info!("Test case: {} FAIL", &c);

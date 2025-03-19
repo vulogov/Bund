@@ -96,7 +96,7 @@ pub fn run_snippet_for_script(snippet: String, cli: &cmd::Cli) {
 }
 
 #[time_graph::instrument]
-pub fn run_snippet_and_return_value(snippet: String) -> Result<Value, Error> {
+pub fn run_snippet_and_return_value(snippet: String) -> Result<(Value, Option<Value>), Error> {
     let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,
@@ -113,8 +113,9 @@ pub fn run_snippet_and_return_value(snippet: String) -> Result<Value, Error> {
     } else {
         match bc.vm.stack.pull() {
             Some(value) => {
+                let is_desc = bc.vm.stack.pull();
                 drop(bc);
-                return Ok(value);
+                return Ok((value, is_desc));
             }
             None => {
                 drop(bc);
