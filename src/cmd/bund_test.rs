@@ -29,7 +29,7 @@ fn run_test_file(file: String) -> bool {
 fn run_test_case(script: String, source: String) -> bool {
     let timer = ExecutionTime::start();
     match helpers::run_snippet::run_snippet_and_return_value(script) {
-        Ok((value, is_desc)) => {
+        Ok((value, is_desc, stack_len)) => {
             let elapsed_time = timer.get_elapsed_time();
             let res = match value.cast_bool() {
                 Ok(res) => res,
@@ -49,12 +49,21 @@ fn run_test_case(script: String, source: String) -> bool {
                 },
                 None => "NO DESCRIPTION".to_string(),
             };
+            let test_status = if res {
+                if stack_len > 0 {
+                    Cell::new(res).fg(Color::Yellow)
+                } else {
+                    Cell::new(res).fg(Color::Green)
+                }
+            } else {
+                Cell::new(res).fg(Color::Red)
+            };
             table
                 .load_preset(UTF8_FULL)
                 .apply_modifier(UTF8_ROUND_CORNERS)
                 .set_content_arrangement(ContentArrangement::Dynamic)
                 .add_row(vec![
-                    Cell::new("Test case status").fg(Color::Green), Cell::new(res).fg(Color::White),
+                    Cell::new("Test case status").fg(Color::White), test_status,
                 ])
                 .add_row(vec![
                     Cell::new("Test case source").fg(Color::Blue), Cell::new(&source).fg(Color::White),

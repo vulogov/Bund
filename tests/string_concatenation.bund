@@ -1,0 +1,2 @@
+" " "Hello" + "world!" swap + "Hello world!" ==
+"Testing concatenation and comparing of strings" swap

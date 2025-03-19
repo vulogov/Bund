@@ -1,0 +1,2 @@
+41 1.0 + 2 * 2.0 swap / 42.0 == 
+"Testing of base add/sub/mul/div functions for mix integers or floats" swap

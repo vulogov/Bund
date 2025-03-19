@@ -1,0 +1,2 @@
+41 1 + 2 * 2 swap / 42 ==
+"Testing of base add/sub/mul/div functions for integers" swap

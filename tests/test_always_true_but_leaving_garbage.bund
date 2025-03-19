@@ -1,0 +1,6 @@
+//
+// This test case will be succesful every time
+//
+42
+"This test always succesful but leaving garbage in the stack"
+true
