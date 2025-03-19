@@ -1,0 +1,7 @@
+0.0 .
+config
+  "X"     0.0       set
+  "Step"  1.0         set
+  "N"     3           set
+seq { math.sin } map { +. } loop take 1.7507684116335783 ==
+"Testing [...] {} map loop " swap

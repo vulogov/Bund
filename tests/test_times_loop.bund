@@ -1,0 +1,5 @@
+0 .
+10 {
+  +.
+} times take 45 ==
+"Testing N {} times loop" swap

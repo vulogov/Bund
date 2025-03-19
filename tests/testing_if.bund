@@ -1,0 +1,4 @@
+"Testing { } if word"
+42 42 == {
+  true
+} if
