@@ -46,7 +46,7 @@ BUND incorporates certain elements of imperative programming, notably the suppor
 
 ```rust
 //
-// This is a partuial application demo
+// This is a partial application demo
 //
 :greeting curry
   :data [
