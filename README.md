@@ -182,3 +182,12 @@ bund  test -- ./tests/test_always_true.bund
 │ Test case description ┆ This test always succesful     │
 ╰───────────────────────┴────────────────────────────────╯
 ```
+
+## BUND build instruction
+
+Ensure that you do have the must up-to-date Rust toolchain and compiler installed,
+then run:
+
+```bash
+make
+```

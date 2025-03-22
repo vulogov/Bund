@@ -31,7 +31,18 @@ pub fn stdlib_internaldb_sql(vm: &mut VM) -> Result<&mut VM, Error> {
             bail!("SQL: prepare statement returns error: {}", err)
         },
     };
-
+    match stmt.exists([]) {
+        Ok(res) => {
+            if res {
+                log::debug!("SQL: statement ready. Will return data");
+            } else {
+                log::debug!("SQL: statement ready. Will not return data");
+            }
+        }
+        Err(err) => {
+            log::debug!("SQL: statement ready. No prediction: {}", err);
+        }
+    }
     let mut res = Value::list();
     match stmt.query([]) {
         Ok(mut rows) => {
