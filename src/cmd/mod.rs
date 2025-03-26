@@ -15,6 +15,7 @@ pub mod bund_eval;
 pub mod bund_test;
 pub mod bund_script;
 pub mod bund_wscript;
+pub mod bund_bbus;
 pub mod bund_load;
 
 pub mod bund_display_banner;
@@ -89,6 +90,9 @@ pub fn main() {
         Commands::Wscript(wscript) => {
             bund_wscript::run(&cli, &wscript);
         }
+        Commands::Bus(bbus) => {
+            bund_bbus::run(&cli, &bbus);
+        }
         Commands::Version(_) => {
             bund_version::run(&cli);
         }
@@ -142,7 +146,7 @@ pub struct Cli {
     pub bootstrap: Option<Vec<String>>,
 
     #[clap(flatten, help="BUND BIS configuration")]
-    bus: DistributedArgGroup,
+    pub bus: DistributedArgGroup,
 
     #[clap(subcommand)]
     command: Commands,
@@ -156,35 +160,18 @@ enum Commands {
     Test(Test),
     Load(Load),
     Wscript(Wscript),
+    Bus(Bbus),
     Version(Version),
 }
 
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = false, multiple = true)]
 pub struct DistributedArgGroup {
-    #[clap(help="BUS receiving address", long, default_value_t = String::from(env::var("BUND_BUS_RECV_ADDRESS").unwrap_or("tcp/127.0.0.1:7447".to_string())))]
-    pub bus_recv_connect: String,
+    #[clap(help="BUS configuration file", long, default_value_t = String::from(env::var("BUND_BUS_CONFIG_FILE").unwrap_or("zenoh_client.json5".to_string())))]
+    pub bus_config: String,
 
-    #[clap(help="BUS listen address", long, default_value_t = String::from_utf8(vec![]).unwrap())]
-    pub bus_recv_listen: String,
-
-    #[clap(help="BUS topic to subscribe", long )]
-    pub bus_recv_key: Vec<String>,
-
-    #[clap(help="BUS sending address", long, default_value_t = String::from(env::var("BUND_BUS_SEND_ADDRESS").unwrap_or("tcp/127.0.0.1:7447".to_string())))]
-    pub bus_send_connect: String,
-
-    #[clap(help="BUS listen address", long, default_value_t = String::from_utf8(vec![]).unwrap())]
-    pub bus_send_listen: String,
-
-    #[clap(help="BUS topic to subscribe", long)]
-    pub bus_send_key: Vec<String>,
-
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable multicast discovery of ZENOH bus")]
-    pub bus_disable_multicast_scout: bool,
-
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Configure CONNECT mode for ZENOH bus")]
-    pub bus_set_connect_mode: bool,
+    #[clap(help="Instance receiving queue", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING").unwrap_or("zbus/receiving".to_string())))]
+    pub receiving: String,
 }
 
 #[derive(Args, Clone, Debug)]
@@ -301,6 +288,38 @@ pub struct Wscript {
 
     #[clap(flatten, help="Command performed")]
     command: WscriptSrcArgGroup,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct BbusArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Publish data on the BUS")]
+    pub publish: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Subscribe to the BUS queue")]
+    pub subscribe: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Put value to the BUS")]
+    pub put: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Get value from the bus")]
+    pub get: bool,
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Manage data stored in the BUND data bus")]
+pub struct Bbus {
+
+    #[clap(short, long, help="Value for sending to the BUS")]
+    pub value: Option<String>,
+
+    #[clap(short, long, value_delimiter = ' ', help="BUS pub/sub/get/put key")]
+    pub key: Option<String>,
+
+    #[clap(flatten, help="BUS command")]
+    command: BbusArgGroup,
 
 }
 

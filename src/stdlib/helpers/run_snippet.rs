@@ -120,6 +120,7 @@ pub fn run_snippet_and_return_value(snippet: String) -> Result<(Value, Option<Va
                 }
                 bc.vm.stack.clear();
                 drop(bc);
+                // println!("SSS {:?}: {:?} {:?} {}",  &snippet, &value, &is_desc, &stack_len);
                 return Ok((value, is_desc, stack_len));
             }
             None => {
