@@ -178,6 +178,9 @@ pub struct DistributedArgGroup {
     #[clap(help="Distributed node ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
     pub nodeid: String,
 
+    #[clap(help="Distributed node role", long, default_value_t = String::from("BUND"))]
+    pub noderole: String,
+
     #[clap(help="Instance receiving queue prefix", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING_PREFIX").unwrap_or("zbus/receiving".to_string())))]
     pub receiving: String,
 
