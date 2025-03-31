@@ -8,6 +8,7 @@ use crossbeam::channel::{Sender, Receiver, unbounded};
 use easy_error::{Error, bail};
 
 pub mod crossbus;
+pub mod globals;
 
 lazy_static! {
     static ref PIPES: Mutex<BTreeMap<String,(Sender<Vec<u8>>, Receiver<Vec<u8>>)>> = {
@@ -126,4 +127,5 @@ pub fn bus_pull(k: String) -> Result<Value, Error> {
 pub fn init_stdlib(cli: &cmd::Cli) {
     pipes_init();
     crossbus::init_stdlib(cli);
+    globals::init_stdlib(cli);
 }

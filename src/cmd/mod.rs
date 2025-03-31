@@ -5,6 +5,8 @@ use crate::stdlib::BUND;
 use crate::stdlib::{init_stdlib};
 use lazy_static::lazy_static;
 use std::sync::Mutex;
+use uuid::Uuid;
+use crate::stdlib::helpers::hostname::get_hostname;
 use clap::{Parser, Subcommand, Args};
 
 pub mod setloglevel;
@@ -167,11 +169,23 @@ enum Commands {
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = false, multiple = true)]
 pub struct DistributedArgGroup {
-    #[clap(help="BUS configuration file", long, default_value_t = String::from(env::var("BUND_BUS_CONFIG_FILE").unwrap_or("zenoh_client.json5".to_string())))]
+    #[clap(help="BUS configuration file", long, default_value_t = String::from(env::var("BUND_BUS_CONFIG_FILE").unwrap_or("bund_client.json5".to_string())))]
     pub bus_config: String,
 
-    #[clap(help="Instance receiving queue", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING").unwrap_or("zbus/receiving".to_string())))]
+    #[clap(help="Distributed hostname", long, default_value_t = String::from(get_hostname()))]
+    pub hostname: String,
+
+    #[clap(help="Distributed node ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
+    pub nodeid: String,
+
+    #[clap(help="Instance receiving queue prefix", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING_PREFIX").unwrap_or("zbus/receiving".to_string())))]
     pub receiving: String,
+
+    #[clap(help="BUND global vaariables bus prefix", long, default_value_t = String::from(env::var("BUND_GLOBALS_PREFIX").unwrap_or("zbus/globals".to_string())))]
+    pub globals_prefix: String,
+
+    #[clap(help="BUND execution outcome bus prefix", long, default_value_t = String::from(env::var("BUND_OUTCOME_PREFIX").unwrap_or("zbus/result".to_string())))]
+    pub outcome_prefix: String,
 }
 
 #[derive(Args, Clone, Debug)]
