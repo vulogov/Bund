@@ -64,3 +64,46 @@ pub fn get_file_from_relative_file(full_path: String) -> Option<String> {
         Err(_) => None,
     }
 }
+
+pub fn get_snippet(source_stdin: bool, source_eval: Option<String>, source_file: Option<String>, source_url: Option<String>) -> Option<String> {
+    let snippet = if source_stdin {
+        get_file_from_stdin()
+    } else {
+        match source_eval {
+            Some(snippet) => snippet.to_string(),
+            None => {
+                match source_file {
+                    Some(snippet_file) => {
+                        let snippet = match get_file_from_file(snippet_file.to_string()) {
+                            Some(snippet) => snippet,
+                            None =>  {
+                                log::error!("EError getting snippet from file: {}", &snippet_file.to_string());
+                                return None;
+                            }
+                        };
+                        snippet
+                    }
+                    None => {
+                        match source_url {
+                            Some(snippet_uri) => {
+                                let snippet = match get_file_from_uri(snippet_uri.to_string()) {
+                                    Some(snippet) => snippet,
+                                    None => {
+                                        log::error!("EError getting snippet from URL: {}", &snippet_uri.to_string());
+                                        return None;
+                                    }
+                                };
+                                snippet
+                            }
+                            None => {
+                                log::error!("No sources for script were provided");
+                                return None;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+    return Some(snippet);
+}

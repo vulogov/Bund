@@ -57,3 +57,15 @@ pub fn get_outcome_path(execution_id: String) -> Result<String, Error> {
     drop(cli);
     Ok(res)
 }
+
+pub fn get_scripts_path(script_name: String) -> Result<String, Error> {
+    let cli = match cmd::CLI.lock() {
+        Ok(cli) => cli,
+        Err(err) => bail!("Error locking BUND CLI for Zenoh config making: {}", err),
+    };
+    let is_distributed = cli.distributed;
+    ensure!(is_distributed, "BUND must be in distributed mode. You shall pass --distributed to CLI");
+    let res = format!("{}/{}", &cli.bus.scripts_prefix, &script_name);
+    drop(cli);
+    Ok(res)
+}

@@ -10,6 +10,15 @@ use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 
 pub fn debug_display_hostinfo_color() {
+    let cli = match cmd::CLI.lock() {
+        Ok(cli) => cli,
+        Err(err) => {
+            log::error!("Error locking BUND CLI: {}", err);
+            return;
+        }
+    };
+    let is_distributed = cli.distributed;
+    drop(cli);
     let mut table = Table::new();
     let hostname = match sys_metrics::host::get_hostname() {
         Ok(hostname) => hostname,
@@ -46,6 +55,9 @@ pub fn debug_display_hostinfo_color() {
             Cell::new("internaldb").fg(Color::Green), Cell::new(&helpers::internaldb::internaldb_version()).fg(Color::White),
         ])
         .add_row(vec![
+            Cell::new("Distributed mode").fg(Color::Blue), Cell::new(&is_distributed).fg(Color::White),
+        ])
+        .add_row(vec![
             Cell::new("Hostname").fg(Color::Blue), Cell::new(&hostname.clone()).fg(Color::White),
         ])
         .add_row(vec![
@@ -61,6 +73,15 @@ pub fn debug_display_hostinfo_color() {
 }
 
 pub fn debug_display_hostinfo_nocolor() {
+    let cli = match cmd::CLI.lock() {
+        Ok(cli) => cli,
+        Err(err) => {
+            log::error!("Error locking BUND CLI: {}", err);
+            return;
+        }
+    };
+    let is_distributed = cli.distributed;
+    drop(cli);
     let mut table = Table::new();
     let hostname = match sys_metrics::host::get_hostname() {
         Ok(hostname) => hostname,
@@ -95,6 +116,9 @@ pub fn debug_display_hostinfo_nocolor() {
         ])
         .add_row(vec![
             Cell::new("internaldb"), Cell::new(&helpers::internaldb::internaldb_version()),
+        ])
+        .add_row(vec![
+            Cell::new("Distributed mode"), Cell::new(&is_distributed),
         ])
         .add_row(vec![
             Cell::new("Hostname"), Cell::new(&hostname.clone()),

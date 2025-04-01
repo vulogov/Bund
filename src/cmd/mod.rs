@@ -18,6 +18,7 @@ pub mod bund_test;
 pub mod bund_script;
 pub mod bund_wscript;
 pub mod bund_bbus;
+pub mod bund_cluster;
 pub mod bund_load;
 
 pub mod bund_display_banner;
@@ -95,6 +96,9 @@ pub fn main() {
         Commands::Bus(bbus) => {
             bund_bbus::run(&cli, &bbus);
         }
+        Commands::Cluster(cluster) => {
+            bund_cluster::run(&cli, &cluster);
+        }
         Commands::Version(_) => {
             bund_version::run(&cli);
         }
@@ -163,6 +167,7 @@ enum Commands {
     Load(Load),
     Wscript(Wscript),
     Bus(Bbus),
+    Cluster(Cluster),
     Version(Version),
 }
 
@@ -184,8 +189,11 @@ pub struct DistributedArgGroup {
     #[clap(help="Instance receiving queue prefix", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING_PREFIX").unwrap_or("zbus/receiving".to_string())))]
     pub receiving: String,
 
-    #[clap(help="BUND global vaariables bus prefix", long, default_value_t = String::from(env::var("BUND_GLOBALS_PREFIX").unwrap_or("zbus/globals".to_string())))]
+    #[clap(help="BUND global variables bus prefix", long, default_value_t = String::from(env::var("BUND_GLOBALS_PREFIX").unwrap_or("zbus/globals".to_string())))]
     pub globals_prefix: String,
+
+    #[clap(help="BUND scripts bus prefix", long, default_value_t = String::from(env::var("BUND_SCRIPTS_PREFIX").unwrap_or("zbus/scripts".to_string())))]
+    pub scripts_prefix: String,
 
     #[clap(help="BUND execution outcome bus prefix", long, default_value_t = String::from(env::var("BUND_OUTCOME_PREFIX").unwrap_or("zbus/result".to_string())))]
     pub outcome_prefix: String,
@@ -337,6 +345,38 @@ pub struct Bbus {
 
     #[clap(flatten, help="BUS command")]
     command: BbusArgGroup,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct ClusterArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Publish script to the BUS for execution")]
+    pub publish: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Download previously published script")]
+    pub download: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Schedule script for execution")]
+    pub schedule: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Running distributed script execution service")]
+    pub actor: bool,
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="BUND distributed cluster operation")]
+pub struct Cluster {
+
+    #[clap(flatten)]
+    source: ScriptSrcArgGroup,
+
+    #[clap(short, long, help="Cluster script or value key")]
+    pub key: Option<String>,
+
+    #[clap(flatten, help="CLUSTER command")]
+    command: ClusterArgGroup,
 
 }
 
