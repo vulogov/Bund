@@ -1,13 +1,91 @@
 extern crate log;
 use crate::cmd;
 use rust_dynamic::value::Value;
+use std::time::Duration;
+use beanstalkc::Beanstalkc;
+use serde_json::json;
 use crate::stdlib::helpers;
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 
-fn bund_cluster_schedule(_cli: &cmd::Cli, _bund_cluster_arg: &cmd::Cluster) {
-
+fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
+    if bund_cluster_arg.upload {
+        bund_cluster_publish(cli, bund_cluster_arg);
+    }
+    let mut conn = match Beanstalkc::new()
+                         .host(&cli.bus.beanstalk_host)
+                         .port(cli.bus.beanstalk_port)
+                         .connection_timeout(Some(Duration::from_secs(10)))
+                         .connect() {
+        Ok(conn) => conn,
+        Err(err) => {
+            log::error!("Can not connect to beanstalk at {}:{}: {}", &cli.bus.beanstalk_host, cli.bus.beanstalk_port, err);
+            return;
+        }
+    };
+    match conn.use_tube(&cli.bus.beanstalk_tube) {
+        Ok(name) => log::debug!("Using BEANSTALK tube: {}", &name),
+        Err(err) => {
+            log::error!("Error connecting to BEANSTALK tube {}: {}", &cli.bus.beanstalk_tube, err);
+            return;
+        }
+    }
+    let name = match &bund_cluster_arg.key {
+        Some(name) => name,
+        None => {
+            log::error!("Error getting a script name");
+            return;
+        }
+    };
+    let key = match helpers::zenoh::conf::get_scripts_path(name.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("SCHEDULE: error setting KEY: {}", err);
+            return;
+        }
+    };
+    let payload = json!({
+        "script": key.clone(),
+        "name": name.clone(),
+        "nodeid": cli.bus.nodeid.clone(),
+        "hostname": cli.bus.hostname.clone(),
+        "id": bund_cluster_arg.execid.clone(),
+    });
+    match conn.put_default(payload.to_string().as_bytes()) {
+        Ok(j_id) => {
+            let mut table = Table::new();
+            table
+                .load_preset(UTF8_FULL)
+                .apply_modifier(UTF8_ROUND_CORNERS)
+                .set_content_arrangement(ContentArrangement::Dynamic)
+                .add_row(vec![
+                    Cell::new("NAME").fg(Color::Green),
+                    Cell::new(name.clone()).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("JOB ID").fg(Color::Green),
+                    Cell::new(&j_id).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("EXEC ID").fg(Color::Green),
+                    Cell::new(bund_cluster_arg.execid.clone()).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("NODE ID").fg(Color::Green),
+                    Cell::new(cli.bus.nodeid.clone()).fg(Color::White),
+                ])
+                .add_row(vec![
+                    Cell::new("HOSTNAME").fg(Color::Green),
+                    Cell::new(cli.bus.hostname.clone()).fg(Color::White),
+                ]);
+            println!("{table}");
+        }
+        Err(err) => {
+            log::error!("SCHEDULE: error scheduling job: {}", err);
+            return;
+        }
+    }
 }
 
 fn bund_cluster_actor(_cli: &cmd::Cli, _bund_cluster_arg: &cmd::Cluster) {
@@ -44,21 +122,21 @@ fn bund_cluster_publish(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     let session = match helpers::zenoh::session::zenoh_session(config) {
         Ok(session) => session,
         Err(err) => {
-            log::error!("GLOBAL returs: {}", err);
+            log::error!("PUBLISH returs: {}", err);
             return;
         }
     };
-    let key = match helpers::zenoh::conf::get_globals_path(name.clone()) {
-        Ok(key) => key,
-        Err(err) => {
-            log::error!("GLOBAL: error setting KEY: {}", err);
-            return;
-        }
-    };
-    let receiving = match helpers::zenoh::conf::get_scripts_path(name.clone()) {
+    let key = match helpers::zenoh::conf::get_scripts_path(name.clone()) {
         Ok(key) => key,
         Err(err) => {
             log::error!("PUBLISH: error setting KEY: {}", err);
+            return;
+        }
+    };
+    let receiving = match helpers::zenoh::conf::get_receiving_path(name.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("PUBLISH: error setting RECEIVING: {}", err);
             return;
         }
     };
@@ -97,7 +175,7 @@ fn bund_cluster_download(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
             return;
         }
     };
-    let key = match helpers::zenoh::conf::get_globals_path(name.clone()) {
+    let key = match helpers::zenoh::conf::get_scripts_path(name.clone()) {
         Ok(key) => key,
         Err(err) => {
             log::error!("GLOBAL: error setting KEY: {}", err);

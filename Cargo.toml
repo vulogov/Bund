@@ -104,6 +104,7 @@ augurs =  { version = "0.9.*", features = ["forecaster", "ets", "mstl", "outlier
 execution-time = "0.3.1"
 hostname = "0.4.0"
 beanstalkc = "1.0.0"
+serde_json = "1.0.140"
 
 
 [dependencies.rusqlite]

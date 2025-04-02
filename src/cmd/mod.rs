@@ -197,6 +197,15 @@ pub struct DistributedArgGroup {
 
     #[clap(help="BUND execution outcome bus prefix", long, default_value_t = String::from(env::var("BUND_OUTCOME_PREFIX").unwrap_or("zbus/result".to_string())))]
     pub outcome_prefix: String,
+
+    #[clap(help="Hostname of the beanstalkd server", long, default_value_t = String::from(env::var("BUND_BEANSTALKD_ADDR").unwrap_or("127.0.0.1".to_string())))]
+    pub beanstalk_host: String,
+
+    #[clap(help="Port of the beanstalkd server", long, default_value_t = 11300 )]
+    pub beanstalk_port: u16,
+
+    #[clap(help="Beanstalkd tube", long, default_value_t = String::from(env::var("BUND_BEANSTALKD_TUBE").unwrap_or("bund".to_string())))]
+    pub beanstalk_tube: String,
 }
 
 #[derive(Args, Clone, Debug)]
@@ -374,6 +383,12 @@ pub struct Cluster {
 
     #[clap(short, long, help="Cluster script or value key")]
     pub key: Option<String>,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Upload script before schedule")]
+    pub upload: bool,
+
+    #[clap(help="Execution ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
+    pub execid: String,
 
     #[clap(flatten, help="CLUSTER command")]
     command: ClusterArgGroup,
