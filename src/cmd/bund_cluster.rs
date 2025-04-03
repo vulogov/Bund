@@ -1,5 +1,6 @@
 extern crate log;
 use crate::cmd;
+use std::collections::HashMap;
 use rust_dynamic::value::Value;
 use std::time::Duration;
 use beanstalkc::Beanstalkc;
@@ -8,6 +9,121 @@ use crate::stdlib::helpers;
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
+
+fn actor_run(job: HashMap<String, String>) {
+    let name = match job.get("name") {
+        Some(name) => name,
+        None => {
+            log::error!("NO SCRIPT NAME IN JOB");
+            return;
+        }
+    };
+    let config = match helpers::zenoh::conf::zenoh_config() {
+        Ok(config) => config,
+        Err(err) => {
+            log::error!("{}", err);
+            return;
+        }
+    };
+    let session = match helpers::zenoh::session::zenoh_session(config) {
+        Ok(session) => session,
+        Err(err) => {
+            log::error!("GLOBAL returs: {}", err);
+            return;
+        }
+    };
+    let key = match helpers::zenoh::conf::get_scripts_path(name.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("GLOBAL: error setting KEY: {}", err);
+            return;
+        }
+    };
+    match helpers::zenoh::putget::zenoh_get(session, key.to_string()) {
+        Ok(value) => {
+            for n in value {
+                let val = match n.at(2) {
+                    Some(val) => val,
+                    None => continue,
+                };
+                for snippet in val {
+                    let snippet_str = snippet.to_string();
+                    match helpers::run_snippet::run_snippet_as_actor(&snippet_str) {
+                        Ok(_) => {},
+                        Err(err) => {
+                            helpers::print_error::format_error_plain(err);
+                        }
+                    }
+                }
+            }
+        },
+        Err(err) => {
+            log::error!("Error in GET data from {}: {}", &key, err);
+            return
+        }
+    }
+}
+
+fn bund_cluster_actor(cli: &cmd::Cli, _bund_cluster_arg: &cmd::Cluster) {
+    let mut conn = match Beanstalkc::new()
+                         .host(&cli.bus.beanstalk_host)
+                         .port(cli.bus.beanstalk_port)
+                         .connection_timeout(Some(Duration::from_secs(10)))
+                         .connect() {
+        Ok(conn) => conn,
+        Err(err) => {
+            log::error!("Can not connect to beanstalk at {}:{}: {}", &cli.bus.beanstalk_host, cli.bus.beanstalk_port, err);
+            return;
+        }
+    };
+    match conn.use_tube(&cli.bus.beanstalk_tube) {
+        Ok(name) => log::debug!("Using BEANSTALK tube: {}", &name),
+        Err(err) => {
+            log::error!("Error connecting to BEANSTALK tube {}: {}", &cli.bus.beanstalk_tube, err);
+            return;
+        }
+    }
+    match conn.watch(&cli.bus.beanstalk_tube) {
+        Ok(n) => log::debug!("Watching {} BEANSTALK tubes", n),
+        Err(err) => {
+            log::error!("Error watching BEANSTALK tube {}: {}", &cli.bus.beanstalk_tube, err);
+            return;
+        }
+    }
+
+    loop {
+        log::debug!("In the RECV loop");
+        let mut job = match conn.reserve() {
+            Ok(job) => job,
+            Err(err) => {
+                log::error!("BEANSTALK can not reserve job: {}", err);
+                break;
+            }
+        };
+        let body: HashMap<String, String> = match std::str::from_utf8(job.body()) {
+            Ok(body) => match serde_json::from_str(body) {
+                Ok(json_body) => json_body,
+                Err(err) => {
+                    log::error!("Error parsing job body: {}", err);
+                    return;
+                }
+            },
+            Err(err) => {
+                log::error!("Error converting job body: {}", err);
+                return;
+            }
+        };
+        actor_run(body);
+        match job.delete() {
+            Ok(_) => {},
+            Err(err) => {
+                log::error!("BEANSTALK can not delete job: {}", err);
+                break;
+            }
+        }
+    }
+    log::debug!("Getting out of here!");
+}
 
 fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     if bund_cluster_arg.upload {
@@ -45,12 +161,20 @@ fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
             return;
         }
     };
+    let outcome = match helpers::zenoh::conf::get_outcome_path(bund_cluster_arg.execid.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("SCHEDULE: error setting OUTCOME: {}", err);
+            return;
+        }
+    };
     let payload = json!({
         "script": key.clone(),
         "name": name.clone(),
         "nodeid": cli.bus.nodeid.clone(),
         "hostname": cli.bus.hostname.clone(),
         "id": bund_cluster_arg.execid.clone(),
+        "return": outcome.clone(),
     });
     match conn.put_default(payload.to_string().as_bytes()) {
         Ok(j_id) => {
@@ -86,10 +210,6 @@ fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
             return;
         }
     }
-}
-
-fn bund_cluster_actor(_cli: &cmd::Cli, _bund_cluster_arg: &cmd::Cluster) {
-
 }
 
 fn bund_cluster_publish(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
