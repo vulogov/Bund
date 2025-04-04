@@ -41,6 +41,7 @@ fn actor_run(job: HashMap<String, String>) {
     };
     match helpers::zenoh::putget::zenoh_get(session, key.to_string()) {
         Ok(value) => {
+            log::debug!("Running actor script from {}", &key.to_string());
             for n in value {
                 let val = match n.at(2) {
                     Some(val) => val,
@@ -330,6 +331,43 @@ fn bund_cluster_download(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     }
 }
 
+fn bund_cluster_push(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
+    let key = match &bund_cluster_arg.key {
+        Some(key) => key,
+        None => {
+            log::error!("Destination is not defined with --key");
+            return;
+        }
+    };
+    log::debug!("PUSH to {}", &key);
+    let receiving = match helpers::zenoh::conf::get_receiving_path(cli.bus.nodeid.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("PUBLISH: error setting RECEIVING: {}", err);
+            return;
+        }
+    };
+    let from_addr = Value::from_string(receiving.clone());
+    let to_addr = Value::from_string(&key);
+    for v in bund_cluster_arg.args.clone() {
+        let value = match helpers::run_snippet::run_snippet_and_return_value(v.to_string()) {
+            Ok((value, _, _)) => value,
+            Err(err) => {
+                log::error!("Error computing value for the bus: {}", err);
+                return;
+            }
+        };
+        let payload = Value::message(from_addr.clone(), to_addr.clone(), value);
+        match helpers::zenoh::pubsub::zenoh_pub_internal(key.to_string(), payload) {
+            Ok(_) => {},
+            Err(err) => {
+                log::error!("PUSH: error sending: {}", err);
+                return;
+            }
+        }
+    }
+}
+
 #[time_graph::instrument]
 pub fn run(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     log::debug!("BUND_CLUSTER::run() reached");
@@ -342,6 +380,8 @@ pub fn run(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
         bund_cluster_publish(&cli, &bund_cluster_arg);
     } else if bund_cluster_arg.command.download {
         bund_cluster_download(&cli, &bund_cluster_arg);
+    } else if bund_cluster_arg.command.push {
+        bund_cluster_push(&cli, &bund_cluster_arg);
     } else {
         log::error!("Unknown CLUSTER command");
     }

@@ -158,7 +158,7 @@ pub fn run_snippet(snippet: String) {
 
 #[time_graph::instrument]
 pub fn run_snippet_as_actor(snippet: &String) -> Result<(), Error> {
-    log::debug!("Running snippet: {}", &snippet);
+    // log::debug!("Running snippet: {}", &snippet);
     let code = format!("{}\n", &snippet);
     let mut bc = match BUND.lock() {
         Ok(bc) => bc,

@@ -372,6 +372,9 @@ pub struct ClusterArgGroup {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Running distributed script execution service")]
     pub actor: bool,
 
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Push data to the PUB/SUB queue")]
+    pub push: bool,
+
 }
 
 #[derive(Args, Clone, Debug)]
@@ -392,6 +395,9 @@ pub struct Cluster {
 
     #[clap(flatten, help="CLUSTER command")]
     command: ClusterArgGroup,
+
+    #[clap(last = true)]
+    args: Vec<String>,
 
 }
 

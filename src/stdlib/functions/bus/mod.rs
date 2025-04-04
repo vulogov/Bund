@@ -4,6 +4,8 @@ use rust_dynamic::value::Value;
 use std::sync::Mutex;
 use std::collections::btree_map::BTreeMap;
 use lazy_static::lazy_static;
+use zenoh;
+use crate::stdlib::helpers;
 use crossbeam::channel::{Sender, Receiver, unbounded};
 use easy_error::{Error, bail};
 
@@ -14,6 +16,27 @@ lazy_static! {
     static ref PIPES: Mutex<BTreeMap<String,(Sender<Vec<u8>>, Receiver<Vec<u8>>)>> = {
         let e: Mutex<BTreeMap<String,(Sender<Vec<u8>>, Receiver<Vec<u8>>)>> = Mutex::new(BTreeMap::new());
         e
+    };
+}
+
+lazy_static! {
+    pub static ref ZENOH: Mutex<zenoh::Session> = {
+        log::debug!("Initializing default BUS connection");
+        let config = match helpers::zenoh::conf::zenoh_config() {
+            Ok(config) => config,
+            Err(err) => {
+                log::error!("ERROR establishing BUS config: {}", err);
+                std::process::exit(10);
+            }
+        };
+        let session = match helpers::zenoh::session::zenoh_session(config) {
+            Ok(session) => session,
+            Err(err) => {
+                log::error!("ERROR connecting to the BUS: {}", err);
+                std::process::exit(10);
+            }
+        };
+        Mutex::new(session)
     };
 }
 
@@ -126,6 +149,10 @@ pub fn bus_pull(k: String) -> Result<Value, Error> {
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     pipes_init();
+    if cli.distributed {
+        let z = ZENOH.lock().unwrap();
+        drop(z);
+    }
     crossbus::init_stdlib(cli);
     globals::init_stdlib(cli);
 }
