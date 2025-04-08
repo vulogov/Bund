@@ -1,7 +1,9 @@
 extern crate log;
 use crate::cmd;
+use crate::stdlib::BUND;
 use std::collections::HashMap;
 use rust_dynamic::value::Value;
+use rust_dynamic::types::*;
 use std::time::Duration;
 use beanstalkc::Beanstalkc;
 use serde_json::json;
@@ -9,26 +11,13 @@ use crate::stdlib::helpers;
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
+use zenoh::Wait;
 
 fn actor_run(job: HashMap<String, String>) {
     let name = match job.get("name") {
         Some(name) => name,
         None => {
             log::error!("NO SCRIPT NAME IN JOB");
-            return;
-        }
-    };
-    let config = match helpers::zenoh::conf::zenoh_config() {
-        Ok(config) => config,
-        Err(err) => {
-            log::error!("{}", err);
-            return;
-        }
-    };
-    let session = match helpers::zenoh::session::zenoh_session(config) {
-        Ok(session) => session,
-        Err(err) => {
-            log::error!("GLOBAL returs: {}", err);
             return;
         }
     };
@@ -39,7 +28,7 @@ fn actor_run(job: HashMap<String, String>) {
             return;
         }
     };
-    match helpers::zenoh::putget::zenoh_get(session, key.to_string()) {
+    match helpers::zenoh::putget::zenoh_get_internal(key.to_string()) {
         Ok(value) => {
             log::debug!("Running actor script from {}", &key.to_string());
             for n in value {
@@ -148,7 +137,7 @@ fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
             return;
         }
     }
-    let name = match &bund_cluster_arg.key {
+    let name = match &bund_cluster_arg.job {
         Some(name) => name,
         None => {
             log::error!("Error getting a script name");
@@ -275,10 +264,10 @@ fn bund_cluster_publish(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
 }
 
 fn bund_cluster_download(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
-    let name = match &bund_cluster_arg.key {
+    let name = match &bund_cluster_arg.job {
         Some(key) => key,
         None => {
-            log::error!("Destination is not defined with --key");
+            log::error!("Destination is not defined with --job");
             return;
         }
     };
@@ -366,6 +355,98 @@ fn bund_cluster_push(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
             }
         }
     }
+    //
+    // And sending NODATA which means that is no more data for now
+    //
+    let payload = Value::message(from_addr.clone(), to_addr.clone(), Value::nodata());
+    match helpers::zenoh::pubsub::zenoh_pub_internal(key.to_string(), payload) {
+        Ok(_) => {},
+        Err(err) => {
+            log::error!("PUSH: error sending: {}", err);
+            return;
+        }
+    }
+}
+
+fn bund_cluster_pull(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
+    let key = match &bund_cluster_arg.key {
+        Some(key) => key,
+        None => {
+            log::error!("Destination is not defined with --key");
+            return;
+        }
+    };
+    let job = match &bund_cluster_arg.job {
+        Some(job) => job,
+        None => {
+            log::error!("Actor is not defined with --job");
+            return;
+        }
+    };
+    log::debug!("PULL from {}", &key);
+    let config = match helpers::zenoh::conf::zenoh_config() {
+        Ok(config) => config,
+        Err(err) => {
+            log::error!("{}", err);
+            return;
+        }
+    };
+    let session = match helpers::zenoh::session::zenoh_session(config) {
+        Ok(session) => session,
+        Err(err) => {
+            log::error!("PULL session returs: {}", err);
+            return;
+        }
+    };
+     let subscriber = match session.declare_subscriber(key).wait() {
+         Ok(subscriber) => subscriber,
+         Err(err) => {
+             log::error!("PULL subscriber returs: {}", err);
+             return;
+         }
+     };
+     loop {
+         let mut bc = match BUND.lock() {
+             Ok(bc) => bc,
+             Err(err) => {
+                 log::error!("Can not lock BUND: {}", err);
+                 return;
+             }
+         };
+         'outer: while let Ok(payload) = subscriber.recv() {
+             let data = payload.payload().to_bytes().to_vec();
+             let value = match Value::from_binary(data) {
+                 Ok(value) => value,
+                 Err(err) => {
+                     log::error!("PULL decoding: {}", err);
+                     return;
+                 }
+             };
+             let pull_value = match value.get("payload") {
+                 Ok(value) => value,
+                 Err(err) => {
+                     log::error!("PULL getting value: {}", err);
+                     continue;
+                 }
+             };
+             for v in pull_value {
+                 if v.is_type(NODATA) {
+                     break 'outer;
+                 }
+                 if bund_cluster_arg.stdout {
+                     println!("{:?}", &v);
+                 }
+                 bc.vm.stack.push(v);
+             }
+         }
+         bc.eval("debug.display_stack");
+         drop(bc);
+         log::debug!("Running job: {} with data from: {}", &job, &key);
+         let mut body: HashMap<String, String> = HashMap::new();
+         body.insert("name".to_string(), job.to_string());
+         actor_run(body)
+     }
+
 }
 
 #[time_graph::instrument]
@@ -382,6 +463,8 @@ pub fn run(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
         bund_cluster_download(&cli, &bund_cluster_arg);
     } else if bund_cluster_arg.command.push {
         bund_cluster_push(&cli, &bund_cluster_arg);
+    } else if bund_cluster_arg.command.pull {
+        bund_cluster_pull(&cli, &bund_cluster_arg);
     } else {
         log::error!("Unknown CLUSTER command");
     }

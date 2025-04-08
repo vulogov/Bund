@@ -23,14 +23,6 @@ pub fn stdlib_global_set(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("GLOBAL: NO DATA #2"),
     };
-    let config = match helpers::zenoh::conf::zenoh_config() {
-        Ok(config) => config,
-        Err(err) => bail!("{}", err),
-    };
-    let session = match helpers::zenoh::session::zenoh_session(config) {
-        Ok(session) => session,
-        Err(err) => bail!("GLOBAL returs: {}", err),
-    };
     let key = match helpers::zenoh::conf::get_globals_path(name.clone()) {
         Ok(key) => key,
         Err(err) => bail!("GLOBAL: error setting KEY: {}", err),
@@ -42,7 +34,7 @@ pub fn stdlib_global_set(vm: &mut VM) -> Result<&mut VM, Error> {
     let from_addr = Value::from_string(receiving.clone());
     let to_addr = Value::from_string(&key);
     let payload = Value::message(from_addr, to_addr, value);
-    match helpers::zenoh::putget::zenoh_put(session, key.clone(), payload) {
+    match helpers::zenoh::putget::zenoh_put_internal(key.clone(), payload) {
         Ok(_) => {},
         Err(err) => bail!("GLOBAL returns: {}", err),
     };
@@ -62,19 +54,11 @@ pub fn stdlib_global_get(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("GLOBAL: NO DATA #1"),
     };
-    let config = match helpers::zenoh::conf::zenoh_config() {
-        Ok(config) => config,
-        Err(err) => bail!("{}", err),
-    };
-    let session = match helpers::zenoh::session::zenoh_session(config) {
-        Ok(session) => session,
-        Err(err) => bail!("GLOBAL* returns: {}", err),
-    };
     let key = match helpers::zenoh::conf::get_globals_path(name.clone()) {
         Ok(key) => key,
         Err(err) => bail!("GLOBAL*: error setting KEY: {}", err),
     };
-    let res = match helpers::zenoh::putget::zenoh_get(session, key.clone()) {
+    let res = match helpers::zenoh::putget::zenoh_get_internal(key.clone()) {
         Ok(res) => res,
         Err(err) => bail!("GLOBAL* returns: {}", err),
     };
@@ -102,19 +86,11 @@ pub fn stdlib_global_check(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("GLOBAL: NO DATA #1"),
     };
-    let config = match helpers::zenoh::conf::zenoh_config() {
-        Ok(config) => config,
-        Err(err) => bail!("{}", err),
-    };
-    let session = match helpers::zenoh::session::zenoh_session(config) {
-        Ok(session) => session,
-        Err(err) => bail!("GLOBAL* returns: {}", err),
-    };
     let key = match helpers::zenoh::conf::get_globals_path(name.clone()) {
         Ok(key) => key,
         Err(err) => bail!("GLOBAL*: error setting KEY: {}", err),
     };
-    let res = match helpers::zenoh::putget::zenoh_has_get(session, key.clone()) {
+    let res = match helpers::zenoh::putget::zenoh_has_get_internal(key.clone()) {
         Ok(res) => res,
         Err(err) => bail!("GLOBAL* returns: {}", err),
     };

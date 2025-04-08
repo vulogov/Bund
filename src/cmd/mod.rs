@@ -375,6 +375,9 @@ pub struct ClusterArgGroup {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Push data to the PUB/SUB queue")]
     pub push: bool,
 
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Pull data from the PUB/SUB queue and optionally running them through ACTOR")]
+    pub pull: bool,
+
 }
 
 #[derive(Args, Clone, Debug)]
@@ -384,11 +387,17 @@ pub struct Cluster {
     #[clap(flatten)]
     source: ScriptSrcArgGroup,
 
-    #[clap(short, long, help="Cluster script or value key")]
+    #[clap(short, long, help="Value key")]
     pub key: Option<String>,
+
+    #[clap(short, long, help="Cluster script")]
+    pub job: Option<String>,
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Upload script before schedule")]
     pub upload: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Send data to STDOUT where applicable")]
+    pub stdout: bool,
 
     #[clap(help="Execution ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
     pub execid: String,

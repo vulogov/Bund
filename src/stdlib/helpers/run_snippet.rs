@@ -166,7 +166,7 @@ pub fn run_snippet_as_actor(snippet: &String) -> Result<(), Error> {
             bail!("{}", err)
         }
     };
-    log::debug!("Reached bc::eval()");
+    log::debug!("Reached bc::eval() for ACTOR");
     match bc.eval(code) {
         Ok(_) => {
             bc.vm.stack.clear();
