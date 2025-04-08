@@ -5,6 +5,8 @@ use crate::stdlib::BUND;
 use crate::stdlib::{init_stdlib};
 use lazy_static::lazy_static;
 use std::sync::Mutex;
+use uuid::Uuid;
+use crate::stdlib::helpers::hostname::get_hostname;
 use clap::{Parser, Subcommand, Args};
 
 pub mod setloglevel;
@@ -15,6 +17,8 @@ pub mod bund_eval;
 pub mod bund_test;
 pub mod bund_script;
 pub mod bund_wscript;
+pub mod bund_bbus;
+pub mod bund_cluster;
 pub mod bund_load;
 
 pub mod bund_display_banner;
@@ -89,6 +93,12 @@ pub fn main() {
         Commands::Wscript(wscript) => {
             bund_wscript::run(&cli, &wscript);
         }
+        Commands::Bus(bbus) => {
+            bund_bbus::run(&cli, &bbus);
+        }
+        Commands::Cluster(cluster) => {
+            bund_cluster::run(&cli, &cluster);
+        }
         Commands::Version(_) => {
             bund_version::run(&cli);
         }
@@ -142,7 +152,7 @@ pub struct Cli {
     pub bootstrap: Option<Vec<String>>,
 
     #[clap(flatten, help="BUND BIS configuration")]
-    bus: DistributedArgGroup,
+    pub bus: DistributedArgGroup,
 
     #[clap(subcommand)]
     command: Commands,
@@ -156,35 +166,46 @@ enum Commands {
     Test(Test),
     Load(Load),
     Wscript(Wscript),
+    Bus(Bbus),
+    Cluster(Cluster),
     Version(Version),
 }
 
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = false, multiple = true)]
 pub struct DistributedArgGroup {
-    #[clap(help="BUS receiving address", long, default_value_t = String::from(env::var("BUND_BUS_RECV_ADDRESS").unwrap_or("tcp/127.0.0.1:7447".to_string())))]
-    pub bus_recv_connect: String,
+    #[clap(help="BUS configuration file", long, default_value_t = String::from(env::var("BUND_BUS_CONFIG_FILE").unwrap_or("bund_client.json5".to_string())))]
+    pub bus_config: String,
 
-    #[clap(help="BUS listen address", long, default_value_t = String::from_utf8(vec![]).unwrap())]
-    pub bus_recv_listen: String,
+    #[clap(help="Distributed hostname", long, default_value_t = String::from(get_hostname()))]
+    pub hostname: String,
 
-    #[clap(help="BUS topic to subscribe", long )]
-    pub bus_recv_key: Vec<String>,
+    #[clap(help="Distributed node ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
+    pub nodeid: String,
 
-    #[clap(help="BUS sending address", long, default_value_t = String::from(env::var("BUND_BUS_SEND_ADDRESS").unwrap_or("tcp/127.0.0.1:7447".to_string())))]
-    pub bus_send_connect: String,
+    #[clap(help="Distributed node role", long, default_value_t = String::from("BUND"))]
+    pub noderole: String,
 
-    #[clap(help="BUS listen address", long, default_value_t = String::from_utf8(vec![]).unwrap())]
-    pub bus_send_listen: String,
+    #[clap(help="Instance receiving queue prefix", long, default_value_t = String::from(env::var("BUND_BUS_RECEIVING_PREFIX").unwrap_or("zbus/receiving".to_string())))]
+    pub receiving: String,
 
-    #[clap(help="BUS topic to subscribe", long)]
-    pub bus_send_key: Vec<String>,
+    #[clap(help="BUND global variables bus prefix", long, default_value_t = String::from(env::var("BUND_GLOBALS_PREFIX").unwrap_or("zbus/globals".to_string())))]
+    pub globals_prefix: String,
 
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable multicast discovery of ZENOH bus")]
-    pub bus_disable_multicast_scout: bool,
+    #[clap(help="BUND scripts bus prefix", long, default_value_t = String::from(env::var("BUND_SCRIPTS_PREFIX").unwrap_or("zbus/scripts".to_string())))]
+    pub scripts_prefix: String,
 
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Configure CONNECT mode for ZENOH bus")]
-    pub bus_set_connect_mode: bool,
+    #[clap(help="BUND execution outcome bus prefix", long, default_value_t = String::from(env::var("BUND_OUTCOME_PREFIX").unwrap_or("zbus/result".to_string())))]
+    pub outcome_prefix: String,
+
+    #[clap(help="Hostname of the beanstalkd server", long, default_value_t = String::from(env::var("BUND_BEANSTALKD_ADDR").unwrap_or("127.0.0.1".to_string())))]
+    pub beanstalk_host: String,
+
+    #[clap(help="Port of the beanstalkd server", long, default_value_t = 11300 )]
+    pub beanstalk_port: u16,
+
+    #[clap(help="Beanstalkd tube", long, default_value_t = String::from(env::var("BUND_BEANSTALKD_TUBE").unwrap_or("bund".to_string())))]
+    pub beanstalk_tube: String,
 }
 
 #[derive(Args, Clone, Debug)]
@@ -301,6 +322,94 @@ pub struct Wscript {
 
     #[clap(flatten, help="Command performed")]
     command: WscriptSrcArgGroup,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct BbusArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Publish data on the BUS")]
+    pub publish: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Subscribe to the BUS queue")]
+    pub subscribe: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Put value to the BUS")]
+    pub put: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Get value from the bus")]
+    pub get: bool,
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Manage data stored in the BUND data bus")]
+pub struct Bbus {
+
+    #[clap(short, long, help="Value for sending to the BUS")]
+    pub value: Option<String>,
+
+    #[clap(short, long, value_delimiter = ' ', help="BUS pub/sub/get/put key")]
+    pub key: Option<String>,
+
+    #[clap(flatten, help="BUS command")]
+    command: BbusArgGroup,
+
+    #[clap(last = true)]
+    args: Vec<String>,
+
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = true, multiple = false)]
+pub struct ClusterArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Publish script to the BUS for execution")]
+    pub publish: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Download previously published script")]
+    pub download: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Schedule script for execution")]
+    pub schedule: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Running distributed script execution service")]
+    pub actor: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Push data to the PUB/SUB queue")]
+    pub push: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Pull data from the PUB/SUB queue and optionally running them through ACTOR")]
+    pub pull: bool,
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="BUND distributed cluster operation")]
+pub struct Cluster {
+
+    #[clap(flatten)]
+    source: ScriptSrcArgGroup,
+
+    #[clap(short, long, help="Value key")]
+    pub key: Option<String>,
+
+    #[clap(short, long, help="Cluster script")]
+    pub job: Option<String>,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Upload script before schedule")]
+    pub upload: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Send data to STDOUT where applicable")]
+    pub stdout: bool,
+
+    #[clap(help="Execution ID", long, default_value_t = String::from(Uuid::new_v4().to_string()))]
+    pub execid: String,
+
+    #[clap(flatten, help="CLUSTER command")]
+    command: ClusterArgGroup,
+
+    #[clap(last = true)]
+    args: Vec<String>,
 
 }
 

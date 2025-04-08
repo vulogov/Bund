@@ -1,0 +1,13 @@
+{
+  mode: "client",
+  connect: {
+    endpoints: [
+      "tcp/localhost:7447",
+    ],
+  },
+  scouting: {
+    multicast: {
+      enabled: false,
+    },
+  },
+}

@@ -120,6 +120,7 @@ pub fn run_snippet_and_return_value(snippet: String) -> Result<(Value, Option<Va
                 }
                 bc.vm.stack.clear();
                 drop(bc);
+                // println!("SSS {:?}: {:?} {:?} {}",  &snippet, &value, &is_desc, &stack_len);
                 return Ok((value, is_desc, stack_len));
             }
             None => {
@@ -153,4 +154,29 @@ pub fn run_snippet(snippet: String) {
         }
     }
     drop(bc);
+}
+
+#[time_graph::instrument]
+pub fn run_snippet_as_actor(snippet: &String) -> Result<(), Error> {
+    // log::debug!("Running snippet: {}", &snippet);
+    let code = format!("{}\n", &snippet);
+    let mut bc = match BUND.lock() {
+        Ok(bc) => bc,
+        Err(err) => {
+            bail!("{}", err)
+        }
+    };
+    log::debug!("Reached bc::eval() for ACTOR");
+    match bc.eval(code) {
+        Ok(_) => {
+            bc.vm.stack.clear();
+            drop(bc);
+        }
+        Err(err) =>  {
+            bc.vm.stack.clear();
+            drop(bc);
+            bail!("{}", err)
+        }
+    }
+    return Ok(());
 }

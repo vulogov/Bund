@@ -8,3 +8,5 @@ pub mod eval;
 pub mod world;
 pub mod conf;
 pub mod internaldb;
+pub mod zenoh;
+pub mod hostname;

@@ -36,9 +36,11 @@ pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
     }
     println!("{}", bund_display_banner::bund_banner());
     if cli.nocolor {
-        debug_fun::debug_display_hostinfo::debug_display_hostinfo_nocolor()
+        debug_fun::debug_display_hostinfo::debug_display_hostinfo_nocolor();
+        debug_fun::debug_display_distributed_info::debug_display_distributed_info_nocolor();
     } else {
-        debug_fun::debug_display_hostinfo::debug_display_hostinfo_color()
+        debug_fun::debug_display_hostinfo::debug_display_hostinfo_color();
+        debug_fun::debug_display_distributed_info::debug_display_distributed_info_color();
     }
     let prompt = match cli.nocolor {
         true => format!("[BUND> "),

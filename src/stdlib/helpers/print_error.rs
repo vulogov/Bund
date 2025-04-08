@@ -185,7 +185,34 @@ pub fn print_error_from_str_plain(err: String) {
     }
 }
 
+pub fn format_error_from_str_plain(err: String) -> String {
+    match parse_msg(err.clone()) {
+        Some(msg_parsed) => {
+            let mut table = Table::new();
+            table
+                .load_preset(UTF8_FULL)
+                .apply_modifier(UTF8_ROUND_CORNERS)
+                .set_content_arrangement(ContentArrangement::Dynamic)
+                .add_row(vec![
+                    Cell::new("Error"), Cell::new(msg_parsed[0].clone()),
+                ])
+                .add_row(vec![
+                    Cell::new("Location"), Cell::new(msg_parsed[1].clone()),
+                ]);
+            return format!("{table}");
+        }
+        None => {
+            return format!("{}", &err);
+        }
+    }
+}
+
 pub fn print_error_plain(the_err: Error) {
     let err = format!("{}", the_err.ctx);
     print_error_from_str_plain(err);
+}
+
+pub fn format_error_plain(the_err: Error) -> String {
+    let err = format!("{}", the_err.ctx);
+    format_error_from_str_plain(err)
 }

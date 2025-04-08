@@ -1,0 +1,10 @@
+//
+// Very simple script demonstrating basic PUBLISH/SCHEDULE/ACTOR features
+//
+
+//
+// Storing some value into a zbus/globals/RECEIVEDVALUE variable through pull ACTOR
+//
+:RECEIVEDVALUE
+  swap
+    global
