@@ -439,7 +439,6 @@ fn bund_cluster_pull(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
                  bc.vm.stack.push(v);
              }
          }
-         bc.eval("debug.display_stack");
          drop(bc);
          log::debug!("Running job: {} with data from: {}", &job, &key);
          let mut body: HashMap<String, String> = HashMap::new();

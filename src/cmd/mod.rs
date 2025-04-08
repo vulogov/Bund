@@ -355,6 +355,9 @@ pub struct Bbus {
     #[clap(flatten, help="BUS command")]
     command: BbusArgGroup,
 
+    #[clap(last = true)]
+    args: Vec<String>,
+
 }
 
 #[derive(Debug, Clone, clap::Args)]

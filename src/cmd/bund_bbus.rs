@@ -5,13 +5,97 @@ use crate::stdlib::helpers;
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
+use zenoh::Wait;
 
-fn bund_bus_publish(_cli: &cmd::Cli, _bund_bus_arg: &cmd::Bbus, _value: Value) {
+fn bund_bus_publish(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, _value: Value) {
     log::debug!("BUND_BUS::bund_bus_publish() reached");
+    let key = match &bund_bus_arg.key {
+        Some(key) => key,
+        None => {
+            log::error!("Destination is not defined with --key");
+            return;
+        }
+    };
+    log::debug!("PUSH to {}", &key);
+    let receiving = match helpers::zenoh::conf::get_receiving_path(cli.bus.nodeid.clone()) {
+        Ok(key) => key,
+        Err(err) => {
+            log::error!("PUBLISH: error setting RECEIVING: {}", err);
+            return;
+        }
+    };
+    let from_addr = Value::from_string(receiving.clone());
+    let to_addr = Value::from_string(&key);
+    for v in bund_bus_arg.args.clone() {
+        let value = match helpers::run_snippet::run_snippet_and_return_value(v.to_string()) {
+            Ok((value, _, _)) => value,
+            Err(err) => {
+                log::error!("Error computing value for the bus: {}", err);
+                return;
+            }
+        };
+        let payload = Value::message(from_addr.clone(), to_addr.clone(), value);
+        match helpers::zenoh::pubsub::zenoh_pub_internal(key.to_string(), payload) {
+            Ok(_) => {},
+            Err(err) => {
+                log::error!("PUSH: error sending: {}", err);
+                return;
+            }
+        }
+    }
 }
 
-fn bund_bus_subscribe(_cli: &cmd::Cli, _bund_bus_arg: &cmd::Bbus) {
+fn bund_bus_subscribe(_cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus) {
     log::debug!("BUND_BUS::bund_bus_subscribe() reached");
+    let key = match &bund_bus_arg.key {
+        Some(key) => key,
+        None => {
+            log::error!("Destination is not defined with --key");
+            return;
+        }
+    };
+    log::debug!("PULL from {}", &key);
+    let config = match helpers::zenoh::conf::zenoh_config() {
+        Ok(config) => config,
+        Err(err) => {
+            log::error!("{}", err);
+            return;
+        }
+    };
+    let session = match helpers::zenoh::session::zenoh_session(config) {
+        Ok(session) => session,
+        Err(err) => {
+            log::error!("PULL session returs: {}", err);
+            return;
+        }
+    };
+    let subscriber = match session.declare_subscriber(key).wait() {
+         Ok(subscriber) => subscriber,
+         Err(err) => {
+             log::error!("PULL subscriber returs: {}", err);
+             return;
+         }
+    };
+    while let Ok(payload) = subscriber.recv() {
+        let data = payload.payload().to_bytes().to_vec();
+        let value = match Value::from_binary(data) {
+            Ok(value) => value,
+            Err(err) => {
+                log::error!("PULL decoding: {}", err);
+                return;
+            }
+        };
+        let pull_value = match value.get("payload") {
+            Ok(value) => value,
+            Err(err) => {
+                log::error!("PULL getting value: {}", err);
+                continue;
+            }
+        };
+        for v in pull_value {
+            println!("{:?}", &v)
+        }
+    }
 }
 
 fn bund_bus_put(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, value: Value) {
