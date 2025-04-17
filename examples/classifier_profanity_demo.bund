@@ -1,0 +1,18 @@
+//
+// This example demonstrates Profanity classifier
+//
+
+
+:TEST config
+  :type  "profanity" set   // This is a profanity detector
+
+
+classifier                  // First, we create classifier
+  "Is profanity found in Hello world: " print
+  :TEST "Hello world" classify println
+  "Is profanity found Hello f???ing world: " print
+  :TEST "Hello f???ing in world" classify println
+  "Is profanity found Hello fucking world: " print
+  :TEST "Hello fucking in world" classify println
+  "Is profanity found Hello funking world: " print
+  :TEST "Hello funking in world" classify println

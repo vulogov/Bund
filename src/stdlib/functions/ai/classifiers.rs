@@ -4,6 +4,7 @@ use crate::stdlib::helpers;
 use rust_dynamic::value::Value;
 use crate::stdlib::functions::ai::naivebayes;
 use crate::stdlib::functions::ai::linguistic;
+use crate::stdlib::functions::ai::profanity;
 use easy_error::{Error, bail};
 
 #[time_graph::instrument]
@@ -25,6 +26,7 @@ pub fn stdlib_classifier_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             let res = match nn_type.cast_string().unwrap().as_str() {
                 "naivebayes" => naivebayes::create_naivebayes_classifier(vm, name, conf),
                 "linguistic" => linguistic::create_linguistic_classifier(vm, name, conf),
+                "profanity" => profanity::create_profanity_classifier(vm, name, conf),
                 _ => bail!("Unknown CLASSIFIER type: {}", &nn_type),
             };
             return res;

@@ -107,6 +107,7 @@ beanstalkc = "1.0.0"
 serde_json = "1.0.140"
 signal-hook = "0.3.17"
 serde = "1.0.219"
+rustrict = "0.7.34"
 
 
 [dependencies.rusqlite]
