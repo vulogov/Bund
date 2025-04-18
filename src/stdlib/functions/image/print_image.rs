@@ -23,10 +23,6 @@ pub fn stdlib_image_print_image_inline(vm: &mut VM) -> Result<&mut VM, Error> {
         bail!("IMAGE.PRINT: file {} not exists", &name);
     }
     let conf = viuer::Config {
-        // width: Some(40),
-        // height: Some(30),
-        // x: 10,
-        // y: 4,
         ..Default::default()
     };
     println!("");
