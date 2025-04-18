@@ -1,6 +1,6 @@
 [package]
 name = "bund"
-version = "0.18.0"
+version = "0.19.0"
 edition = "2021"
 description = "Interpreter and CLI for a Virtual Machine for BUND programming language"
 license-file = "LICENSE"
@@ -108,7 +108,7 @@ serde_json = "1.0.140"
 signal-hook = "0.3.17"
 serde = "1.0.219"
 rustrict = "0.7.34"
-viuer = "0.9.1"
+viuer = { version = "0.9.1", features = ["print-file"] }
 
 
 [dependencies.rusqlite]

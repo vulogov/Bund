@@ -37,10 +37,18 @@ pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
     println!("{}", bund_display_banner::bund_banner());
     if cli.nocolor {
         debug_fun::debug_display_hostinfo::debug_display_hostinfo_nocolor();
-        debug_fun::debug_display_distributed_info::debug_display_distributed_info_nocolor();
+        if cli.distributed {
+            debug_fun::debug_display_distributed_info::debug_display_distributed_info_nocolor();
+        } else {
+            log::info!("SHELL is running in LOCAL mode");
+        }
     } else {
         debug_fun::debug_display_hostinfo::debug_display_hostinfo_color();
-        debug_fun::debug_display_distributed_info::debug_display_distributed_info_color();
+        if cli.distributed {
+            debug_fun::debug_display_distributed_info::debug_display_distributed_info_color();
+        } else {
+            log::info!("SHELL is running in LOCAL mode");
+        }
     }
     let prompt = match cli.nocolor {
         true => format!("[BUND> "),
