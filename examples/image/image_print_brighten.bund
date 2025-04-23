@@ -1,0 +1,17 @@
+//
+// This script demonstrates brighten and printing image using IMAGE class
+//
+
+:print
+  -50 :brighten
+    //
+    // Define the name of the file with image
+    //
+    "./examples/image/demo_small_scaled.png"
+    //
+    // Then create IMAGE object
+    //
+    :IMAGE
+      object
+  !
+!

@@ -1,0 +1,15 @@
+//
+// This script demonstrates printong image using IMAGE class
+//
+
+:print
+  //
+  // Define the name of the file with image
+  //
+  "./examples/image/demo_small_scaled.png"
+  //
+  // Then create IMAGE object
+  //
+  :IMAGE
+    object
+!
