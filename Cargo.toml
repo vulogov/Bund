@@ -110,6 +110,7 @@ serde = "1.0.219"
 rustrict = "0.7.34"
 viuer = { version = "0.9.1", features = ["print-file"] }
 image = "0.25.6"
+rustface = "0.1.7"
 
 
 [dependencies.rusqlite]
