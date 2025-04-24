@@ -1,0 +1,17 @@
+//
+// This script demonstrates detecting faces in image using IMAGE class
+//
+
+"./examples/image/2nd_infantry_regiment_officers_facesdetected.jpg" :save
+  :facedetect
+    //
+    // Define the name of the file with image
+    //
+    "./examples/image/2nd_infantry_regiment_officers.jpg"
+    //
+    // Then create IMAGE object
+    //
+    :IMAGE
+      object
+  !
+!

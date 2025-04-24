@@ -54,6 +54,35 @@ pub fn make_image(value: Value) -> Result<image::DynamicImage, Error> {
     Ok(image::DynamicImage::ImageRgb8(img))
 }
 
+pub fn make_grayscale_image(value: Value) -> Result<image::DynamicImage, Error> {
+    let h: u32 = match value.get("H") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let w: u32 = match value.get("W") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let pixels: Vec<u8> = match value.get("image") {
+        Ok(pixels) => match pixels.cast_bin() {
+            Ok(pixels) => pixels,
+            Err(err) => bail!("{}", err),
+        }
+        Err(err) => bail!("{}", err),
+    };
+    let img: image::GrayImage = match image::ImageBuffer::from_raw(w, h, pixels) {
+        Some(img) => img,
+        None => bail!("Can not create an image"),
+    };
+    Ok(image::DynamicImage::ImageLuma8(img))
+}
+
 fn register_method_image_init(vm: &mut VM) -> Result<&mut VM, Error> {
     let value_object = match vm.stack.pull() {
         Some(value_object) => value_object,
@@ -152,14 +181,52 @@ fn register_method_image_save(vm: &mut VM) -> Result<&mut VM, Error> {
     Ok(vm)
 }
 
+fn register_method_image_save_gray(vm: &mut VM) -> Result<&mut VM, Error> {
+    if vm.stack.current_stack_len() < 2 {
+        bail!("Stack is too shallow for method 'IMAGE::SAVE'");
+    }
+    let value_object = match vm.stack.pull() {
+        Some(value_object) => value_object,
+        None => bail!("IMAGE::SAVE: NO DATA #1"),
+    };
+    let fname = match vm.stack.pull() {
+        Some(fname_object) => match fname_object.cast_string() {
+            Ok(fname) => fname,
+            Err(err) => bail!("IMAGE::SAVE casting file name returns: {}", err),
+        },
+        None => bail!("IMAGE::SAVE: NO DATA #2"),
+    };
+    match value_object.get("image".to_string()) {
+        Ok(image_object) => {
+            if image_object.type_of() == ENVELOPE {
+                let img = match make_grayscale_image(value_object.clone()) {
+                    Ok(img) => img,
+                    Err(err) => bail!("IMAGE::SAVE returns: {}", err),
+                };
+                let _ = match img.save(fname) {
+                    Ok(()) => {},
+                    Err(err) => bail!("IMAGE::SAVE returns {}", err),
+                };
+            } else {
+                bail!("IMAGE::SAVE data object is not ENVELOPE");
+            }
+            vm.stack.push(value_object);
+        }
+        Err(err) => bail!("IMAGE: NO WRAPPED DATA WAS FOUND FOR IMAGE::SAVE {}", err),
+    }
+    Ok(vm)
+}
+
 fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     let _ = vm.register_method(".image_init".to_string(), register_method_image_init);
     let _ = vm.register_method(".image_print".to_string(), register_method_image_print);
     let _ = vm.register_method(".image_save".to_string(), register_method_image_save);
+    let _ = vm.register_method(".image_save_grayscale".to_string(), register_method_image_save_gray);
     let _ = vm.register_method(".image_grayscale".to_string(), functions::image::image_ops_class::register_method_image_greyscale);
     let _ = vm.register_method(".image_blur".to_string(), functions::image::image_ops_class::register_method_image_blur);
     let _ = vm.register_method(".image_brighten".to_string(), functions::image::image_ops_class::register_method_image_brighten);
     let _ = vm.register_method(".image_contrast".to_string(), functions::image::image_ops_class::register_method_image_contrast);
+    let _ = vm.register_method(".image_facedetect".to_string(), functions::image::image_face_class::register_method_image_facedetect);
     let mut obj_class = Value::make_class();
     let mut super_class = Value::list();
     super_class = super_class.push(Value::from_string("Value"));
@@ -168,10 +235,12 @@ fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     obj_class = obj_class.set(".init".to_string(), Value::ptr(".image_init".to_string(), Vec::new()));
     obj_class = obj_class.set("print".to_string(), Value::ptr(".image_print".to_string(), Vec::new()));
     obj_class = obj_class.set("save".to_string(), Value::ptr(".image_save".to_string(), Vec::new()));
+    obj_class = obj_class.set("save.grayscale".to_string(), Value::ptr(".image_save_grayscale".to_string(), Vec::new()));
     obj_class = obj_class.set("grayscale".to_string(), Value::ptr(".image_grayscale".to_string(), Vec::new()));
     obj_class = obj_class.set("blur".to_string(), Value::ptr(".image_blur".to_string(), Vec::new()));
     obj_class = obj_class.set("brighten".to_string(), Value::ptr(".image_brighten".to_string(), Vec::new()));
     obj_class = obj_class.set("contrast".to_string(), Value::ptr(".image_contrast".to_string(), Vec::new()));
+    obj_class = obj_class.set("facedetect".to_string(), Value::ptr(".image_facedetect".to_string(), Vec::new()));
     vm.register_class("IMAGE".to_string(), obj_class)
 }
 
