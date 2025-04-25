@@ -14,8 +14,9 @@ pub fn register_method_image_greyscale(vm: &mut VM) -> Result<&mut VM, Error> {
         Ok(img) => img,
         Err(err) => bail!("IMAGE::GRAYSCALE returns: {}", err),
     };
-    let gimg = img.grayscale();
-    let image_data = Value::make_envelope(gimg.into_bytes());
+    let gray_img = img.grayscale();
+    let res_rgb = gray_img.to_rgb8();
+    let image_data = Value::make_envelope(res_rgb.into_raw());
     let new_value_object = value_object.set("image".to_string(), image_data);
     vm.stack.push(new_value_object);
     Ok(vm)

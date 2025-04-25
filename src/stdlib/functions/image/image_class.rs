@@ -10,6 +10,71 @@ use easy_error::{Error, bail};
 use std::path::Path;
 use image;
 
+pub fn exported_image(value: Value) -> Result<Value, Error> {
+    let h: u32 = match value.get("H") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let w: u32 = match value.get("W") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let pixels: Vec<u8> = match value.get("image") {
+        Ok(pixels) => match pixels.cast_bin() {
+            Ok(pixels) => pixels,
+            Err(err) => bail!("{}", err),
+        }
+        Err(err) => bail!("{}", err),
+    };
+    let data = Value::make_envelope(pixels);
+    let mut res = functions::values::exported_wrap(
+        functions::values::IMAGE,
+        data
+    );
+    res = res.set("H", Value::from_int(h as i64));
+    res = res.set("W", Value::from_int(w as i64));
+    Ok(res)
+}
+
+pub fn exported_to_dynamic(value: Value) -> Result<image::DynamicImage, Error> {
+    match functions::values::exported_type_of(value.clone()) {
+        Some(functions::values::IMAGE) => {},
+        _ => bail!("Exported package having a wrong type"),
+    };
+    let h: u32 = match value.get("H") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let w: u32 = match value.get("W") {
+        Ok(h) => match h.cast_int() {
+            Ok(h) => h as u32,
+            Err(err) => bail!("{}", err),
+        },
+        Err(err) => bail!("{}", err),
+    };
+    let pixels = match value.get(".data") {
+        Ok(pixels) => match pixels.cast_bin() {
+            Ok(pixels) => pixels,
+            Err(err) => bail!("{}", err),
+        }
+        Err(err) => bail!("{}", err),
+    };
+    let img: image::RgbImage = match image::ImageBuffer::from_raw(w, h, pixels) {
+        Some(img) => img,
+        None => bail!("Can not create an image"),
+    };
+    Ok(image::DynamicImage::ImageRgb8(img))
+}
+
 fn image_load(mut value: Value, name: String) -> Result<Value, Error> {
     if ! Path::new(&name).exists() {
         bail!("IMAGE.LOAD: file {} not exists", &name);
@@ -90,19 +155,31 @@ fn register_method_image_init(vm: &mut VM) -> Result<&mut VM, Error> {
     };
     match oop::value_class::locate_value_in_object(".data".to_string(), value_object.clone()) {
         Some(data_object) => {
-            match data_object.conv(STRING) {
-                Ok(new_data_object) => {
-                    if ! Path::new(&new_data_object.to_string()).exists() {
-                        bail!("IMAGE.INIT: file {} not exists", &new_data_object);
+            match data_object.type_of() {
+                MAP => {
+                    match functions::values::exported_type_of(data_object.clone()) {
+                        Some(functions::values::IMAGE) => {},
+                        _ => bail!("Exported package having a wrong type"),
+                    };
+                    let mut new_value_object = oop::value_class::set_value_in_object(".data".to_string(), value_object, Value::from_string(""));
+                    let mut new_value_object = new_value_object.set("image", data_object.get("image").unwrap());
+                    let mut new_value_object = new_value_object.set("W", data_object.get("W").unwrap());
+                    let new_value_object = new_value_object.set("H", data_object.get("H").unwrap());
+                    vm.stack.push(new_value_object);
+                }
+                STRING => {
+                    let data = data_object.cast_string().unwrap();
+                    if ! Path::new(&data).exists() {
+                        bail!("IMAGE.INIT: file {} not exists", &data);
                     }
-                    let new_value_object = oop::value_class::set_value_in_object(".data".to_string(), value_object, new_data_object.clone());
-                    let new_value_object_w_data = match image_load(new_value_object, new_data_object.to_string()) {
+                    let new_value_object = oop::value_class::set_value_in_object(".data".to_string(), value_object, Value::from_string(&data));
+                    let new_value_object_w_data = match image_load(new_value_object, data) {
                         Ok(new_value_object) => new_value_object,
                         Err(err) => bail!("{}", err),
                     };
                     vm.stack.push(new_value_object_w_data);
                 }
-                Err(err) => bail!("IMAGE: error converting to IMAGE filename: {}", err),
+                _ => bail!("IMAGE: WRAPPED TYPE IS NOT SUPPORTED: {}", &data_object.type_name()),
             }
         }
         None => bail!("IMAGE: NO WRAPPED DATA WAS FOUND FOR INIT"),
