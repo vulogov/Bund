@@ -207,7 +207,6 @@ fn register_method_image_print(vm: &mut VM) -> Result<&mut VM, Error> {
                 let conf = viuer::Config {
                     ..Default::default()
                 };
-                println!("");
                 match viuer::print(&img, &conf) {
                     Ok(_) => {},
                     Err(err) => bail!("IMAGE.PRINT prints returns: {}", err),
@@ -303,7 +302,11 @@ fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     let _ = vm.register_method(".image_blur".to_string(), functions::image::image_ops_class::register_method_image_blur);
     let _ = vm.register_method(".image_brighten".to_string(), functions::image::image_ops_class::register_method_image_brighten);
     let _ = vm.register_method(".image_contrast".to_string(), functions::image::image_ops_class::register_method_image_contrast);
+    let _ = vm.register_method(".image_crop".to_string(), functions::image::image_ops_class::register_method_image_crop);
+    let _ = vm.register_method(".image_thumbnail".to_string(), functions::image::image_ops_class::register_method_image_thumbnail);
+    let _ = vm.register_method(".image_unsharp".to_string(), functions::image::image_ops_class::register_method_image_unsharp);
     let _ = vm.register_method(".image_facedetect".to_string(), functions::image::image_face_class::register_method_image_facedetect);
+    let _ = vm.register_method(".image_upscale".to_string(), functions::image::image_size_class::register_method_image_upscale);
     let mut obj_class = Value::make_class();
     let mut super_class = Value::list();
     super_class = super_class.push(Value::from_string("Value"));
@@ -317,7 +320,11 @@ fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     obj_class = obj_class.set("blur".to_string(), Value::ptr(".image_blur".to_string(), Vec::new()));
     obj_class = obj_class.set("brighten".to_string(), Value::ptr(".image_brighten".to_string(), Vec::new()));
     obj_class = obj_class.set("contrast".to_string(), Value::ptr(".image_contrast".to_string(), Vec::new()));
+    obj_class = obj_class.set("crop".to_string(), Value::ptr(".image_crop".to_string(), Vec::new()));
+    obj_class = obj_class.set("thumbnail".to_string(), Value::ptr(".image_thumbnail".to_string(), Vec::new()));
+    obj_class = obj_class.set("unsharp".to_string(), Value::ptr(".image_unsharp".to_string(), Vec::new()));
     obj_class = obj_class.set("facedetect".to_string(), Value::ptr(".image_facedetect".to_string(), Vec::new()));
+    obj_class = obj_class.set("upscale".to_string(), Value::ptr(".image_upscale".to_string(), Vec::new()));
     vm.register_class("IMAGE".to_string(), obj_class)
 }
 
