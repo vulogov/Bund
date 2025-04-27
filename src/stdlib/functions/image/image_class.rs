@@ -42,6 +42,17 @@ pub fn exported_image(value: Value) -> Result<Value, Error> {
     Ok(res)
 }
 
+pub fn exported_from_dynamic(img: image::DynamicImage) -> Result<Value, Error> {
+    let data = Value::make_envelope(img.clone().into_bytes());
+    let mut res = functions::values::exported_wrap(
+        functions::values::IMAGE,
+        data
+    );
+    res = res.set("H", Value::from_int(img.height() as i64));
+    res = res.set("W", Value::from_int(img.width() as i64));
+    Ok(res)
+}
+
 pub fn exported_to_dynamic(value: Value) -> Result<image::DynamicImage, Error> {
     match functions::values::exported_type_of(value.clone()) {
         Some(functions::values::IMAGE) => {},
@@ -162,7 +173,7 @@ fn register_method_image_init(vm: &mut VM) -> Result<&mut VM, Error> {
                         _ => bail!("Exported package having a wrong type"),
                     };
                     let mut new_value_object = oop::value_class::set_value_in_object(".data".to_string(), value_object, Value::from_string(""));
-                    let mut new_value_object = new_value_object.set("image", data_object.get("image").unwrap());
+                    let mut new_value_object = new_value_object.set("image", data_object.get(".data").unwrap());
                     let mut new_value_object = new_value_object.set("W", data_object.get("W").unwrap());
                     let new_value_object = new_value_object.set("H", data_object.get("H").unwrap());
                     vm.stack.push(new_value_object);
@@ -236,6 +247,7 @@ fn register_method_image_save(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("IMAGE::SAVE: NO DATA #2"),
     };
+    log::debug!("IMAGE::SAVE to {}", &fname);
     match value_object.get("image".to_string()) {
         Ok(image_object) => {
             if image_object.type_of() == ENVELOPE {
