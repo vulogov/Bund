@@ -109,6 +109,13 @@ signal-hook = "0.3.17"
 serde = "1.0.219"
 rustrict = "0.7.34"
 
+viuer = { version = "0.9.1", features = ["print-file"] }
+image = "0.25.6"
+rustface = { version="0.1.*", git="https://github.com/atomashpolskiy/rustface.git" }
+imageproc = "0.25.0"
+fast_image_resize = { version="5.1.3", features=["image"]}
+
+
 
 [dependencies.rusqlite]
 version = "0.32.*"

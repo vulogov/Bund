@@ -1,0 +1,18 @@
+//
+// This script demonstrates cropping and printing image using IMAGE class
+//
+
+:print
+  // Width Height Y coordinate X coordinate
+  80 80 100 100 :crop
+    //
+    // Define the name of the file with image
+    //
+    "./examples/image/demo_small_scaled.png"
+    //
+    // Then create IMAGE object
+    //
+    :IMAGE
+      object
+  !
+!

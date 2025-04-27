@@ -15,18 +15,20 @@ pub mod classifiers;
 pub mod classifiers_classify;
 pub mod naivebayes;
 pub mod linguistic;
+pub mod profanity;
 
 #[derive(Clone, Debug)]
 pub enum NNType {
     Perceptron,
     NaiveBayes,
     LangClassifier,
+    Profanity,
 }
 
 pub enum NNVal {
     Null,
     Perceptron(network::Network),
-    NaiveBayes(NaiveBayesClassifier)
+    NaiveBayes(NaiveBayesClassifier),
 }
 
 

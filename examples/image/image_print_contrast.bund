@@ -1,0 +1,17 @@
+//
+// This script demonstrates contrast and printing image using IMAGE class
+//
+
+:print
+  42.0 :contrast
+    //
+    // Define the name of the file with image
+    //
+    "./examples/image/demo_small_scaled.png"
+    //
+    // Then create IMAGE object
+    //
+    :IMAGE
+      object
+  !
+!

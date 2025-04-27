@@ -7,7 +7,6 @@ use crate::stdlib::helpers;
 use easy_error::{Error, bail};
 use local_ip_address::{local_ip, local_ipv6};
 
-
 pub fn stdlib_local_ip_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     match local_ip() {
         Ok(ip_addr) => vm.stack.push(Value::from_string(ip_addr.to_string())),

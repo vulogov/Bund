@@ -1,0 +1,1 @@
+This is a collection of scripts demonstrating various aspects of solving real-world problems using BUND language. Including demonstration of text classification techniques. Including a profanity classifier, for which obscene language samples are used. User discretion is advised.

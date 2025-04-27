@@ -1,0 +1,28 @@
+//
+// This script demonstrates detecting faces in image using IMAGE class
+//
+
+//
+// Before we proceed, let's clean previously generated faces
+//
+"./examples/image/faces" ls { rm } loop
+
+"./examples/image/2nd_infantry_regiment_officers_facesdetected.jpg" :save
+  // Provide model path for facedetect
+  cwd "{A}/Models/facedetection/seeta_fd_frontal_v1.0.bin" format :facedetect
+    //
+    // Define the name of the file with image
+    //
+    "./examples/image/2nd_infantry_regiment_officers.jpg"
+    //
+    // Then create IMAGE object
+    //
+    :IMAGE
+      object
+  !
+! :faces get {
+    :IMAGE object .
+    id.uuid "./examples/image/faces/{A}.jpg" format :save
+        take
+    !
+} loop

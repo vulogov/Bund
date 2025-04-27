@@ -1,0 +1,23 @@
+//
+// This script demonstrates upscaling unsharpening and bit blurring
+// and saving image using IMAGE class
+//
+
+"./examples/image/demo_small_upscale.jpg" :save
+  3.14 :blur
+    5.0 2 :unsharp
+      // Upscaling to 3 times
+      3 :upscale
+        //
+        // Define the name of the file with image
+        //
+        "./examples/image/demo_small_scaled.png"
+        //
+        // Then create IMAGE object
+        //
+        :IMAGE
+          object
+      !
+    !
+  !
+!
