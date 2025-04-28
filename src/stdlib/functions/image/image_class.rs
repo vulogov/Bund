@@ -310,6 +310,7 @@ fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     let _ = vm.register_method(".image_print".to_string(), register_method_image_print);
     let _ = vm.register_method(".image_save".to_string(), register_method_image_save);
     let _ = vm.register_method(".image_save_grayscale".to_string(), register_method_image_save_gray);
+    let _ = vm.register_method(".image_export".to_string(), functions::image::image_ie_class::register_method_image_export);
     let _ = vm.register_method(".image_grayscale".to_string(), functions::image::image_ops_class::register_method_image_greyscale);
     let _ = vm.register_method(".image_blur".to_string(), functions::image::image_ops_class::register_method_image_blur);
     let _ = vm.register_method(".image_brighten".to_string(), functions::image::image_ops_class::register_method_image_brighten);
@@ -329,6 +330,7 @@ fn register_image(vm: &mut VM) -> Result<&mut VM, Error> {
     obj_class = obj_class.set("save".to_string(), Value::ptr(".image_save".to_string(), Vec::new()));
     obj_class = obj_class.set("save.grayscale".to_string(), Value::ptr(".image_save_grayscale".to_string(), Vec::new()));
     obj_class = obj_class.set("grayscale".to_string(), Value::ptr(".image_grayscale".to_string(), Vec::new()));
+    obj_class = obj_class.set("export".to_string(), Value::ptr(".image_export".to_string(), Vec::new()));
     obj_class = obj_class.set("blur".to_string(), Value::ptr(".image_blur".to_string(), Vec::new()));
     obj_class = obj_class.set("brighten".to_string(), Value::ptr(".image_brighten".to_string(), Vec::new()));
     obj_class = obj_class.set("contrast".to_string(), Value::ptr(".image_contrast".to_string(), Vec::new()));
