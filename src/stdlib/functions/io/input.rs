@@ -9,6 +9,7 @@ use easy_error::{Error, bail};
 use yansi::Paint;
 use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor};
+use yapp::PasswordReader;
 
 pub fn stdlib_bund_prompt_inline(vm: &mut VM) -> Result<&mut VM, Error> {
     let prompt = format!("{}{}{}{}{} {} ", Paint::yellow("["), Paint::red("B"), Paint::blue("U").bold(), Paint::white("N"), Paint::cyan("D"), Paint::green(">").bold());
@@ -52,6 +53,23 @@ pub fn stdlib_input_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             bail!("INPUT line returns: {}", err);
         }
     }
+    Ok(vm)
+}
+
+pub fn stdlib_input_password_inline(vm: &mut VM) -> Result<&mut VM, Error> {
+    let msg = match vm.stack.pull() {
+        Some(msg) => match msg.cast_string() {
+            Ok(msg) => msg,
+            Err(err) => bail!("PASSWORD error casting message: {}", err),
+        },
+        None => bail!("PASSWORD: NO DATA #1"),
+    };
+    let mut passwd_prompt = yapp::Yapp::new().with_echo_symbol('.');
+    let res = match passwd_prompt.read_password_with_prompt(&msg) {
+        Ok(res) => res,
+        Err(err) => bail!("PASSWORD returns: {}", err),
+    };
+    vm.stack.push(Value::from_string(res));
     Ok(vm)
 }
 
@@ -122,6 +140,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
         }
     };
     let _ = bc.vm.register_inline("input".to_string(), stdlib_input_inline);
+    let _ = bc.vm.register_inline("password".to_string(), stdlib_input_password_inline);
     let _ = bc.vm.register_inline("input*".to_string(), stdlib_input_loop_inline);
     let _ = bc.vm.register_inline("bund.prompt".to_string(), stdlib_bund_prompt_inline);
     drop(bc);

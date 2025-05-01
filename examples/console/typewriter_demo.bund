@@ -1,0 +1,9 @@
+//
+// clear and typewrter features for the console
+//
+
+// Clearing console
+console.clear
+// Then let's print the banner
+"Dear user, welcome to our console demonstration!"
+  io.banner console.typewriter
