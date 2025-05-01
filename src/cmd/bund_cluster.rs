@@ -13,6 +13,7 @@ use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 use zenoh::Wait;
 
+#[time_graph::instrument]
 fn actor_run(job: HashMap<String, String>) {
     let name = match job.get("name") {
         Some(name) => name,
@@ -54,6 +55,7 @@ fn actor_run(job: HashMap<String, String>) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_cluster_actor(cli: &cmd::Cli, _bund_cluster_arg: &cmd::Cluster) {
     let mut conn = match Beanstalkc::new()
                          .host(&cli.bus.beanstalk_host)
@@ -202,6 +204,7 @@ fn bund_cluster_schedule(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_cluster_publish(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     let name = match &bund_cluster_arg.key {
         Some(key) => key,
@@ -320,6 +323,7 @@ fn bund_cluster_download(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_cluster_push(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     let key = match &bund_cluster_arg.key {
         Some(key) => key,
@@ -368,6 +372,7 @@ fn bund_cluster_push(cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_cluster_pull(_cli: &cmd::Cli, bund_cluster_arg: &cmd::Cluster) {
     let key = match &bund_cluster_arg.key {
         Some(key) => key,

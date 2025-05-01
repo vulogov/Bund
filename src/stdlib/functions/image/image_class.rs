@@ -10,6 +10,7 @@ use easy_error::{Error, bail};
 use std::path::Path;
 use image;
 
+#[time_graph::instrument]
 pub fn exported_image(value: Value) -> Result<Value, Error> {
     let h: u32 = match value.get("H") {
         Ok(h) => match h.cast_int() {
@@ -42,6 +43,7 @@ pub fn exported_image(value: Value) -> Result<Value, Error> {
     Ok(res)
 }
 
+#[time_graph::instrument]
 pub fn exported_from_dynamic(img: image::DynamicImage) -> Result<Value, Error> {
     let data = Value::make_envelope(img.clone().into_bytes());
     let mut res = functions::values::exported_wrap(
@@ -53,6 +55,7 @@ pub fn exported_from_dynamic(img: image::DynamicImage) -> Result<Value, Error> {
     Ok(res)
 }
 
+#[time_graph::instrument]
 pub fn exported_to_dynamic(value: Value) -> Result<image::DynamicImage, Error> {
     match functions::values::exported_type_of(value.clone()) {
         Some(functions::values::IMAGE) => {},
@@ -101,6 +104,7 @@ fn image_load(mut value: Value, name: String) -> Result<Value, Error> {
     Ok(new_value_object)
 }
 
+#[time_graph::instrument]
 pub fn make_image(value: Value) -> Result<image::DynamicImage, Error> {
     let h: u32 = match value.get("H") {
         Ok(h) => match h.cast_int() {
@@ -130,6 +134,7 @@ pub fn make_image(value: Value) -> Result<image::DynamicImage, Error> {
     Ok(image::DynamicImage::ImageRgb8(img))
 }
 
+#[time_graph::instrument]
 pub fn make_grayscale_image(value: Value) -> Result<image::DynamicImage, Error> {
     let h: u32 = match value.get("H") {
         Ok(h) => match h.cast_int() {

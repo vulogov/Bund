@@ -5,6 +5,7 @@ use zenoh::Wait;
 use zenoh::config::{Config};
 use easy_error::{Error, bail, ensure};
 
+#[time_graph::instrument]
 pub fn zenoh_session(config: Config) -> Result<zenoh::Session, Error> {
     let cli = match cmd::CLI.lock() {
         Ok(cli) => cli,

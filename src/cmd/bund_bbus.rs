@@ -7,6 +7,7 @@ use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 use zenoh::Wait;
 
+#[time_graph::instrument]
 fn bund_bus_publish(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, _value: Value) {
     log::debug!("BUND_BUS::bund_bus_publish() reached");
     let key = match &bund_bus_arg.key {
@@ -45,6 +46,7 @@ fn bund_bus_publish(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, _value: Value) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_bus_subscribe(_cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus) {
     log::debug!("BUND_BUS::bund_bus_subscribe() reached");
     let key = match &bund_bus_arg.key {
@@ -98,6 +100,7 @@ fn bund_bus_subscribe(_cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_bus_put(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, value: Value) {
     log::debug!("BUND_BUS::bund_bus_put() reached");
     let config = match helpers::zenoh::conf::zenoh_config() {
@@ -134,6 +137,7 @@ fn bund_bus_put(cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus, value: Value) {
     }
 }
 
+#[time_graph::instrument]
 fn bund_bus_get(_cli: &cmd::Cli, bund_bus_arg: &cmd::Bbus) {
     log::debug!("BUND_BUS::bund_bus_get() reached");
     let config = match helpers::zenoh::conf::zenoh_config() {

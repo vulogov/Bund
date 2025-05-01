@@ -6,6 +6,7 @@ use zenoh;
 use zenoh::Wait;
 use easy_error::{Error, bail, ensure};
 
+#[time_graph::instrument]
 pub fn zenoh_pub(session: zenoh::Session, key: String, value: Value) -> Result<zenoh::Session, Error> {
     let cli = match cmd::CLI.lock() {
         Ok(cli) => cli,
@@ -32,6 +33,7 @@ pub fn zenoh_pub(session: zenoh::Session, key: String, value: Value) -> Result<z
     Ok(session)
 }
 
+#[time_graph::instrument]
 pub fn zenoh_pub_internal(key: String, value: Value) -> Result<(), Error> {
     let cli = match cmd::CLI.lock() {
         Ok(cli) => cli,

@@ -3,7 +3,7 @@ use rust_multistackvm::multistackvm::VM;
 use crate::stdlib::{functions};
 use easy_error::{Error, bail};
 
-
+#[time_graph::instrument]
 pub fn register_method_image_export(vm: &mut VM) -> Result<&mut VM, Error> {
     let value_object = match vm.stack.pull() {
         Some(value_object) => value_object,
