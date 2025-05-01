@@ -22,6 +22,7 @@ pub mod conditional;
 pub mod graph;
 pub mod internaldb;
 pub mod image;
+pub mod console;
 
 pub mod create_aliases;
 
@@ -47,6 +48,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     graph::init_stdlib(cli);
     internaldb::init_stdlib(cli);
     image::init_stdlib(cli);
+    console::init_stdlib(cli);
     // And create aliases from BUND shell
     create_aliases::init_stdlib(cli);
 }

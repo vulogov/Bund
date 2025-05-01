@@ -1,12 +1,13 @@
 [package]
 name = "bund"
-version = "0.19.0"
+version = "0.20.0"
 edition = "2021"
 description = "Interpreter and CLI for a Virtual Machine for BUND programming language"
 license-file = "LICENSE"
 repository = "https://github.com/vulogov/Bund"
 categories = ["compilers"]
 keywords = ["language", "stack", "concatenative", "lambda", "dynamic"]
+exclude = ["examples", "Models", "Documentation", ".*"]
 
 [dependencies]
 bund_language_parser = ">=0.*.*"
@@ -114,6 +115,11 @@ image = "0.25.6"
 rustface = { version="0.1.*", git="https://github.com/atomashpolskiy/rustface.git" }
 imageproc = "0.25.0"
 fast_image_resize = { version="5.1.3", features=["image"]}
+image_hasher = "3.0.0"
+spinoff = "0.8.0"
+spin_sleep = "1.3.1"
+yapp = "0.5.0"
+rusty-termcolor = "0.1.62"
 
 
 

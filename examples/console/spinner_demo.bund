@@ -1,0 +1,28 @@
+//
+// Let's demonstrate some console functions
+// with console output and spinners
+//
+
+// Make a spinner
+"I am spinner" console.spinner
+// Sleep for 3 seconds and display the message
+3 sleep
+nl "I am a message in the box" console.box println
+// Update spinner
+"Doing something" console.spinner
+// Sleep for 2 seconds
+2 sleep
+"This is a message from application" spinner.text
+// Update spinner
+"And some more" console.spinner.info
+// Sleep for 2 seconds
+2 sleep
+// Report success and close spinner
+"Done" console.spinner.success
+
+// And this is a spinner demo that is failing
+"I am spinner with failure" console.spinner
+3 sleep
+"Doing something" console.spinner.warning
+2 sleep
+"Failure!" console.spinner.fail

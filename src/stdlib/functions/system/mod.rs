@@ -7,6 +7,7 @@ pub mod unixpath;
 pub mod ip;
 pub mod locale;
 pub mod display;
+pub mod sleep;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     proctitle::init_stdlib(cli);
@@ -15,4 +16,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     ip::init_stdlib(cli);
     locale::init_stdlib(cli);
     display::init_stdlib(cli);
+    sleep::init_stdlib(cli);
 }
