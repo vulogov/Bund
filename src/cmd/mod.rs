@@ -151,8 +151,11 @@ pub struct Cli {
     #[clap(short, long, value_delimiter = ' ', num_args = 0..)]
     pub bootstrap: Option<Vec<String>>,
 
-    #[clap(flatten, help="BUND BIS configuration")]
+    #[clap(flatten, help="BUND BUS configuration")]
     pub bus: DistributedArgGroup,
+
+    #[clap(flatten, help="BUND AI configuration")]
+    pub ai: AIArgGroup,
 
     #[clap(subcommand)]
     command: Commands,
@@ -206,6 +209,16 @@ pub struct DistributedArgGroup {
 
     #[clap(help="Beanstalkd tube", long, default_value_t = String::from(env::var("BUND_BEANSTALKD_TUBE").unwrap_or("bund".to_string())))]
     pub beanstalk_tube: String,
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = false, multiple = true)]
+pub struct AIArgGroup {
+    #[clap(help="DeepSeek API token", long)]
+    pub deepseek_token: Option<String>,
+
+    #[clap(help="Address of the default OLLAMA endpoint", long)]
+    pub ollama_addr: Option<String>,
 }
 
 #[derive(Args, Clone, Debug)]
