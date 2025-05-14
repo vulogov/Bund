@@ -1,0 +1,32 @@
+//
+// MATH.INTERPOLATION function demo
+//
+
+//
+// Let's interpolate value at XP=10.5
+//
+10.5
+//
+// Generating Y sequence
+//
+:Y config
+  :type     "periodic"  set
+  :Sampling 15.0        set
+  :Freq     3.0         set
+  :Amplitude  10.0      set
+  :Phase    1.0         set
+  :Delay    1           set
+
+generator
+  :Y 20 generator.sample*
+//
+// Generating X sequence
+//
+config
+  "X"    1.0       set
+  "Step" 1.0       set
+  "N"    20        set
+seq
+math.interpolation
+  "Interpolated value at 10.5 = {A}" format
+    println

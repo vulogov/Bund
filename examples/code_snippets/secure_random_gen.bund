@@ -1,0 +1,9 @@
+//
+// Generating 20 secure random numbers using CHACHA algorithm
+//
+
+20 {
+  math.securerandom.int
+    "CHACHA algorithm generated random number = {A}"
+    format println 
+} times

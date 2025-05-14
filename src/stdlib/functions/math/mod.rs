@@ -9,6 +9,7 @@ pub mod rand;
 pub mod anomalies;
 pub mod clusters;
 pub mod breakout;
+pub mod interp;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     normalize::init_stdlib(cli);
@@ -16,4 +17,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     math::init_stdlib(cli);
     seq::init_stdlib(cli);
     rand::init_stdlib(cli);
+    interp::init_stdlib(cli);
 }
