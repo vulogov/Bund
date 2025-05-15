@@ -1,0 +1,17 @@
+//
+// This script demonstrated displaying text with different colors on the screen
+//
+
+"This text is printed with default WHITE color" console.text
+"This text is printed with RED color" console.text.red
+"This text is printed with YELLOW color" console.text.yellow
+"This text is printed with GREEN color" console.text.green
+"This text is printed with MAGENTA color" console.text.magenta
+"This text is printed with CYAN color" console.text.cyan
+"This text is printed with BLUE color" console.text.blue
+"This text is printed with RANDOM color" console.text.randomcolor
+"This text is printed with MATRIX effect" console.text.matrix
+"This text is printed with RAINBOW effect" console.text.rainbow
+"This text is OK colored message" console.text.ok
+"This text is WARNING colored message" console.text.warning
+"This text is ERROR colored message" console.text.error

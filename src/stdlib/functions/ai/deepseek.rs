@@ -8,7 +8,7 @@ use crate::stdlib::{helpers, functions};
 use crate::stdlib::functions::oop;
 use easy_error::{Error, bail};
 use deepseek_api::Client;
-use deepseek_api::{request::MessageRequest, response::ModelType};
+use deepseek_api::{response::ModelType};
 
 pub fn stdlib_deepseek_token(vm: &mut VM) -> Result<&mut VM, Error> {
     let cli = cmd::CLI.lock();
@@ -84,9 +84,11 @@ fn register_method_deepseek_ask(vm: &mut VM) -> Result<&mut VM, Error> {
     let resp = completions.create(builder).unwrap().must_response();
     let mut resp_words = vec![];
     for msg in resp.choices.iter() {
-        let resp_msg =
-            MessageRequest::from_message(msg.message.as_ref().expect("message")).unwrap();
-        resp_words.push(msg.message.as_ref().expect("message").content.clone());
+        let ds_msg = match msg.message.as_ref() {
+            Some(msg) => msg.content.clone(),
+            None => bail!("DEEPSEEK::ASK referencing message request returns: None"),
+        };
+        resp_words.push(ds_msg);
     }
 
     let mut res = Value::from_string("");
