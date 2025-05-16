@@ -16,6 +16,8 @@ pub mod classifiers_classify;
 pub mod naivebayes;
 pub mod linguistic;
 pub mod profanity;
+pub mod deepseek;
+pub mod ollama;
 
 #[derive(Clone, Debug)]
 pub enum NNType {
@@ -58,4 +60,8 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("neuralnetwork.predict".to_string(), neuralnetworks_predict::stdlib_neuralnetworks_predict_inline);
     let _ = bc.vm.register_inline("classifier.classify".to_string(), classifiers_classify::stdlib_classify_inline);
     drop(bc);
+
+    deepseek::init_stdlib(cli);
+    ollama::init_stdlib(cli);
+
 }

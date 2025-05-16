@@ -30,7 +30,6 @@ pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
             return;
         }
     };
-    // #[cfg(feature = "with-file-history")]
     if rl.load_history("bund_history.txt").is_err() {
         log::warn!("No previous shell history.");
     }

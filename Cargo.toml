@@ -1,6 +1,6 @@
 [package]
 name = "bund"
-version = "0.20.0"
+version = "0.21.0"
 edition = "2021"
 description = "Interpreter and CLI for a Virtual Machine for BUND programming language"
 license-file = "LICENSE"
@@ -105,11 +105,10 @@ augurs =  { version = "0.9.*", features = ["forecaster", "ets", "mstl", "outlier
 execution-time = "0.3.1"
 hostname = "0.4.0"
 beanstalkc = "1.0.0"
-serde_json = "1.0.140"
+serde_json = { version = "1.0.140", features=["raw_value"] }
 signal-hook = "0.3.17"
-serde = "1.0.219"
+serde = { version = "1.0.219", features = ["derive"] }
 rustrict = "0.7.34"
-
 viuer = { version = "0.9.1", features = ["print-file"] }
 image = "0.25.6"
 rustface = { version="0.1.*", git="https://github.com/atomashpolskiy/rustface.git" }
@@ -120,8 +119,14 @@ spinoff = "0.8.0"
 spin_sleep = "1.3.1"
 yapp = "0.5.0"
 rusty-termcolor = "0.1.62"
-
-
+deepseek-api = { version = "0.1.0-alpha.3", default-features = false, features = ["is_sync"] }
+rand_core = "0.9.3"
+rand_chacha = "0.9.0"
+interp = "2.0.2"
+srch = "0.0.1"
+textwrap = { version = "0.16.2", features= ["smawk", "unicode-width", "unicode-linebreak", "hyphenation"] }
+hyphenation = { version = "0.8.*", features= ["embed_all"] }
+reqwest = { version = "0.12.15", features = ["json", "blocking"] }
 
 [dependencies.rusqlite]
 version = "0.32.*"

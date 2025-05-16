@@ -1,0 +1,23 @@
+//
+// SHowing how to use string text expression matching
+//
+
+"42, this is the answer!" 'contains "42"'
+  string.expressionmatch
+  "Source string contains word '42' and matches expression 'contains 42' : {A}"
+    format println
+
+"42" 'length 2'
+  string.expressionmatch
+  "Source string is size of 2 and matches expression 'length 2' : {A}"
+    format println
+
+"42" 'numeric and length 2'
+  string.expressionmatch
+  "Source string is size of 2, contains only numeric letters and matches expression 'numeric and length 2' : {A}"
+    format println
+
+"Hi" 'numeric and length 2'
+  string.expressionmatch
+  "Source string is size of 2, contains only numeric letters and matches expression 'numeric and length 2' : {A}"
+    format println

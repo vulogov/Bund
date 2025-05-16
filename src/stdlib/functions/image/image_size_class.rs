@@ -6,7 +6,7 @@ use fast_image_resize::images::Image;
 use crate::stdlib::{functions};
 use easy_error::{Error, bail};
 
-
+#[time_graph::instrument]
 pub fn register_method_image_upscale(vm: &mut VM) -> Result<&mut VM, Error> {
     let mut value_object = match vm.stack.pull() {
         Some(value_object) => value_object,

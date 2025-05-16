@@ -9,6 +9,7 @@ use comfy_table::presets::UTF8_FULL;
 use comfy_table::*;
 use crate::stdlib::helpers;
 
+#[time_graph::instrument]
 fn run_test_file(file: String) -> bool {
     if file.ends_with(".bund") {
         match helpers::file_helper::get_file_from_relative_file(file.clone()) {
@@ -26,6 +27,7 @@ fn run_test_file(file: String) -> bool {
     true
 }
 
+#[time_graph::instrument]
 fn run_test_case(script: String, source: String) -> bool {
     let timer = ExecutionTime::start();
     match helpers::run_snippet::run_snippet_and_return_value(script) {

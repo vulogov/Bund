@@ -3,6 +3,7 @@ use crate::cmd::Cli;
 use crate::stdlib::BUND;
 use crate::stdlib::helpers;
 
+#[time_graph::instrument]
 pub fn run(cli: &Cli) {
     log::debug!("BOOTSTRAP::run() reached");
     match &cli.bootstrap {

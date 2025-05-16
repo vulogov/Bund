@@ -8,7 +8,7 @@ use imageproc::rect::Rect;
 use easy_error::{Error, bail};
 use std::path::Path;
 
-
+#[time_graph::instrument]
 pub fn register_method_image_facedetect(vm: &mut VM) -> Result<&mut VM, Error> {
     let mut value_object = match vm.stack.pull() {
         Some(value_object) => value_object,

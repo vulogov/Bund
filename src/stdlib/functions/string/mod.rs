@@ -6,6 +6,7 @@ pub mod fuzzy_match;
 pub mod distance;
 pub mod regex;
 pub mod regex_matches;
+pub mod textexpr_match;
 pub mod regex_split;
 pub mod prefix_suffix;
 pub mod any_id;
@@ -13,6 +14,7 @@ pub mod tokenize;
 pub mod grok;
 pub mod random;
 pub mod unicode;
+pub mod textwrap;
 
 pub fn init_stdlib(cli: &cmd::Cli) {
     wildmatch::init_stdlib(cli);
@@ -27,4 +29,6 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     grok::init_stdlib(cli);
     random::init_stdlib(cli);
     unicode::init_stdlib(cli);
+    textexpr_match::init_stdlib(cli);
+    textwrap::init_stdlib(cli);
 }
