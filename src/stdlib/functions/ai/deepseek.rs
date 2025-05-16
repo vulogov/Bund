@@ -64,9 +64,9 @@ fn register_method_deepseek_ask(vm: &mut VM) -> Result<&mut VM, Error> {
     let token = match oop::value_class::locate_value_in_object(".data".to_string(), value_object.clone()) {
         Some(api_token) => match api_token.cast_string() {
             Ok(api_token) => api_token,
-            Err(err) => bail!("DEEPSEEK::BALANCE error casting API token: {}", err),
+            Err(err) => bail!("DEEPSEEK::ASK error casting API token: {}", err),
         },
-        None => bail!("DEEPSEEK::BALANCE token not found"),
+        None => bail!("DEEPSEEK::ASK token not found"),
     };
     let msg = match vm.stack.pull() {
         Some(msg) => match msg.cast_string() {

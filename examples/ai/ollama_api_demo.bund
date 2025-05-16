@@ -1,0 +1,29 @@
+//
+// Trying to find the ultimate answer in local OLLAMA
+//
+
+//
+// Start the spinner
+//
+"Sending question to OLLAMA" console.spinner
+  //
+  // Prepare the question
+  //
+  "what is the answer on life universe and everything?"
+    //
+    // And call :ask method of newly created OLLAMA object
+    //
+    :ask
+      "127.0.0.1:11434"
+        :OLLAMA
+          object
+  !
+//
+// Stop spinner
+//
+"Done" console.spinner.success
+
+//
+// Share the wisdom
+//
+console.typewriter nl
