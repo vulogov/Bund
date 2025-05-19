@@ -119,7 +119,6 @@ spinoff = "0.8.0"
 spin_sleep = "1.3.1"
 yapp = "0.5.0"
 rusty-termcolor = "0.1.62"
-deepseek-api = { version = "0.1.0-alpha.3", default-features = false, features = ["is_sync"] }
 rand_core = "0.9.3"
 rand_chacha = "0.9.0"
 interp = "2.0.2"
@@ -127,6 +126,7 @@ srch = "0.0.1"
 textwrap = { version = "0.16.2", features= ["smawk", "unicode-width", "unicode-linebreak", "hyphenation"] }
 hyphenation = { version = "0.8.*", features= ["embed_all"] }
 reqwest = { version = "0.12.15", features = ["json", "blocking"] }
+tts = "0.26.3"
 
 [dependencies.rusqlite]
 version = "0.32.*"

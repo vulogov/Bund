@@ -6,16 +6,9 @@ use rust_dynamic::types::*;
 use crate::stdlib::{helpers, functions};
 use crate::stdlib::functions::oop;
 use rust_dynamic::value::Value;
-use serde::{Serialize, Deserialize};
 use serde_json::json;
-use curl::easy::{Easy2, Handler, WriteError};
+use curl::easy::List;
 use easy_error::{Error, bail};
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct Message {
-    role: String,
-    content: String,
-}
 
 
 fn register_method_ollama_init(vm: &mut VM) -> Result<&mut VM, Error> {
@@ -58,8 +51,6 @@ fn register_method_ollama_init(vm: &mut VM) -> Result<&mut VM, Error> {
 
 
 fn register_method_ollama_ask(vm: &mut VM) -> Result<&mut VM, Error> {
-    #[derive(Debug)]
-    struct Collector(Vec<u8>);
 
     let value_object = match vm.stack.pull() {
         Some(value_object) => value_object,
@@ -84,9 +75,9 @@ fn register_method_ollama_ask(vm: &mut VM) -> Result<&mut VM, Error> {
 
     let full_url = format!("{}/api/chat", url);
 
-    let mut messages: Vec<Message> = vec![];
+    let mut messages: Vec<helpers::json_api::Message> = vec![];
 
-    messages.push(Message {
+    messages.push(helpers::json_api::Message {
         role: String::from("user"),
         content: msg,
     });
@@ -97,31 +88,11 @@ fn register_method_ollama_ask(vm: &mut VM) -> Result<&mut VM, Error> {
         "stream": false,
     });
 
-    impl Handler for Collector {
-    fn write(&mut self, data: &[u8]) -> Result<usize, WriteError> {
-            self.0.extend_from_slice(data);
-            Ok(data.len())
-        }
-    }
+    let headers = List::new();
 
-    let mut easy = Easy2::new(Collector(Vec::new()));
-    let _ = easy.useragent("BUND");
-
-    easy.post(true).unwrap();
-    easy.url(&full_url).unwrap();
-    easy.post_fields_copy(format!("{}", &payload).as_bytes()).unwrap();
-    match easy.perform() {
-        Ok(_) => {},
-        Err(err) => bail!("OLLAMA::ASK perform returns: {}", err),
-    }
-
-
-    let contents = easy.get_ref();
-    let raw_data = String::from_utf8_lossy(&contents.0).to_string();
-
-    let json_data: serde_json::Value = match serde_json::from_str(&raw_data) {
-        Ok(json_data) => json_data,
-        Err(err) => bail!("OLLAMA::ASK can produce JSON: {}", err),
+    let json_data: serde_json::Value = match helpers::json_api::json_api_post(full_url, headers, payload) {
+        Some(json_value) => json_value,
+        None => bail!("OLLAMA::ASK did not get any meaningful data"),
     };
 
     let json_message = match json_data.get("message") {
@@ -132,7 +103,7 @@ fn register_method_ollama_ask(vm: &mut VM) -> Result<&mut VM, Error> {
             },
             None => bail!("OLLAMA::ASK Ollama did not returned a content"),
         },
-        None => bail!("OLLAMA::ASK Ollama did not returned a message"),
+        None => bail!("OLLAMA::ASK did not returned a message"),
     };
 
     vm.stack.push(value_object);

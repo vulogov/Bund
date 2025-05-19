@@ -4,11 +4,12 @@ use rust_multistackvm::multistackvm::{VM};
 use crate::cmd;
 use rust_dynamic::types::*;
 use rust_dynamic::value::Value;
+use curl::easy::List;
+use serde_json::json;
 use crate::stdlib::{helpers, functions};
 use crate::stdlib::functions::oop;
 use easy_error::{Error, bail};
-use deepseek_api::Client;
-use deepseek_api::{response::ModelType};
+
 
 pub fn stdlib_deepseek_token(vm: &mut VM) -> Result<&mut VM, Error> {
     let cli = cmd::CLI.lock();
@@ -75,57 +76,64 @@ fn register_method_deepseek_ask(vm: &mut VM) -> Result<&mut VM, Error> {
         },
         None => bail!("DEEPSEEK::ASK: NO DATA #2"),
     };
-    let client = Client::new(&token);
-    let mut completions = client.chat();
-    let builder = completions
-                    .chat_builder(vec![])
-                    .use_model(ModelType::DeepSeekChat)
-                    .append_user_message(&msg);
-    let resp = completions.create(builder).unwrap().must_response();
-    let mut resp_words = vec![];
-    for msg in resp.choices.iter() {
-        let ds_msg = match msg.message.as_ref() {
-            Some(msg) => msg.content.clone(),
-            None => bail!("DEEPSEEK::ASK referencing message request returns: None"),
-        };
-        resp_words.push(ds_msg);
-    }
 
-    let mut res = Value::from_string("");
+    let full_url = "https://api.deepseek.com/chat/completions".to_string();
 
-    for msg in resp_words.iter() {
-        msg.split("\n").for_each(|x| res = res.push(Value::from_string(x)));
-    }
-    vm.stack.push(value_object);
-    vm.stack.push(res);
-    Ok(vm)
-}
+    let mut messages: Vec<helpers::json_api::Message> = vec![];
 
-fn register_method_deepseek_balance(vm: &mut VM) -> Result<&mut VM, Error> {
-    let mut value_object = match vm.stack.pull() {
-        Some(value_object) => value_object,
-        None => bail!("DEEPSEEK::BALANCE stack is empty"),
+    messages.push(helpers::json_api::Message {
+        role: String::from("user"),
+        content: msg,
+    });
+
+    let payload = json!({
+        "model": "deepseek-chat",
+        "messages": &messages,
+        "stream": false,
+    });
+
+    let mut headers = List::new();
+    headers.append("Content-Type: application/json").unwrap();
+    headers.append(&format!("Authorization: Bearer {}", token).to_string()).unwrap();
+
+    let json_data: serde_json::Value = match helpers::json_api::json_api_post(full_url, headers, payload) {
+        Some(json_value) => json_value,
+        None => bail!("DEEPSEEK::ASK did not get any meaningful data"),
     };
-    let token = match oop::value_class::locate_value_in_object(".data".to_string(), value_object.clone()) {
-        Some(api_token) => match api_token.cast_string() {
-            Ok(api_token) => api_token,
-            Err(err) => bail!("DEEPSEEK::BALANCE error casting API token: {}", err),
+
+    let json_choices: Vec<serde_json::Value> = match json_data.get("choices") {
+        Some(json_choices) => match json_choices.as_array() {
+            Some(json_choices) => json_choices.to_vec(),
+            None => bail!("DEEPSEEK::ASK did not get any meaningful array"),
         },
-        None => bail!("DEEPSEEK::BALANCE token not found"),
+        None => bail!("DEEPSEEK::ASK did not get any meaningful choices"),
     };
-    let client = Client::new(&token);
-    let balance = match client.balance() {
-        Ok(balance) => balance,
-        Err(err) => bail!("DEEPSEEK::BALANCE error getting balance: {}", err),
-    };
-    value_object = value_object.set("available", Value::from_bool(balance.is_available));
+
+    let mut res: String = "".to_string();
+
+    for c in json_choices.iter() {
+        let json_message = match c.get("message") {
+            Some(message) => match message.get("content") {
+                Some(content) => match content.as_str() {
+                    Some(content) => content,
+                    None => bail!("DEEPSEEK::ASK can not parse JSON"),
+                },
+                None => bail!("DEEPSEEK::ASK Deepseek did not returned a content"),
+            },
+            None => bail!("DEEPSEEK::ASK did not returned a message"),
+        };
+        res.push_str(json_message);
+        res.push_str("\n");
+    }
+
     vm.stack.push(value_object);
+    vm.stack.push(Value::from_string(res));
+
     Ok(vm)
 }
 
 fn register_deepseek(vm: &mut VM) -> Result<&mut VM, Error> {
     let _ = vm.register_method(".deepseek_init".to_string(), register_method_deepseek_init);
-    let _ = vm.register_method(".deepseek_balance".to_string(), register_method_deepseek_balance);
     let _ = vm.register_method(".deepseek_ask".to_string(), register_method_deepseek_ask);
     let mut obj_class = Value::make_class();
     let mut super_class = Value::list();
@@ -134,7 +142,6 @@ fn register_deepseek(vm: &mut VM) -> Result<&mut VM, Error> {
     obj_class = obj_class.set(".class_name".to_string(), Value::from_string("DEEPSEEK"));
     obj_class = obj_class.set(".super".to_string(), super_class);
     obj_class = obj_class.set(".init".to_string(), Value::ptr(".deepseek_init".to_string(), Vec::new()));
-    obj_class = obj_class.set("balance".to_string(), Value::ptr(".deepseek_balance".to_string(), Vec::new()));
     obj_class = obj_class.set("ask".to_string(), Value::ptr(".deepseek_ask".to_string(), Vec::new()));
     vm.register_class("DEEPSEEK".to_string(), obj_class)
 }

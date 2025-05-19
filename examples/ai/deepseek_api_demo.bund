@@ -1,9 +1,4 @@
 "Why the ultimate answer on the question of life,
 universe, everything is 42?" :ask
-  //
-  // Checking the balance
-  //
-  :balance
     deepseek.token :DEEPSEEK object
-  !
 ! display
