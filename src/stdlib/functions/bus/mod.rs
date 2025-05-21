@@ -45,6 +45,8 @@ fn pipes_init() {
     let mut q = PIPES.lock().unwrap();
     q.insert("in".to_string(), unbounded::<Vec<u8>>());
     q.insert("out".to_string(), unbounded::<Vec<u8>>());
+    q.insert("force_exit".to_string(), unbounded::<Vec<u8>>());
+    q.insert("tts_in".to_string(), unbounded::<Vec<u8>>());
     drop(q);
 }
 

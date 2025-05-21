@@ -3,8 +3,10 @@ extern crate log;
 use crate::cmd;
 use crate::stdlib::BUND;
 use crate::stdlib::helpers;
+use crate::stdlib::functions;
 use rust_multistackvm::multistackvm::{VM};
 use easy_error::{Error};
+use rust_dynamic::value::Value;
 use std::process;
 
 pub fn stdlib_bund_exit_inline(vm: &mut VM) -> Result<&mut VM, Error> {
@@ -26,6 +28,8 @@ pub fn stdlib_bund_exit_inline(vm: &mut VM) -> Result<&mut VM, Error> {
             0 as i64
         },
     };
+    log::debug!("Sending termination signal to threads");
+    let _ = functions::bus::bus_push("force_exit".to_string(), Value::from_bool(true));
     log::debug!("BUND is exiting with code {}", err_code);
     process::exit(err_code as i32);
 }

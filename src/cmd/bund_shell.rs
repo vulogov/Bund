@@ -6,6 +6,7 @@ use crate::cmd;
 use rust_dynamic::value::Value;
 use crate::cmd::*;
 use crate::stdlib::helpers;
+use crate::stdlib::functions;
 use crate::stdlib::functions::{debug_fun, bund};
 
 pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
@@ -66,14 +67,17 @@ pub fn run(cli: &cmd::Cli, shell_arg: &cmd::Shell) {
             },
             Err(ReadlineError::Interrupted) => {
                 log::info!("CTRL-C");
+                let _ = functions::bus::bus_push("force_exit".to_string(), Value::from_bool(true));
                 break
             },
             Err(ReadlineError::Eof) => {
                 log::info!("CTRL-D");
+                let _ = functions::bus::bus_push("force_exit".to_string(), Value::from_bool(true));
                 break
             },
             Err(err) => {
                 helpers::print_error::print_error_from_str(format!("{}", err), cli);
+                let _ = functions::bus::bus_push("force_exit".to_string(), Value::from_bool(true));
                 break
             }
         }

@@ -11,3 +11,4 @@ pub mod internaldb;
 pub mod zenoh;
 pub mod hostname;
 pub mod json_api;
+pub mod tts;

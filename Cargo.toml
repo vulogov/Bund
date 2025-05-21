@@ -127,6 +127,7 @@ textwrap = { version = "0.16.2", features= ["smawk", "unicode-width", "unicode-l
 hyphenation = { version = "0.8.*", features= ["embed_all"] }
 reqwest = { version = "0.12.15", features = ["json", "blocking"] }
 tts = "0.26.3"
+objc2-foundation = "0.3.1"
 
 [dependencies.rusqlite]
 version = "0.32.*"

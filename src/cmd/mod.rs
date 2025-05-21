@@ -6,6 +6,7 @@ use crate::stdlib::{init_stdlib};
 use lazy_static::lazy_static;
 use std::sync::Mutex;
 use uuid::Uuid;
+use crate::stdlib::helpers;
 use crate::stdlib::helpers::hostname::get_hostname;
 use clap::{Parser, Subcommand, Args};
 
@@ -74,6 +75,12 @@ pub fn main() {
         time_graph::enable_data_collection(true);
     }
     bund_bus::bund_bus_init(&cli);
+    if cli.tts {
+        log::debug!("TTS enabled");
+        helpers::tts::tts_init();
+    } else {
+        log::debug!("TTS disabled");
+    }
     match &cli.command {
         Commands::Script(script) => {
             bund_script::run(&cli, &script);
@@ -159,6 +166,9 @@ pub struct Cli {
 
     #[clap(subcommand)]
     command: Commands,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Enable TTS (Text-To-Speech) functionality")]
+    pub tts: bool,
 }
 
 #[derive(Subcommand, Clone, Debug)]
