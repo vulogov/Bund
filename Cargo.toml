@@ -126,8 +126,10 @@ srch = "0.0.1"
 textwrap = { version = "0.16.2", features= ["smawk", "unicode-width", "unicode-linebreak", "hyphenation"] }
 hyphenation = { version = "0.8.*", features= ["embed_all"] }
 reqwest = { version = "0.12.15", features = ["json", "blocking"] }
-tts = "0.26.3"
+tts = { version="0.*.*", git="https://github.com/ndarilek/tts-rs.git" }
 objc2-foundation = "0.3.1"
+cocoa-foundation = "0.2.0"
+objc = "0.2.7"
 
 [dependencies.rusqlite]
 version = "0.32.*"

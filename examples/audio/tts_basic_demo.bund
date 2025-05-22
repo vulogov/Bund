@@ -1,0 +1,7 @@
+//
+// Trying to say something
+//
+
+"They say say something. I say something."
+tts.say
+  16 sleep

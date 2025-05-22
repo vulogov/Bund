@@ -77,6 +77,10 @@ pub fn main() {
     bund_bus::bund_bus_init(&cli);
     if cli.tts {
         log::debug!("TTS enabled");
+        #[cfg(target_os = "macos")]
+        {
+            log::warn!("TTS (Text-To_Speech) for Mac OS doesn't work well");
+        }
         helpers::tts::tts_init();
     } else {
         log::debug!("TTS disabled");
