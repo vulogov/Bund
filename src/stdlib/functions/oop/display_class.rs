@@ -37,6 +37,24 @@ fn register_method_format(vm: &mut VM) -> Result<&mut VM, Error> {
                 if values.contains_key(&name.to_string().clone()) {
                     continue;
                 }
+                if *name == ".data" {
+                    match functions::oop::value_class::locate_value_in_object(".data".to_string(), value.clone()) {
+                        Some(data_object) => {
+                            match data_object.type_of() {
+                                STRING => {
+                                    let data_str = match data_object.cast_string() {
+                                        Ok(data_str) => data_str,
+                                        Err(err) => bail!("'.format' error casting .data value to STRING: {}", err),
+                                    };
+                                    values.insert(name.to_string(), data_str);
+                                    continue;
+                                }
+                                _ => bail!("'.format': WRAPPED TYPE IS NOT SUPPORTED: {}", &data_object.type_name()),
+                            }
+                        }
+                        None => {},
+                    }
+                }
                 let attr_value = match value.get(name) {
                     Ok(attr_value) => attr_value,
                     Err(_) => match vm.stack.pull() {

@@ -18,6 +18,7 @@ pub mod linguistic;
 pub mod profanity;
 pub mod deepseek;
 pub mod ollama;
+pub mod document;
 
 #[derive(Clone, Debug)]
 pub enum NNType {
@@ -63,5 +64,5 @@ pub fn init_stdlib(cli: &cmd::Cli) {
 
     deepseek::init_stdlib(cli);
     ollama::init_stdlib(cli);
-
+    document::init_stdlib(cli);
 }
