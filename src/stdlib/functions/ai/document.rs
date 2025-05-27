@@ -161,7 +161,7 @@ fn local_embed_document(value: Value) -> Result<Value, Error> {
                         chunk = chunk.set(".data", c);
                         chunk = chunk.set(".documentid", Value::from_string(Uuid::new_v4().to_string()));
                         chunk = chunk.set(".original_documentid", documentid.clone());
-                        chunk = chunk.set("embedings", wrap_embeddings(embeddings[0].clone()));
+                        chunk = chunk.set("embeddings", wrap_embeddings(embeddings[0].clone()));
                         res = res.push(chunk);
                         n = n + 1;
                     }

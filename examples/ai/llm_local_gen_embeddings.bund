@@ -1,0 +1,7 @@
+:embeddings
+  cwd "{CWD}/examples/ai/artefacts/documents/tolstoy_the_kingdom_of_god_1.txt"
+    format file
+      :DOCUMENT object
+! {
+  :embeddings get println
+} loop
