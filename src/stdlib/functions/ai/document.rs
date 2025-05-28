@@ -115,7 +115,7 @@ fn wrap_embeddings(e: Vec<f32>) -> Value {
 }
 
 #[time_graph::instrument]
-fn local_embed_document(value: Value) -> Result<Value, Error> {
+pub fn local_embed_document(value: Value) -> Result<Value, Error> {
     let name = match value.get("name") {
         Ok(name) => match name.cast_string() {
             Ok(name) => name,

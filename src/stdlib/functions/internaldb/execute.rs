@@ -4,18 +4,7 @@ use rust_multistackvm::multistackvm::{VM};
 use easy_error::{Error, bail};
 
 #[time_graph::instrument]
-pub fn stdlib_internaldb_execute(vm: &mut VM) -> Result<&mut VM, Error> {
-    if vm.stack.current_stack_len() < 1 {
-        bail!("Stack is too shallow for inline INTERNALDB.EXECUTE");
-    }
-    let query_val = match vm.stack.pull() {
-        Some(query_val) => query_val,
-        None => bail!("INTERNALDB.EXECUTE: NO DATA #1"),
-    };
-    let query_str = match query_val.cast_string() {
-        Ok(query_str) => query_str,
-        Err(err) => bail!("INTERNALDB.EXECUTE: casting query returns error: {}", err),
-    };
+pub fn internaldb_execute_query(query_str: String) -> Result<(), Error> {
     let db = match internaldb::DB.lock() {
         Ok(db) => db,
         Err(err) => bail!("INTERNALDB.EXECUTE: getting reference to internal database returns error: {}", err),
@@ -38,5 +27,25 @@ pub fn stdlib_internaldb_execute(vm: &mut VM) -> Result<&mut VM, Error> {
         }
     }
     drop(db);
+    Ok(())
+}
+
+#[time_graph::instrument]
+pub fn stdlib_internaldb_execute(vm: &mut VM) -> Result<&mut VM, Error> {
+    if vm.stack.current_stack_len() < 1 {
+        bail!("Stack is too shallow for inline INTERNALDB.EXECUTE");
+    }
+    let query_val = match vm.stack.pull() {
+        Some(query_val) => query_val,
+        None => bail!("INTERNALDB.EXECUTE: NO DATA #1"),
+    };
+    let query_str = match query_val.cast_string() {
+        Ok(query_str) => query_str,
+        Err(err) => bail!("INTERNALDB.EXECUTE: casting query returns error: {}", err),
+    };
+    match internaldb_execute_query(query_str) {
+        Ok(_) => {},
+        Err(err) => bail!("INTERNALDB.EXECUTE returned an error: {}", err),
+    };
     Ok(vm)
 }

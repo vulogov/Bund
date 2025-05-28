@@ -12,6 +12,7 @@ use duckdb::{Connection, Config};
 pub mod sql;
 pub mod execute;
 pub mod prql;
+pub mod document_store;
 
 lazy_static! {
     pub static ref DB: Mutex<Connection> = {
@@ -65,5 +66,7 @@ pub fn init_stdlib(cli: &cmd::Cli) {
     let _ = bc.vm.register_inline("internaldb.sql".to_string(), sql::stdlib_internaldb_sql);
     let _ = bc.vm.register_inline("internaldb.execute".to_string(), execute::stdlib_internaldb_execute);
     let _ = bc.vm.register_inline("internaldb.prql".to_string(), prql::stdlib_internal_prql);
+    let _ = bc.vm.register_inline("documentstore.init".to_string(), document_store::stdlib_internaldb_docstore_init);
+    let _ = bc.vm.register_inline("documentstore.drop".to_string(), document_store::stdlib_internaldb_docstore_drop);
     drop(bc);
 }
