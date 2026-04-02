@@ -2,7 +2,7 @@ SOURCES=$(wildcard src/*.rs)
 
 
 all: $(SOURCES) Makefile
-	cargo build 
+	cargo build
 
 rebuild:
 	make clean
@@ -14,5 +14,9 @@ test:
 clean:
 	cargo clean
 	cargo update
+
+commit:
+	aic -ac
+	git push
 
 all:
